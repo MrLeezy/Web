@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fiscal Year 2027 Board</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+	<div style="height: 10px;"></div>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="title-block">
+          <p class="date-range" id="dateRange">Jan 31, 2026 - Jan 29, 2027</p>
+          <h1>Fiscal Year 2027</h1>
+        </div>
+        <div class="status-block">
+          <div class="status-pills">
+            <span class="status-pill" id="quarterPill">FY27 Q1</span>
+            <span class="status-pill" id="weekPill">Week 10</span>
+            <span class="status-pill status-pill-strong" id="todayPill">Apr 10</span>
+          </div>
+          <p class="status-line" id="statusLine">2 overdue | 3 due soon | next meeting 14:30</p>
+        </div>
+      </header>
+
+      <main class="main-layout">
+        <section class="calendar-panel" aria-label="Fiscal year board">
+          <section class="calendar-region" aria-label="Fiscal year calendar">
+            <div class="calendar-grid" id="calendarGrid"></div>
+          </section>
+          <section class="calendar-footer" aria-label="Work reference">
+            <div class="calendar-footer-body">
+              <div class="calendar-footer-tabs" id="deskTabs" role="tablist" aria-label="Quick access sections">
+                <button
+                  class="calendar-footer-tab is-active"
+                  id="deskTabWork"
+                  data-desk-tab="workdesk"
+                  type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="referenceGrid"
+                >
+                  WORK DESK
+                </button>
+                <button
+                  class="calendar-footer-tab"
+                  id="deskTabLinks"
+                  data-desk-tab="links"
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="referenceGrid"
+                >
+                  QUICK LINKS
+                </button>
+                <button
+                  class="calendar-footer-tab"
+                  id="deskTabPlugins"
+                  data-desk-tab="plugins"
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="referenceGrid"
+                >
+                  PLUGINS
+                </button>
+              </div>
+              <div class="reference-grid" id="referenceGrid" role="tabpanel" aria-live="polite"></div>
+            </div>
+          </section>
+        </section>
+
+        <aside class="sidebar" aria-label="Work summary">
+          <section class="sidebar-section sidebar-section-hero">
+            <div class="sidebar-label">任务面板</div>
+            <div class="today-row">
+              <div>
+                <div class="today-date" id="todayLabel">Friday, Apr 10</div>
+                <div class="today-quarter" id="todayQuarterLabel">FY27 Q1 | Week 10</div>
+              </div>
+              <button class="quick-create-button" id="quickCreateButton" type="button">创建任务</button>
+            </div>
+            <div class="task-toolbar" id="taskToolbar">
+              <button class="interaction-button is-active" data-view="focus" type="button">聚焦待办</button>
+              <button class="interaction-button" data-view="all" type="button">全部任务</button>
+              <a class="interaction-button interaction-link-button" href="/admin.html">后台管理</a>
+            </div>
+            <div class="interaction-demo">
+              <div class="interaction-meta">
+                <p class="interaction-note" id="interactionNote">勾选任务后会直接移入已完成，适合在 Plash 上做快速确认。</p>
+                <p class="refresh-note" id="refreshNote">上次刷新：刚刚</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="sidebar-section task-board-section">
+            <div class="task-board" id="taskBoard"></div>
+          </section>
+
+          <section class="sidebar-utility">
+            <p class="sidebar-utility-note" id="sidebarUtilityNote"></p>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <div class="task-modal-backdrop is-hidden" id="taskModalBackdrop">
+      <section class="task-modal" aria-labelledby="taskModalTitle" aria-modal="true" role="dialog">
+        <div class="task-modal-header">
+          <div>
+            <div class="task-modal-eyebrow">Quick Add</div>
+            <h2 class="task-modal-title" id="taskModalTitle">新增单次任务</h2>
+          </div>
+          <button class="task-modal-close" id="taskModalClose" type="button" aria-label="关闭弹窗">×</button>
+        </div>
+
+        <form class="task-modal-form" id="quickTaskForm">
+          <label class="task-modal-field">
+            <span>任务标题</span>
+            <input id="quickTaskTitle" name="title" type="text" required />
+          </label>
+          <label class="task-modal-field">
+            <span>截止时间</span>
+            <input id="quickTaskDueAt" name="dueAt" type="datetime-local" />
+          </label>
+          <label class="task-modal-field">
+            <span>提前提醒（分钟）</span>
+            <input id="quickTaskReminder" name="reminderMinutes" type="number" min="0" value="15" />
+          </label>
+          <label class="task-modal-field">
+            <span>任务说明</span>
+            <textarea id="quickTaskNote" name="note" rows="4" placeholder="例如：今天 17:00 前提交 | 需要最后确认"></textarea>
+          </label>
+          <div class="task-modal-actions">
+            <button class="task-modal-secondary" id="quickTaskCancel" type="button">取消</button>
+            <button class="task-modal-primary" id="quickTaskSubmit" type="submit">保存任务</button>
+          </div>
+          <p class="task-modal-feedback" id="quickTaskFeedback" aria-live="polite"></p>
+        </form>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

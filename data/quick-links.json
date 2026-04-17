@@ -1,0 +1,245 @@
+[
+  {
+    "title": "协作平台",
+    "items": [
+      {
+        "label": "大汉三通",
+        "url": "https://3tong.net/login/login.jsp",
+        "note": "5G短信平台",
+        "remark": "用户名：dh86353 密码：75Ram7iA"
+      },
+      {
+        "label": "亿美",
+        "url": "http://www.b2m.cn/",
+        "note": "2G短信平台",
+        "remark": "用户名：wenjing 密码：123321jing"
+      },
+      {
+        "label": "数米",
+        "url": "http://web.shumi365.com:8890/smg/index.jsp",
+        "note": "2G短信平台",
+        "remark": "用户名：410376 密码：374834"
+      },
+      {
+        "label": "Sendcloud",
+        "url": "https://www.sendcloud.net/",
+        "note": "EDM发送平台",
+        "remark": "用户名：anne_wang@sinobasedm.com 密码：Anne_Wang"
+      },
+      {
+        "label": "腾讯企点",
+        "url": "https://admin.qidian.qq.com/",
+        "note": "企点QQ平台",
+        "remark": "用户名：3007592237 密码：Dell@123"
+      },
+      {
+        "label": "腾讯文档",
+        "url": "https://docs.qq.com/desktop",
+        "note": "腾讯文档平台",
+        "remark": ""
+      },
+      {
+        "label": "腾讯开放",
+        "url": "https://open.weixin.qq.com/",
+        "note": "通过微信平台授权，获取Union_Id",
+        "remark": "用户名：dellemc_solution@sina.com 密码：@Dellqywx123"
+      },
+      {
+        "label": "腾讯公众号",
+        "url": "https://mp.weixin.qq.com/",
+        "note": "微信公众号与小程序平台",
+        "remark": ""
+      },
+      {
+        "label": "腾讯支付",
+        "url": "https://pay.weixin.qq.com/",
+        "note": "优奥微信支付账号平台",
+        "remark": ""
+      },
+      {
+        "label": "支付宝支付",
+        "url": "https://www.alipay.com/",
+        "note": "优奥支付宝支付账号平台",
+        "remark": "用户名：bj_uao@sinobasedm.com 密码：!z3afVXVMNA2"
+      },
+      {
+        "label": "OA",
+        "url": "https://oa.sinobase.cn/login/Login.jsp",
+        "note": "公司OA平台",
+        "remark": "用户名：carl_li@sinobasedm.com 密码：Leezy@123"
+      },
+      {
+        "label": "Italent",
+        "url": "https://sinobase.italent.cn/Login",
+        "note": "公司北森平台",
+        "remark": ""
+      },
+      {
+        "label": "GIO",
+        "url": "https://accounts.growingio.com/login",
+        "note": "数据检测平台",
+        "remark": "用户名：13370131943 密码：SINObase123"
+      },
+      {
+        "label": "服务器充值",
+        "url": "https://signin.aliyun.com/login.htm?callback=https%3A%2F%2Fwww.aliyun.com%2F#/main",
+        "note": "阿里云平台",
+        "remark": "用户名：lizhongyu@1819930856647297.onaliyun.com 密码：Sino@123"
+      },
+      {
+        "label": "阿里云点播",
+        "url": "https://signin.aliyun.com/1819930856647297/login.htm?spm=5176.2020520153.10101.d1.6d954945WD6CaD",
+        "note": "阿里云平台",
+        "remark": "用户名：spdb@1819930856647297 密码：Spdb@123"
+      },
+      {
+        "label": "阿里企业邮箱",
+        "url": "https://qiye.aliyun.com/alimail/entries/v5.1/mail/inbox/all",
+        "note": "戴尔邮箱平台",
+        "remark": "用户名：telesales@marketing.dellemc-solution.com 密码：Dell_Sinobase!"
+      },
+      {
+        "label": "腾讯企业邮箱",
+        "url": "https://work.weixin.qq.com/mail/",
+        "note": "公司邮箱平台",
+        "remark": ""
+      },
+      {
+        "label": "天眼查",
+        "url": "https://open.tianyancha.com/",
+        "note": "企业接口查询平台",
+        "remark": "用户名：17744595687"
+      },
+      {
+        "label": "腾讯视频号",
+        "url": "https://channels.weixin.qq.com/platform/login",
+        "note": "视频号平台",
+        "remark": ""
+      },
+      {
+        "label": "火山引擎",
+        "url": "https://console.volcengine.com/auth/login",
+        "note": "",
+        "remark": "用户名：dell-solution 密码：Dell@123"
+      },
+      {
+        "label": "微信分析",
+        "url": "https://wedata.weixin.qq.com/mp2/basic-data/realtime-data",
+        "note": "小程序数据检测",
+        "remark": ""
+      },
+      {
+        "label": "UTM",
+        "url": "https://docs.qq.com/sheet/DTUpucWJmSmFQV29k",
+        "note": "UTM数据检测表",
+        "remark": ""
+      }
+    ]
+  },
+  {
+    "title": "管理平台",
+    "items": [
+      {
+        "label": "Haft",
+        "url": "https://haft.dell.com/",
+        "note": "数据上传与下载平台",
+        "remark": "用户名1：haftattp10243435 密码：K@9s624ns 用户名2：haftattp1200045 密码：Dell@2020"
+      },
+      {
+        "label": "Seafile",
+        "url": "http://seafile.smarket.com.cn/accounts/login/?next=/",
+        "note": "历史数据存储平台",
+        "remark": "用户名：leon_yang@sinobasedm.com 密码：820307Yj!"
+      },
+      {
+        "label": "Eshop",
+        "url": "https://www.dellemc-solution.com/eshop/admin",
+        "note": "管理平台",
+        "remark": "用户名：17744595687 密码：Carl2026@"
+      },
+      {
+        "label": "Comsumer",
+        "url": "https://b-consumer.smarket.com.cn/",
+        "note": "管理平台",
+        "remark": "用户名：zhongyu 密码：r9G=:_Qc^zgO"
+      },
+      {
+        "label": "Wework",
+        "url": "https://wecom.dell-brand.com/index.php?g=admin&m=public&a=login",
+        "note": "管理平台",
+        "remark": "用户名：AdminMasterSino 密码：@sinobase2022"
+      },
+      {
+        "label": "Smarket",
+        "url": "https://smarket.dellemc-solution.com/tenant/login.html",
+        "note": "管理平台",
+        "remark": "用户名：17744595687 密码：123456"
+      },
+      {
+        "label": "Ecpu",
+        "url": "https://e-cpu.smarket.com.cn/",
+        "note": "管理平台",
+        "remark": "用户名：Admin_MasterSino 密码：@ECPU2023"
+      },
+      {
+        "label": "MA",
+        "url": "https://solution-cdp.smarket.net.cn/login",
+        "note": "CDP平台",
+        "remark": "用户名：17744595687 密码：Leezy@12"
+      },
+      {
+        "label": "AIChat",
+        "url": "https://ai-search.smarket.com.cn/b/index.html#/admin/auth/rule",
+        "note": "智能搜索平台",
+        "remark": "用户名：admin 密码：@Sino2025"
+      }
+    ]
+  },
+  {
+    "title": "技术与AI平台",
+    "items": [
+      {
+        "label": "PCM",
+        "url": "https://docs.qq.com/sheet/DTVBEY2xKQXJBTGRO?tab=BB08J2",
+        "note": "立项汇总表",
+        "remark": ""
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/",
+        "note": "代码仓库与 PR 协作",
+        "remark": "用户名：397562309@qq.com 密码：lizhongyu@123"
+      },
+      {
+        "label": "OpenVPN",
+        "url": "https://dbeaver.io/download/",
+        "note": "公司内网VPN",
+        "remark": "Host: pc-2ze81z133s7p5fh4b.rwlb.rds.aliyuncs.com Port: 3306 Database: dellsaas Username: projectread Password: cbNRyNg524olqxrS"
+      },
+      {
+        "label": "蓝湖",
+        "url": "https://lanhuapp.com/sso/#/main/home?tid=85342d9f-1ae8-4789-861c-491d443f5433",
+        "note": "设计平台",
+        "remark": ""
+      },
+      {
+        "label": "智谱",
+        "url": "https://open.bigmodel.cn/console/overview",
+        "note": "大模型平台",
+        "remark": "用户名：19331615687"
+      },
+      {
+        "label": "图片压缩",
+        "url": "https://tinypng.com/",
+        "note": "",
+        "remark": ""
+      },
+      {
+        "label": "VPN",
+        "url": "https://user.hi-pure.net/signin?redirect=payment-success",
+        "note": "海外VPN链接平台",
+        "remark": "用户名：17744595687 密码：Leezy@123"
+      }
+    ]
+  }
+]

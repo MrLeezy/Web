@@ -1,0 +1,20 @@
+[
+  {
+    "id": "leads-splitter",
+    "icon": "SD",
+    "title": "大企数据每日上传",
+    "category": "Data Ops",
+    "summary": "智能拆分Leads表数据，支持多来源过滤和分类导出，一键生成业务所需报表。",
+    "pageUrl": "/plugins/leads-splitter.html",
+    "enabled": true
+  },
+  {
+    "id": "haft-uploader",
+    "icon": "HU",
+    "title": "Haft Uploader",
+    "category": "Automation",
+    "summary": "统一管理 Haft 上传任务、调度器状态和执行日志，支持手动测试与定时执行。",
+    "pageUrl": "/plugins/haft-uploader.html",
+    "enabled": true
+  }
+]

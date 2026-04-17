@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>任务后台</title>
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <main class="admin-shell">
+      <section class="admin-header">
+        <div>
+          <p class="eyebrow">Local Admin</p>
+          <h1>任务录入后台</h1>
+        </div>
+        <a class="wall-link" href="/index.html">打开壁纸页</a>
+      </section>
+
+      <div class="admin-mode-tabs" id="adminModeTabs">
+        <button class="admin-mode-tab is-active" data-admin-mode="tasks" type="button">任务管理</button>
+        <button class="admin-mode-tab" data-admin-mode="quick-access" type="button">Quick Access 管理</button>
+      </div>
+
+      <section class="admin-view is-active" id="tasksAdminView" data-admin-view="tasks">
+        <section class="admin-grid">
+          <div class="panel-stack">
+            <section class="panel">
+              <h2 id="taskFormTitle">新增单次任务</h2>
+              <form id="taskForm" class="task-form">
+                <input id="taskEditId" name="editId" type="hidden" />
+                <label>
+                  <span>任务标题</span>
+                  <input id="titleInput" name="title" type="text" required />
+                </label>
+                <label>
+                  <span>截止时间</span>
+                  <input id="dueAtInput" name="dueAt" type="datetime-local" />
+                </label>
+                <label>
+                  <span>提前提醒（分钟）</span>
+                  <input id="taskReminderInput" name="reminderMinutes" type="number" min="0" value="15" />
+                </label>
+                <label>
+                  <span>任务说明</span>
+                  <textarea id="noteInput" name="note" rows="4" placeholder="例如：今天 17:00 前提交 | 需要最后确认"></textarea>
+                </label>
+                <div class="form-actions">
+                  <button class="submit-button" id="taskSubmitButton" type="submit">保存任务</button>
+                  <button class="ghost-button is-hidden" id="taskCancelButton" type="button">取消编辑</button>
+                </div>
+              </form>
+            </section>
+
+            <section class="panel">
+              <h2 id="templateFormTitle">新增周期任务</h2>
+              <form id="templateForm" class="task-form">
+                <input id="templateEditId" name="editId" type="hidden" />
+                <label>
+                  <span>任务标题</span>
+                  <input id="templateTitleInput" name="title" type="text" required />
+                </label>
+                <div class="weekday-group">
+                  <span>执行星期</span>
+                  <div class="all-workday-row">
+                    <label class="checkbox-row all-workday-label">
+                      <input type="checkbox" id="allWorkdayCheckbox" />
+                      <span>工作日（排除周末和节假日）</span>
+                    </label>
+                    <div class="weekday-grid">
+                      <label><input type="checkbox" name="weekdays" value="1" />周一</label>
+                      <label><input type="checkbox" name="weekdays" value="2" />周二</label>
+                      <label><input type="checkbox" name="weekdays" value="3" />周三</label>
+                      <label><input type="checkbox" name="weekdays" value="4" />周四</label>
+                      <label><input type="checkbox" name="weekdays" value="5" />周五</label>
+                      <label><input type="checkbox" name="weekdays" value="6" />周六</label>
+                      <label><input type="checkbox" name="weekdays" value="0" />周日</label>
+                    </div>
+                  </div>
+                </div>
+                <label>
+                  <span>执行时间</span>
+                  <input id="templateTimeInput" name="time" type="time" value="12:00" />
+                </label>
+                <label>
+                  <span>提前提醒（分钟）</span>
+                  <input id="templateReminderInput" name="reminderMinutes" type="number" min="0" value="15" />
+                </label>
+                <label>
+                  <span>说明</span>
+                  <textarea id="templateNoteInput" name="note" rows="3" placeholder="例如：会前准备议程和更新"></textarea>
+                </label>
+                <div class="form-actions">
+                  <button class="submit-button" id="templateSubmitButton" type="submit">保存周期规则</button>
+                  <button class="ghost-button is-hidden" id="templateCancelButton" type="button">取消编辑</button>
+                </div>
+              </form>
+            </section>
+          </div>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2>当前任务</h2>
+              <button id="refreshButton" class="ghost-button" type="button">刷新</button>
+            </div>
+            <div class="task-sheet-tabs">
+              <button class="sheet-tab is-active" data-sheet="today" type="button">今天要完成</button>
+              <button class="sheet-tab" data-sheet="recurring" type="button">周期任务</button>
+              <button class="sheet-tab" data-sheet="later" type="button">暂不紧急</button>
+              <button class="sheet-tab" data-sheet="done" type="button">已完成</button>
+            </div>
+            <div id="recurringTemplatesPanel" class="recurring-templates-panel is-hidden">
+              <div class="panel-head">
+                <h2>周期规则</h2>
+              </div>
+              <div id="templateList" class="admin-task-list"></div>
+              <div class="panel-divider"></div>
+            </div>
+            <div id="adminTaskList" class="admin-task-list"></div>
+          </section>
+        </section>
+      </section>
+
+      <section class="admin-view" id="quickAccessAdminView" data-admin-view="quick-access">
+        <div class="access-mode-tabs" id="accessModeTabs">
+          <button class="access-mode-tab is-active" data-access-mode="work-desk" type="button">WORK DESK</button>
+          <button class="access-mode-tab" data-access-mode="quick-links" type="button">QUICK LINKS</button>
+          <button class="access-mode-tab" data-access-mode="plugins" type="button">PLUGINS</button>
+        </div>
+
+        <section class="access-view is-active" data-access-view="work-desk">
+          <section class="panel panel-wide">
+            <div class="panel-head">
+              <div>
+                <h2>Work Desk 配置</h2>
+                <p class="panel-subtitle">维护首页 WORK DESK 的分类和快捷内容。</p>
+              </div>
+              <button class="ghost-button" id="addWorkDeskGroupButton" type="button">新增分类</button>
+            </div>
+            <div id="workDeskEditor" class="access-editor"></div>
+            <div class="form-actions quick-links-actions">
+              <button class="submit-button" id="saveWorkDeskButton" type="button">保存 Work Desk</button>
+            </div>
+          </section>
+        </section>
+
+        <section class="access-view" data-access-view="quick-links">
+          <section class="panel panel-wide">
+            <div class="panel-head">
+              <div>
+                <h2>Quick Links 配置</h2>
+                <p class="panel-subtitle">维护首页 QUICK LINKS 的分类和链接内容。</p>
+              </div>
+              <button class="ghost-button" id="addQuickLinkGroupButton" type="button">新增分类</button>
+            </div>
+            <div id="quickLinksEditor" class="access-editor"></div>
+            <div class="form-actions quick-links-actions">
+              <button class="submit-button" id="saveQuickLinksButton" type="button">保存 Quick Links</button>
+            </div>
+          </section>
+        </section>
+
+        <section class="access-view" data-access-view="plugins">
+          <section class="panel panel-wide">
+            <div class="panel-head">
+              <div>
+                <h2>Plugins 配置</h2>
+                <p class="panel-subtitle">维护首页 PLUGINS 的卡片标题、描述、入口地址和启用状态。</p>
+              </div>
+              <button class="ghost-button" id="addPluginCardButton" type="button">新增插件</button>
+            </div>
+            <div id="pluginCardsEditor" class="access-editor"></div>
+            <div class="form-actions quick-links-actions">
+              <button class="submit-button" id="savePluginCardsButton" type="button">保存 Plugins</button>
+            </div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

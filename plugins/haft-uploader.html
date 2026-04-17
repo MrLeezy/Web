@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Haft Uploader</title>
+    <link rel="stylesheet" href="./haft-uploader.css" />
+  </head>
+  <body>
+    <main class="plugin-shell">
+      <section class="plugin-hero">
+        <a class="hero-back" href="/">← Back To Board</a>
+        <div class="hero-badge-row">
+          <span class="hero-badge" id="pluginTypeBadge">Internal Plugin</span>
+          <span class="hero-badge" id="pluginCategoryBadge">Automation</span>
+        </div>
+        <h1 id="pluginTitle">Haft Uploader</h1>
+        <p class="hero-copy" id="pluginSummary">
+          Create upload jobs, manage the scheduler, and review execution logs for the Haft automation workflow in one
+          place.
+        </p>
+        <div class="hero-actions">
+          <button id="createTaskButton" class="action-button" type="button">Create Task</button>
+          <button id="refreshButton" class="action-button is-secondary" type="button">Refresh</button>
+          <button id="schedulerToggleButton" class="action-button is-secondary" type="button">Toggle Scheduler</button>
+        </div>
+        <p id="heroStatus" class="hero-status">Loading current scheduler and task status...</p>
+      </section>
+
+      <section class="hero-metrics">
+        <article class="metric-card">
+          <span class="metric-label">Scheduler</span>
+          <strong class="metric-value" id="schedulerStateValue">--</strong>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Enabled Tasks</span>
+          <strong class="metric-value" id="enabledTaskValue">--</strong>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Accounts</span>
+          <strong class="metric-value" id="accountCountValue">--</strong>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Protected Accounts</span>
+          <strong class="metric-value" id="protectedCountValue">--</strong>
+        </article>
+      </section>
+
+      <section class="plugin-layout">
+        <section class="panel panel-tasks">
+          <div class="panel-header">
+            <div>
+              <p class="panel-eyebrow">Jobs</p>
+              <h2>Task Queue</h2>
+              <p id="taskSectionMeta" class="panel-copy">Review configured tasks and launch manual test runs.</p>
+            </div>
+          </div>
+          <div id="taskList" class="task-list"></div>
+        </section>
+
+        <section class="panel panel-logs">
+          <div class="panel-header">
+            <div>
+              <p class="panel-eyebrow">History</p>
+              <h2>Recent Logs</h2>
+              <p id="logSectionMeta" class="panel-copy">The latest upload results and debug traces appear here.</p>
+            </div>
+            <button id="clearLogsButton" class="action-button is-ghost" type="button">Clear Logs</button>
+          </div>
+          <div id="logList" class="log-list"></div>
+        </section>
+      </section>
+    </main>
+
+    <div id="taskModal" class="modal hidden">
+      <div class="modal-backdrop" data-close-modal="true"></div>
+      <section class="modal-panel">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Task Editor</p>
+            <h2 id="formTitle">Create Task</h2>
+          </div>
+          <button id="closeModalButton" class="action-button is-ghost" type="button">Close</button>
+        </div>
+
+        <form id="taskForm" class="task-form">
+          <input type="hidden" id="existingTaskId" />
+
+          <div class="form-grid">
+            <label>
+              <span>Task Name</span>
+              <input id="name" required />
+            </label>
+
+            <label>
+              <span>Account</span>
+              <select id="accountKey" required></select>
+            </label>
+
+            <label class="toggle toggle-row">
+              <input id="enabled" type="checkbox" checked />
+              <span>Enable Task</span>
+            </label>
+
+            <label>
+              <span>Schedule Mode</span>
+              <select id="scheduleMode">
+                <option value="daily">Every Day</option>
+                <option value="workday">Workday</option>
+                <option value="weekly">Specific Weekdays</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Upload Time</span>
+              <input id="uploadTime" type="time" required value="09:00" />
+            </label>
+
+            <fieldset id="weekdayField" class="weekday-field hidden">
+              <legend>Upload Weekdays</legend>
+              <div class="weekday-grid">
+                <label><input type="checkbox" name="weekday" value="1" checked />Mon</label>
+                <label><input type="checkbox" name="weekday" value="2" checked />Tue</label>
+                <label><input type="checkbox" name="weekday" value="3" checked />Wed</label>
+                <label><input type="checkbox" name="weekday" value="4" checked />Thu</label>
+                <label><input type="checkbox" name="weekday" value="5" checked />Fri</label>
+                <label><input type="checkbox" name="weekday" value="6" />Sat</label>
+                <label><input type="checkbox" name="weekday" value="0" />Sun</label>
+              </div>
+            </fieldset>
+
+            <label>
+              <span>File Source</span>
+              <select id="fileSourceType">
+                <option value="directory">Local Directory</option>
+                <option value="download">URL Download</option>
+              </select>
+            </label>
+
+            <label id="directoryPathField">
+              <span>Directory Path</span>
+              <input id="directoryPath" />
+            </label>
+
+            <label id="downloadDirField" class="hidden">
+              <span>Download Directory</span>
+              <input id="downloadDir" />
+              <small class="field-hint">Files are downloaded here first, then the newest files are uploaded.</small>
+            </label>
+
+            <label id="urlsField" class="hidden form-grid-full">
+              <span>Download URLs</span>
+              <textarea id="urlsText" rows="5" placeholder="One URL per line"></textarea>
+            </label>
+
+            <label>
+              <span>Required File Count</span>
+              <input id="requiredCount" type="number" min="1" value="1" />
+            </label>
+
+            <label>
+              <span>Stable Window (ms)</span>
+              <input id="stableWindowMs" type="number" min="1000" step="500" value="4000" />
+            </label>
+
+            <label class="toggle toggle-row">
+              <input id="headless" type="checkbox" />
+              <span>Headless Browser</span>
+            </label>
+
+            <label>
+              <span>Slow Motion (ms)</span>
+              <input id="slowMoMs" type="number" min="0" step="50" value="200" />
+            </label>
+
+            <label>
+              <span>Post Upload Delay (ms)</span>
+              <input id="postUploadDelayMs" type="number" min="1000" step="500" value="3000" />
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="action-button">Save Task</button>
+            <button type="button" id="resetFormButton" class="action-button is-secondary">Reset</button>
+          </div>
+        </form>
+
+        <p id="formMessage" class="form-message"></p>
+      </section>
+    </div>
+
+    <script src="./haft-uploader.js"></script>
+  </body>
+</html>

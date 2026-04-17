@@ -1,0 +1,26 @@
+{
+  "loginUrl": "https://haft.dell.com/",
+  "downloadPortalAuth": {
+    "loginUrl": "https://smarket.dellemc-solution.com/tenant/login.html",
+    "username": "CHANGE_ME",
+    "password": "CHANGE_ME"
+  },
+  "accounts": [
+    {
+      "key": "acct1",
+      "label": "账号1",
+      "username": "haftattp1200045",
+      "password": "CHANGE_ME",
+      "targetPath": ["outgoing", "Archive"],
+      "allowManualRun": true
+    },
+    {
+      "key": "acct2",
+      "label": "账号2",
+      "username": "haftattp10243435",
+      "password": "CHANGE_ME",
+      "targetPath": ["outgoing", "Sinobase_Tele", "archive"],
+      "allowManualRun": true
+    }
+  ]
+}

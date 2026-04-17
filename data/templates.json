@@ -1,0 +1,68 @@
+[
+  {
+    "id": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
+    "createdAt": "2026-04-10T09:43:10.655Z",
+    "title": "大企数据上传",
+    "weekdays": "all_workday",
+    "time": "12:00",
+    "reminderMinutes": 15,
+    "note": "大企业leads数据上传到Haft平台",
+    "active": true,
+    "updatedAt": "2026-04-10T13:56:01.781Z",
+    "allWorkday": true
+  },
+  {
+    "id": "4792eec4-2d27-4f73-88c2-24fcd6ef012e",
+    "createdAt": "2026-04-10T09:44:49.279Z",
+    "title": "Solution周会",
+    "weekdays": [
+      2
+    ],
+    "time": "15:00",
+    "reminderMinutes": 15,
+    "note": "https://teams.microsoft.com/dl/launcher/launcher.html?url=%2F_%23%2Fl%2Fmeetup-join%2F19%3Ameeting_MjBjM2IxMmEtZDE3ZC00ZjY0LWEzNDEtYWFlNWYyNjFmNTQw%40thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%2522945c199a-83a2-4e80-9f8c-5a91be5752dd%2522%252c%2522Oid%2522%253a%2522eddca6bc-7f17-482e-b53a-77ebefbcab1f%2522%257d%26anon%3Dtrue&type=meetup-join&deeplinkId=1a519bc8-a8d0-4b2c-9d21-f54b305fa225&directDl=true&msLaunch=true&enableMobilePage=true&suppressPrompt=true",
+    "active": true,
+    "updatedAt": "2026-04-10T09:44:49.279Z"
+  },
+  {
+    "id": "14221924-126e-43e3-b626-1d40dd2a009f",
+    "createdAt": "2026-04-10T09:48:35.130Z",
+    "title": "外星人周会",
+    "weekdays": [
+      4
+    ],
+    "time": "15:30",
+    "reminderMinutes": 15,
+    "note": "https://teams.microsoft.com/meet/29290975877606?p=O6SAtnl8yrUVnelHTx",
+    "active": true,
+    "updatedAt": "2026-04-10T09:48:35.130Z"
+  },
+  {
+    "id": "cad2d679-0b9a-41b2-84cb-f0e660df6958",
+    "createdAt": "2026-04-13T11:26:10.495Z",
+    "title": "大企业周报",
+    "weekdays": [
+      2
+    ],
+    "time": "14:30",
+    "reminderMinutes": 15,
+    "note": "整理大企周报与分析",
+    "active": true,
+    "allWorkday": false,
+    "updatedAt": "2026-04-13T11:26:10.513Z"
+  },
+  {
+    "id": "1f2e04ad-b62e-4914-b2e6-37e1df566d89",
+    "createdAt": "2026-04-16T07:26:12.423Z",
+    "title": "部门周报",
+    "weekdays": [
+      5
+    ],
+    "time": "18:00",
+    "reminderMinutes": 15,
+    "note": "",
+    "active": true,
+    "allWorkday": false,
+    "updatedAt": "2026-04-16T07:26:12.425Z"
+  }
+]

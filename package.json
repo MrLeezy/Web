@@ -1,0 +1,12 @@
+{
+  "name": "fy27-wallboard",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "node-cron": "^4.2.1",
+    "playwright": "^1.59.1"
+  }
+}

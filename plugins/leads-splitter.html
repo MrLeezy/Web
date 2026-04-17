@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leads Splitter</title>
+    <link rel="stylesheet" href="./leads-splitter.css" />
+  </head>
+  <body>
+    <main class="plugin-shell">
+      <section class="plugin-hero">
+        <a class="hero-back" href="/">← Back To Board</a>
+        <div class="hero-badge-row">
+          <span class="hero-badge" id="pluginTypeBadge">Internal Plugin</span>
+          <span class="hero-badge" id="pluginCategoryBadge">Data Ops</span>
+        </div>
+        <h1 id="pluginTitle">Leads Splitter</h1>
+        <p class="hero-copy" id="pluginSummary">
+          Upload the standard leads export, split it into two delivery-ready CSV files, and keep the workflow aligned
+          with the original internal tool.
+        </p>
+      </section>
+
+      <section class="plugin-layout">
+        <section class="panel panel-primary">
+          <div class="panel-header">
+            <p class="panel-eyebrow">Upload</p>
+            <h2>Source File</h2>
+            <p class="panel-copy">
+              Supports the same CSV input as the reference page. This page does not include the old auto-run flow.
+            </p>
+          </div>
+
+          <input id="fileInput" type="file" accept=".csv,text/csv" hidden />
+
+          <button id="dropzone" class="dropzone" type="button">
+            <span class="dropzone-icon">LS</span>
+            <span class="dropzone-title" id="dropzoneTitle">Choose or drop a CSV file</span>
+            <span class="dropzone-hint" id="dropzoneHint">The file will be split into two CSV outputs.</span>
+          </button>
+
+          <div class="action-row">
+            <button id="browseButton" class="action-button" type="button">Select CSV</button>
+            <span class="action-meta" id="actionMeta">Recommended input: the standard leads export file.</span>
+          </div>
+
+          <div class="status-card is-hidden" id="statusCard"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <p class="panel-eyebrow">Rules</p>
+            <h2>Split Logic</h2>
+          </div>
+          <ul class="rule-list">
+            <li>Table 1 removes `wechat-dsp-xcx`, `wechat-dsp`, `douyin`, `kuaishou`, and `toutiao`.</li>
+            <li>Table 2 keeps only `wechat-dsp` for the downstream handoff flow.</li>
+            <li>Output filenames follow the same naming pattern as the previous internal page.</li>
+          </ul>
+        </section>
+      </section>
+
+      <section class="results is-hidden" id="resultsSection">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="output-grid" id="outputGrid"></div>
+        <section class="panel">
+          <div class="panel-header">
+            <p class="panel-eyebrow">Breakdown</p>
+            <h2>Source Distribution</h2>
+          </div>
+          <div class="distribution-grid" id="distributionGrid"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./leads-splitter.js"></script>
+  </body>
+</html>

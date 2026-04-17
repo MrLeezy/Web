@@ -1,0 +1,82 @@
+[
+  {
+    "title": "Mac",
+    "items": [
+      { "lead": "⌘⇧4", "note": "区域截图" },
+      { "lead": "⌘⇧5", "note": "打开截图面板" },
+      { "lead": "⌘⇧.", "note": "显示隐藏文件" },
+      { "lead": "⌘Space", "note": "聚焦搜索" },
+      { "lead": "⌘Tab", "note": "切换应用" },
+      { "lead": "⌘`", "note": "切换窗口" },
+      { "lead": "⌘W", "note": "关闭窗口" },
+      { "lead": "⌘Q", "note": "退出应用" },
+      { "lead": "⌘N", "note": "新建窗口" },
+      { "lead": "⌘,", "note": "打开设置" },
+      { "lead": "⌘C", "note": "复制" },
+      { "lead": "⌘V", "note": "粘贴" },
+      { "lead": "⌘Z", "note": "撤销" },
+      { "lead": "⌘⇧Z", "note": "重做" },
+      { "lead": "⌥⌘Esc", "note": "强制退出" }
+    ]
+  },
+  {
+    "title": "Excel",
+    "items": [
+      { "lead": "⌘⇧L", "note": "开启或关闭筛选" },
+      { "lead": "⌘1", "note": "设置单元格格式" },
+      { "lead": "⌘;", "note": "插入当天日期" },
+      { "lead": "⌘D", "note": "向下填充" },
+      { "lead": "⌘R", "note": "向右填充" },
+      { "lead": "⌘T", "note": "创建表格" },
+      { "lead": "⌃G", "note": "定位到单元格" },
+      { "lead": "⌘F", "note": "查找" },
+      { "lead": "⌘H", "note": "替换" },
+      { "lead": "⌘ShiftK", "note": "插入超链接" },
+      { "lead": "SUMIFS", "note": "按条件求和" },
+      { "lead": "XLOOKUP", "note": "精确查找" },
+      { "lead": "IFERROR", "note": "出错时返回备用值" },
+      { "lead": "COUNTIF", "note": "按条件计数" },
+      { "lead": "TEXTJOIN", "note": "合并文本" }
+    ]
+  },
+  {
+    "title": "Terminal",
+    "items": [
+      { "lead": "Ctrl A", "note": "跳到行首" },
+      { "lead": "Ctrl E", "note": "跳到行尾" },
+      { "lead": "Ctrl R", "note": "搜索历史命令" },
+      { "lead": "Ctrl C", "note": "中断当前命令" },
+      { "lead": "Ctrl U", "note": "删除光标前内容" },
+      { "lead": "Ctrl K", "note": "删除光标后内容" },
+      { "lead": "Ctrl L", "note": "清屏" },
+      { "lead": "Ctrl D", "note": "退出终端" },
+      { "lead": "pwd", "note": "查看当前目录" },
+      { "lead": "ls -la", "note": "显示完整文件列表" },
+      { "lead": "cd ..", "note": "返回上一级" },
+      { "lead": "mkdir", "note": "新建文件夹" },
+      { "lead": "rm -i", "note": "删除前确认" },
+      { "lead": "rg text", "note": "全文搜索文本" },
+      { "lead": "open .", "note": "打开当前目录" }
+    ]
+  },
+  {
+    "title": "开发工具",
+    "items": [
+      { "lead": "⌘P", "note": "快速打开文件" },
+      { "lead": "⌘⇧P", "note": "命令面板" },
+      { "lead": "⌥⇧F", "note": "格式化文档" },
+      { "lead": "⌘B", "note": "显示或隐藏侧边栏" },
+      { "lead": "⌃`", "note": "显示或隐藏终端" },
+      { "lead": "F2", "note": "重命名符号" },
+      { "lead": "⌘/", "note": "添加或取消注释" },
+      { "lead": "⌥↑↓", "note": "上下移动当前行" },
+      { "lead": "⌘D", "note": "选中下一个相同项" },
+      { "lead": "⌘⇧O", "note": "跳转到符号" },
+      { "lead": "⌘⇧F", "note": "全局搜索" },
+      { "lead": "git status", "note": "查看变更状态" },
+      { "lead": "git diff", "note": "查看修改差异" },
+      { "lead": "code .", "note": "打开当前项目" },
+      { "lead": "npm run dev", "note": "启动本地服务" }
+    ]
+  }
+]

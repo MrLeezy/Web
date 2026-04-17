@@ -1,0 +1,48 @@
+{
+  "tasks": [
+    {
+      "id": "local-archive-upload",
+      "name": "本地目录上传到账号2",
+      "enabled": false,
+      "schedule": "0 9 * * *",
+      "accountKey": "acct2",
+      "fileSource": {
+        "type": "directory",
+        "directoryPath": "/path/to/source/folder",
+        "requiredCount": 2,
+        "stableWindowMs": 4000
+      },
+      "browser": {
+        "headless": false,
+        "slowMoMs": 200
+      },
+      "upload": {
+        "postUploadDelayMs": 3000
+      }
+    },
+    {
+      "id": "download-archive-upload",
+      "name": "下载后上传到账号2",
+      "enabled": false,
+      "schedule": "30 9 * * *",
+      "accountKey": "acct2",
+      "fileSource": {
+        "type": "download",
+        "downloadDir": "/path/to/download/folder",
+        "requiredCount": 3,
+        "stableWindowMs": 4000,
+        "urls": [
+          "https://example.com/file-a.csv",
+          "https://example.com/file-b.csv"
+        ]
+      },
+      "browser": {
+        "headless": false,
+        "slowMoMs": 200
+      },
+      "upload": {
+        "postUploadDelayMs": 3000
+      }
+    }
+  ]
+}
