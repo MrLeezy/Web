@@ -3,45 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Haft Uploader</title>
+    <title>Haft 自动上传</title>
     <link rel="stylesheet" href="./haft-uploader.css" />
   </head>
   <body>
     <main class="plugin-shell">
       <section class="plugin-hero">
-        <a class="hero-back" href="/">← Back To Board</a>
+        <a class="hero-back" href="/">← 返回看板</a>
         <div class="hero-badge-row">
-          <span class="hero-badge" id="pluginTypeBadge">Internal Plugin</span>
-          <span class="hero-badge" id="pluginCategoryBadge">Automation</span>
+          <span class="hero-badge" id="pluginTypeBadge">内部插件</span>
+          <span class="hero-badge" id="pluginCategoryBadge">自动化</span>
         </div>
-        <h1 id="pluginTitle">Haft Uploader</h1>
+        <h1 id="pluginTitle">Haft 自动上传</h1>
         <p class="hero-copy" id="pluginSummary">
-          Create upload jobs, manage the scheduler, and review execution logs for the Haft automation workflow in one
-          place.
+          在一个页面里创建上传任务、管理调度器，并查看 Haft 自动化流程的执行日志。
         </p>
         <div class="hero-actions">
-          <button id="createTaskButton" class="action-button" type="button">Create Task</button>
-          <button id="refreshButton" class="action-button is-secondary" type="button">Refresh</button>
-          <button id="schedulerToggleButton" class="action-button is-secondary" type="button">Toggle Scheduler</button>
+          <button id="createTaskButton" class="action-button" type="button">新建任务</button>
+          <button id="refreshButton" class="action-button is-secondary" type="button">刷新</button>
+          <button id="schedulerToggleButton" class="action-button is-secondary" type="button">切换调度器</button>
         </div>
-        <p id="heroStatus" class="hero-status">Loading current scheduler and task status...</p>
+        <p id="heroStatus" class="hero-status">正在加载当前调度器和任务状态...</p>
       </section>
 
       <section class="hero-metrics">
         <article class="metric-card">
-          <span class="metric-label">Scheduler</span>
+          <span class="metric-label">调度器</span>
           <strong class="metric-value" id="schedulerStateValue">--</strong>
         </article>
         <article class="metric-card">
-          <span class="metric-label">Enabled Tasks</span>
+          <span class="metric-label">启用任务</span>
           <strong class="metric-value" id="enabledTaskValue">--</strong>
         </article>
         <article class="metric-card">
-          <span class="metric-label">Accounts</span>
+          <span class="metric-label">账号</span>
           <strong class="metric-value" id="accountCountValue">--</strong>
         </article>
         <article class="metric-card">
-          <span class="metric-label">Protected Accounts</span>
+          <span class="metric-label">受保护账号</span>
           <strong class="metric-value" id="protectedCountValue">--</strong>
         </article>
       </section>
@@ -50,9 +49,9 @@
         <section class="panel panel-tasks">
           <div class="panel-header">
             <div>
-              <p class="panel-eyebrow">Jobs</p>
-              <h2>Task Queue</h2>
-              <p id="taskSectionMeta" class="panel-copy">Review configured tasks and launch manual test runs.</p>
+              <p class="panel-eyebrow">任务</p>
+              <h2>任务队列</h2>
+              <p id="taskSectionMeta" class="panel-copy">查看已配置任务，并发起手动测试执行。</p>
             </div>
           </div>
           <div id="taskList" class="task-list"></div>
@@ -61,11 +60,11 @@
         <section class="panel panel-logs">
           <div class="panel-header">
             <div>
-              <p class="panel-eyebrow">History</p>
-              <h2>Recent Logs</h2>
-              <p id="logSectionMeta" class="panel-copy">The latest upload results and debug traces appear here.</p>
+              <p class="panel-eyebrow">历史</p>
+              <h2>最近日志</h2>
+              <p id="logSectionMeta" class="panel-copy">最新上传结果和调试追踪会显示在这里。</p>
             </div>
-            <button id="clearLogsButton" class="action-button is-ghost" type="button">Clear Logs</button>
+            <button id="clearLogsButton" class="action-button is-ghost" type="button">清空日志</button>
           </div>
           <div id="logList" class="log-list"></div>
         </section>
@@ -77,10 +76,10 @@
       <section class="modal-panel">
         <div class="panel-header">
           <div>
-            <p class="panel-eyebrow">Task Editor</p>
-            <h2 id="formTitle">Create Task</h2>
+            <p class="panel-eyebrow">任务编辑</p>
+            <h2 id="formTitle">新建任务</h2>
           </div>
-          <button id="closeModalButton" class="action-button is-ghost" type="button">Close</button>
+          <button id="closeModalButton" class="action-button is-ghost" type="button">关闭</button>
         </div>
 
         <form id="taskForm" class="task-form">
@@ -88,100 +87,100 @@
 
           <div class="form-grid">
             <label>
-              <span>Task Name</span>
+              <span>任务名称</span>
               <input id="name" required />
             </label>
 
             <label>
-              <span>Account</span>
+              <span>账号</span>
               <select id="accountKey" required></select>
             </label>
 
             <label class="toggle toggle-row">
               <input id="enabled" type="checkbox" checked />
-              <span>Enable Task</span>
+              <span>启用任务</span>
             </label>
 
             <label>
-              <span>Schedule Mode</span>
+              <span>执行频率</span>
               <select id="scheduleMode">
-                <option value="daily">Every Day</option>
-                <option value="workday">Workday</option>
-                <option value="weekly">Specific Weekdays</option>
+                <option value="daily">每天</option>
+                <option value="workday">工作日</option>
+                <option value="weekly">指定星期</option>
               </select>
             </label>
 
             <label>
-              <span>Upload Time</span>
+              <span>上传时间</span>
               <input id="uploadTime" type="time" required value="09:00" />
             </label>
 
             <fieldset id="weekdayField" class="weekday-field hidden">
-              <legend>Upload Weekdays</legend>
+              <legend>上传星期</legend>
               <div class="weekday-grid">
-                <label><input type="checkbox" name="weekday" value="1" checked />Mon</label>
-                <label><input type="checkbox" name="weekday" value="2" checked />Tue</label>
-                <label><input type="checkbox" name="weekday" value="3" checked />Wed</label>
-                <label><input type="checkbox" name="weekday" value="4" checked />Thu</label>
-                <label><input type="checkbox" name="weekday" value="5" checked />Fri</label>
-                <label><input type="checkbox" name="weekday" value="6" />Sat</label>
-                <label><input type="checkbox" name="weekday" value="0" />Sun</label>
+                <label><input type="checkbox" name="weekday" value="1" checked />周一</label>
+                <label><input type="checkbox" name="weekday" value="2" checked />周二</label>
+                <label><input type="checkbox" name="weekday" value="3" checked />周三</label>
+                <label><input type="checkbox" name="weekday" value="4" checked />周四</label>
+                <label><input type="checkbox" name="weekday" value="5" checked />周五</label>
+                <label><input type="checkbox" name="weekday" value="6" />周六</label>
+                <label><input type="checkbox" name="weekday" value="0" />周日</label>
               </div>
             </fieldset>
 
             <label>
-              <span>File Source</span>
+              <span>文件来源</span>
               <select id="fileSourceType">
-                <option value="directory">Local Directory</option>
-                <option value="download">URL Download</option>
+                <option value="directory">本地目录</option>
+                <option value="download">链接下载</option>
               </select>
             </label>
 
             <label id="directoryPathField">
-              <span>Directory Path</span>
+              <span>目录路径</span>
               <input id="directoryPath" />
             </label>
 
             <label id="downloadDirField" class="hidden">
-              <span>Download Directory</span>
+              <span>下载目录</span>
               <input id="downloadDir" />
-              <small class="field-hint">Files are downloaded here first, then the newest files are uploaded.</small>
+              <small class="field-hint">文件会先下载到这里，然后上传最新文件。</small>
             </label>
 
             <label id="urlsField" class="hidden form-grid-full">
-              <span>Download URLs</span>
-              <textarea id="urlsText" rows="5" placeholder="One URL per line"></textarea>
+              <span>下载链接</span>
+              <textarea id="urlsText" rows="5" placeholder="每行一个下载链接"></textarea>
             </label>
 
             <label>
-              <span>Required File Count</span>
+              <span>所需文件数量</span>
               <input id="requiredCount" type="number" min="1" value="1" />
             </label>
 
             <label>
-              <span>Stable Window (ms)</span>
+              <span>文件稳定等待（毫秒）</span>
               <input id="stableWindowMs" type="number" min="1000" step="500" value="4000" />
             </label>
 
             <label class="toggle toggle-row">
               <input id="headless" type="checkbox" />
-              <span>Headless Browser</span>
+              <span>无头浏览器</span>
             </label>
 
             <label>
-              <span>Slow Motion (ms)</span>
+              <span>慢速执行（毫秒）</span>
               <input id="slowMoMs" type="number" min="0" step="50" value="200" />
             </label>
 
             <label>
-              <span>Post Upload Delay (ms)</span>
+              <span>上传后等待（毫秒）</span>
               <input id="postUploadDelayMs" type="number" min="1000" step="500" value="3000" />
             </label>
           </div>
 
           <div class="form-actions">
-            <button type="submit" class="action-button">Save Task</button>
-            <button type="button" id="resetFormButton" class="action-button is-secondary">Reset</button>
+            <button type="submit" class="action-button">保存任务</button>
+            <button type="button" id="resetFormButton" class="action-button is-secondary">重置</button>
           </div>
         </form>
 

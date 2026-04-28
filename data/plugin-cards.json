@@ -11,10 +11,37 @@
   {
     "id": "haft-uploader",
     "icon": "HU",
-    "title": "Haft Uploader",
-    "category": "Automation",
+    "title": "Haft 自动上传",
+    "category": "自动化",
     "summary": "统一管理 Haft 上传任务、调度器状态和执行日志，支持手动测试与定时执行。",
     "pageUrl": "/plugins/haft-uploader.html",
+    "enabled": true
+  },
+  {
+    "id": "wechat-xcx-qacode",
+    "icon": "码",
+    "title": "小程序二维码生成器",
+    "category": "Automation",
+    "summary": "批量生成小程序二维码。上传文件后自动打开微信公众平台，等待扫码登录后逐条生成并保存二维码图片。",
+    "pageUrl": "/plugins/wechat-xcx-qacode.html",
+    "enabled": true
+  },
+  {
+    "id": "comsumer-data",
+    "icon": "数",
+    "title": "Consumer 数据生成器",
+    "category": "Data Ops",
+    "summary": "根据季度和周度生成数据报告，支持多数据源合并、数据清洗、周报和Demand数据生成。",
+    "pageUrl": "/plugins/comsumer-data.html",
+    "enabled": true
+  },
+  {
+    "id": "geo-detection",
+    "icon": "GEO",
+    "title": "GEO长尾词监控",
+    "category": "Automation",
+    "summary": "监控品牌词在各智能Chat平台（豆包、Deepseek、千问、元宝）的曝光情况，自动检测AI回复内容和参考资料中的品牌词命中。",
+    "pageUrl": "/plugins/geo-detection.html",
     "enabled": true
   }
 ]

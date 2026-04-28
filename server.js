@@ -28,6 +28,16 @@ const HAFT_UPLOADER_ACCOUNTS_EXAMPLE_PATH = path.join(HAFT_UPLOADER_PRIVATE_DIR,
 const HAFT_UPLOADER_TASKS_PATH = path.join(HAFT_UPLOADER_PRIVATE_DIR, "tasks.json");
 const HAFT_UPLOADER_TASKS_EXAMPLE_PATH = path.join(HAFT_UPLOADER_PRIVATE_DIR, "tasks.example.json");
 const HAFT_UPLOADER_DB_PATH = path.join(HAFT_UPLOADER_DATA_DIR, "executions.db");
+const WECHAT_XCX_QACODE_OUTPUT_DIR = path.join(DATA_DIR, "wechat-xcx-qacode", "outputs");
+const COMSUMER_DATA_DIR = path.join(DATA_DIR, "comsumer-data");
+const COMSUMER_DATA_UPLOADS_DIR = path.join(COMSUMER_DATA_DIR, "uploads");
+const COMSUMER_DATA_OUTPUTS_DIR = path.join(COMSUMER_DATA_DIR, "outputs");
+const COMSUMER_DATA_WORKSPACES_DIR = path.join(COMSUMER_DATA_DIR, "workspaces");
+const COMSUMER_DATA_PRIVATE_DIR = path.join(PRIVATE_DIR, "comsumer-data");
+const GEO_DETECTION_DATA_DIR = path.join(DATA_DIR, "geo-detection");
+const GEO_DETECTION_PROJECTS_PATH = path.join(GEO_DETECTION_DATA_DIR, "projects.json");
+const GEO_DETECTION_BRANDS_PATH = path.join(GEO_DETECTION_DATA_DIR, "brands.json");
+const GEO_DETECTION_REPORTS_PATH = path.join(GEO_DETECTION_DATA_DIR, "reports.json");
 const LEGACY_HAFT_ROOT = path.resolve(ROOT, "..", "Haft 通用工具");
 const LEGACY_HAFT_CONFIG_DIR = path.join(LEGACY_HAFT_ROOT, "config");
 const LEGACY_HAFT_DATA_DIR = path.join(LEGACY_HAFT_ROOT, "data");
@@ -168,10 +178,37 @@ const DEFAULT_PLUGIN_CARDS = [
   {
     id: "haft-uploader",
     icon: "HU",
-    title: "Haft Uploader",
-    category: "Automation",
-    summary: "Manage upload jobs, scheduler status, and execution logs for the Haft automation flow.",
+    title: "Haft 自动上传",
+    category: "自动化",
+    summary: "统一管理 Haft 上传任务、调度器状态和执行日志，支持手动测试与定时执行。",
     pageUrl: "/plugins/haft-uploader.html",
+    enabled: true,
+  },
+  {
+    id: "wechat-xcx-qacode",
+    icon: "码",
+    title: "小程序二维码生成器",
+    category: "Automation",
+    summary: "批量生成小程序二维码。上传文件后自动打开微信公众平台，等待扫码登录后逐条生成并保存二维码图片。",
+    pageUrl: "/plugins/wechat-xcx-qacode.html",
+    enabled: true,
+  },
+  {
+    id: "comsumer-data",
+    icon: "数",
+    title: "Consumer 数据生成器",
+    category: "Data Ops",
+    summary: "根据季度和周度生成数据报告，支持多数据源合并、数据清洗、周报和Demand数据生成。",
+    pageUrl: "/plugins/comsumer-data.html",
+    enabled: true,
+  },
+  {
+    id: "geo-detection",
+    icon: "GEO",
+    title: "GEO长尾词监控",
+    category: "Automation",
+    summary: "监控品牌词在各智能Chat平台（豆包、Deepseek、千问、元宝）的曝光情况，自动检测AI回复内容和参考资料中的品牌词命中。",
+    pageUrl: "/plugins/geo-detection.html",
     enabled: true,
   },
 ];
@@ -329,6 +366,13 @@ async function ensureDataFiles() {
   await fsp.mkdir(PRIVATE_DIR, { recursive: true });
   await fsp.mkdir(PLUGIN_UPLOAD_DIR, { recursive: true });
   await fsp.mkdir(LEADS_SPLITTER_OUTPUT_DIR, { recursive: true });
+  await fsp.mkdir(WECHAT_XCX_QACODE_OUTPUT_DIR, { recursive: true });
+  await fsp.mkdir(COMSUMER_DATA_DIR, { recursive: true });
+  await fsp.mkdir(COMSUMER_DATA_UPLOADS_DIR, { recursive: true });
+  await fsp.mkdir(COMSUMER_DATA_OUTPUTS_DIR, { recursive: true });
+  await fsp.mkdir(COMSUMER_DATA_WORKSPACES_DIR, { recursive: true });
+  await fsp.mkdir(COMSUMER_DATA_PRIVATE_DIR, { recursive: true });
+  await fsp.mkdir(GEO_DETECTION_DATA_DIR, { recursive: true });
 
   try {
     await fsp.access(TASKS_PATH);
@@ -358,6 +402,25 @@ async function ensureDataFiles() {
     await fsp.access(PLUGIN_CARDS_PATH);
   } catch {
     await writePluginCards(DEFAULT_PLUGIN_CARDS);
+  }
+
+  // 初始化 GEO 检测数据文件
+  try {
+    await fsp.access(GEO_DETECTION_PROJECTS_PATH);
+  } catch {
+    await writeJsonArray(GEO_DETECTION_PROJECTS_PATH, []);
+  }
+
+  try {
+    await fsp.access(GEO_DETECTION_BRANDS_PATH);
+  } catch {
+    await writeJsonArray(GEO_DETECTION_BRANDS_PATH, []);
+  }
+
+  try {
+    await fsp.access(GEO_DETECTION_REPORTS_PATH);
+  } catch {
+    await writeJsonArray(GEO_DETECTION_REPORTS_PATH, []);
   }
 
   await migrateLegacyHaftUploaderFiles();
@@ -1105,7 +1168,7 @@ async function handleHaftUploaderApi(req, res, url) {
       return sendJson(res, 503, {
         ok: false,
         plugin: "haft-uploader",
-        error: error.message || "Haft uploader is unavailable",
+        error: error.message || "Haft 上传器暂不可用",
       });
     }
   }
@@ -1142,7 +1205,7 @@ async function handleHaftUploaderApi(req, res, url) {
       );
 
       if (duplicateIndex >= 0) {
-        return sendJson(res, 400, { error: `Task id already exists: ${incoming.id}` });
+        return sendJson(res, 400, { error: `任务标识已存在：${incoming.id}` });
       }
 
       const nextTasks =
@@ -1152,7 +1215,7 @@ async function handleHaftUploaderApi(req, res, url) {
 
       return sendJson(res, 200, { tasks: await runtime.replaceTasks(nextTasks) });
     } catch (error) {
-      return sendJson(res, 400, { error: error.message || "Task save failed" });
+      return sendJson(res, 400, { error: error.message || "任务保存失败" });
     }
   }
 
@@ -1167,7 +1230,7 @@ async function handleHaftUploaderApi(req, res, url) {
         return sendJson(res, 200, { tasks: await runtime.replaceTasks(nextTasks) });
       }
     } catch (error) {
-      return sendJson(res, 400, { error: error.message || "Task request failed" });
+      return sendJson(res, 400, { error: error.message || "任务请求失败" });
     }
   }
 
@@ -1178,7 +1241,7 @@ async function handleHaftUploaderApi(req, res, url) {
       const result = await runtime.runTaskByIdManually(decodeURIComponent(runMatch[1]));
       return sendJson(res, 200, { result });
     } catch (error) {
-      return sendJson(res, 400, { error: error.message || "Task run failed" });
+      return sendJson(res, 400, { error: error.message || "任务运行失败" });
     }
   }
 
@@ -1202,9 +1265,336 @@ async function handleHaftUploaderApi(req, res, url) {
   return false;
 }
 
+async function handleWechatXcxQacodeApi(req, res, url) {
+  const {
+    PLUGIN_ID,
+    parseRecordsFromFile,
+    generateTemplate,
+    createGenerator,
+  } = require("./lib/wechat-xcx-qacode/generator.js");
+
+  // Health check
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/health` && req.method === "GET") {
+    return sendJson(res, 200, {
+      ok: true,
+      plugin: PLUGIN_ID,
+      version: "2026-04-17",
+    });
+  }
+
+  // Download template
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/template` && req.method === "GET") {
+    const templateContent = generateTemplate();
+    res.writeHead(200, {
+      "Content-Type": "text/csv; charset=utf-8",
+      "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent("小程序二维码模板.csv")}`,
+      "Cache-Control": "no-store",
+    });
+    res.end(templateContent);
+    return true;
+  }
+
+  // Parse uploaded file
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/parse` && req.method === "POST") {
+    const rawBody = await readRawBody(req);
+    const form = parseMultipartForm(req, rawBody);
+    const file = form.files.file;
+
+    if (!file || !file.buffer?.length) {
+      return sendJson(res, 400, { error: "请先选择要上传的文件" });
+    }
+
+    const filename = sanitizeFilename(file.filename || `upload_${Date.now()}.csv`);
+    const ext = path.extname(filename).toLowerCase();
+    if (![".csv", ".txt", ".xlsx"].includes(ext)) {
+      return sendJson(res, 400, { error: "仅支持 CSV、TXT、XLSX 格式的文件" });
+    }
+
+    const tempPath = path.join(PLUGIN_UPLOAD_DIR, `${Date.now()}-${randomUUID()}-${filename}`);
+    await fsp.writeFile(tempPath, file.buffer);
+
+    try {
+      const records = await parseRecordsFromFile(tempPath, filename);
+      return sendJson(res, 200, { records, count: records.length });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "文件解析失败" });
+    } finally {
+      await fsp.unlink(tempPath).catch(() => {});
+    }
+  }
+
+  // Generate QR codes (streaming response)
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/generate` && req.method === "POST") {
+    const body = await readBody(req);
+    const records = Array.isArray(body?.records) ? body.records : [];
+
+    if (records.length === 0) {
+      return sendJson(res, 400, { error: "没有要处理的记录" });
+    }
+
+    // Validate records
+    for (const record of records) {
+      if (!record.title || !record.path) {
+        return sendJson(res, 400, { error: "每条记录必须包含 title 和 path 字段" });
+      }
+    }
+
+    // Create output directory with today's date
+    const today = new Date();
+    const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    const outputDir = path.join(WECHAT_XCX_QACODE_OUTPUT_DIR, dateKey);
+    await ensureDir(outputDir);
+
+    // Store outputDir in global state for login confirm
+    global.__wechatXcxQacodeOutputDir = outputDir;
+
+    // Set up streaming response
+    res.writeHead(200, {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+      "Transfer-Encoding": "chunked",
+    });
+
+    const sendEvent = (event) => {
+      res.write(JSON.stringify(event) + "\n");
+    };
+
+    const generator = createGenerator({
+      outputDir,
+      onLog: (message, level = "") => {
+        sendEvent({ type: "log", message, level });
+      },
+      onProgress: (data) => {
+        sendEvent({ type: "progress", ...data });
+      },
+      onFailure: (data) => {
+        sendEvent({ type: "failure", ...data });
+      },
+      onOutputDir: (dir) => {
+        sendEvent({ type: "output_dir", path: dir });
+      },
+    });
+
+    try {
+      sendEvent({ type: "log", message: `开始处理 ${records.length} 条记录` });
+      sendEvent({ type: "output_dir", path: outputDir });
+      sendEvent({ type: "waiting_login" });
+
+      const result = await generator.generateAll(records);
+
+      sendEvent({
+        type: "complete",
+        success: result.success,
+        failed: result.failed,
+        failures: result.failures,
+      });
+    } catch (error) {
+      sendEvent({ type: "error", message: error.message || "生成过程出错" });
+    } finally {
+      await generator.close().catch(() => {});
+      res.end();
+    }
+
+    return true;
+  }
+
+  // Confirm login
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/confirm-login` && req.method === "POST") {
+    const outputDir = global.__wechatXcxQacodeOutputDir;
+    if (!outputDir) {
+      return sendJson(res, 400, { error: "没有正在进行的任务" });
+    }
+
+    const confirmFile = path.join(outputDir, ".login_confirm");
+    await fsp.writeFile(confirmFile, "confirmed");
+    return sendJson(res, 200, { ok: true });
+  }
+
+  return false;
+}
+
+async function handleComsumerDataApi(req, res, url) {
+  const PLUGIN_ID = "comsumer-data";
+  const service = require("./lib/comsumer-data/workbook-service.js");
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/health` && req.method === "GET") {
+    return sendJson(res, 200, {
+      ok: true,
+      plugin: PLUGIN_ID,
+      version: "2026-04-20",
+    });
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/bootstrap` && req.method === "GET") {
+    try {
+      return sendJson(res, 200, service.getBootstrapData());
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "初始化数据加载失败" });
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/config/editor` && req.method === "GET") {
+    try {
+      return sendJson(res, 200, service.getConfigEditorData());
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "配置数据加载失败" });
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/config/unique-channel` && req.method === "POST") {
+    try {
+      const body = await readBody(req);
+      return sendJson(res, 200, {
+        ok: true,
+        ...service.upsertUniqueChannelEntry(body || {}),
+      });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "唯一渠道保存失败" });
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/config/utm` && req.method === "POST") {
+    try {
+      const body = await readBody(req);
+      return sendJson(res, 200, {
+        ok: true,
+        ...service.upsertUtmEntry(body || {}),
+      });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "UTM 映射保存失败" });
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/config/utm/bulk` && req.method === "POST") {
+    try {
+      const body = await readBody(req);
+      const payload = service.upsertUtmEntries(body?.items || [], body?.uniqueId || "");
+      return sendJson(res, 200, {
+        ok: true,
+        savedCount: payload.savedEntries.length,
+        editor: payload.editor,
+      });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "批量 UTM 映射保存失败" });
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/period/open` && req.method === "POST") {
+    try {
+      const body = await readBody(req);
+      const period = service.buildPeriodInfo(body || {});
+      const workbook = service.inspectPeriodWorkbook(period);
+
+      return sendJson(res, 200, {
+        period: {
+          fiscalYear: period.fiscalYear,
+          quarter: period.quarter,
+          week: period.weekLabel,
+          month: period.monthLabel,
+        },
+        workbook,
+      });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "周期工作簿打开失败" });
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/import` && req.method === "POST") {
+    const rawBody = await readRawBody(req);
+    const form = parseMultipartForm(req, rawBody);
+    const file = form.files.file;
+
+    if (!file || !file.buffer?.length) {
+      return sendJson(res, 400, { error: "请先选择要导入的 Excel 或 CSV 文件" });
+    }
+
+    const filename = sanitizeFilename(file.filename || `consumer_${Date.now()}.xlsx`);
+    if (!/\.(xlsx?|csv)$/i.test(filename)) {
+      return sendJson(res, 400, { error: "仅支持 XLSX、XLS、CSV 格式的文件" });
+    }
+
+    const tempPath = path.join(COMSUMER_DATA_UPLOADS_DIR, `${Date.now()}-${randomUUID()}-${filename}`);
+    await fsp.writeFile(tempPath, file.buffer);
+
+    try {
+      const payload = await service.importWorkbookIntoPeriod(
+        {
+          fiscalYear: form.fields.fiscalYear,
+          quarter: form.fields.quarter,
+          week: form.fields.week,
+        },
+        tempPath,
+        filename
+      );
+      return sendJson(res, 200, {
+        ok: true,
+        imported: payload.imported,
+        workbook: payload.workbook,
+      });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "导入失败" });
+    } finally {
+      await fsp.unlink(tempPath).catch(() => {});
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/rebuild` && req.method === "POST") {
+    try {
+      const body = await readBody(req);
+      const payload = await service.rebuildPeriod(body || {});
+      return sendJson(res, 200, {
+        ok: true,
+        ...payload,
+      });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "汇总重建失败" });
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/download` && req.method === "GET") {
+    try {
+      const filePath = service.resolveDownloadTarget(url.searchParams.get("kind"), {
+        fiscalYear: url.searchParams.get("fiscalYear"),
+        quarter: url.searchParams.get("quarter"),
+        week: url.searchParams.get("week"),
+      });
+
+      const stat = await fsp.stat(filePath);
+      if (!stat.isFile()) {
+        throw new Error("invalid file");
+      }
+
+      const filename = path.basename(filePath);
+      res.writeHead(200, {
+        "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`,
+        "Cache-Control": "no-store",
+      });
+      fs.createReadStream(filePath).pipe(res);
+      return true;
+    } catch (error) {
+      return sendJson(res, 404, { error: error.message || "文件不存在" });
+    }
+  }
+
+  return false;
+}
+
 async function handlePluginsApi(req, res, url) {
   if (url.pathname.startsWith("/api/plugins/haft-uploader/")) {
     return handleHaftUploaderApi(req, res, url);
+  }
+
+  if (url.pathname.startsWith("/api/plugins/wechat-xcx-qacode/")) {
+    return handleWechatXcxQacodeApi(req, res, url);
+  }
+
+  if (url.pathname.startsWith("/api/plugins/comsumer-data/")) {
+    return handleComsumerDataApi(req, res, url);
+  }
+
+  if (url.pathname.startsWith("/api/plugins/geo-detection/")) {
+    return handleGeoDetectionApi(req, res, url);
   }
 
   if (url.pathname === "/api/plugins/leads-splitter/health" && req.method === "GET") {
@@ -1269,6 +1659,296 @@ async function handlePluginsApi(req, res, url) {
   }
 
   return false;
+}
+
+async function handleGeoDetectionApi(req, res, url) {
+  const PLUGIN_ID = "geo-detection";
+
+  // Health check
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/health` && req.method === "GET") {
+    return sendJson(res, 200, {
+      ok: true,
+      plugin: PLUGIN_ID,
+      version: "2026-04-21",
+    });
+  }
+
+  // 停止检测任务
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/stop` && req.method === "POST") {
+    try {
+      // 清除模块缓存并调用停止函数
+      const indexPath = require.resolve("./lib/geo-detection/index.js");
+      delete require.cache[indexPath];
+      const { stopDetection } = require("./lib/geo-detection/index.js");
+
+      if (typeof stopDetection === "function") {
+        await stopDetection();
+      }
+
+      return sendJson(res, 200, { ok: true, message: "检测任务已停止" });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "停止失败" });
+    }
+  }
+
+  // Bootstrap - 获取初始化数据
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/bootstrap` && req.method === "GET") {
+    try {
+      const projects = await readJsonArray(GEO_DETECTION_PROJECTS_PATH);
+      const brands = await readJsonArray(GEO_DETECTION_BRANDS_PATH);
+      const reports = await readJsonArray(GEO_DETECTION_REPORTS_PATH);
+      return sendJson(res, 200, { projects, brands, reports });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "初始化数据加载失败" });
+    }
+  }
+
+  // 添加项目
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/projects` && req.method === "POST") {
+    try {
+      const body = await readBody(req);
+      const name = String(body?.name || "").trim();
+
+      if (!name) {
+        return sendJson(res, 400, { error: "项目名称不能为空" });
+      }
+
+      const projects = await readJsonArray(GEO_DETECTION_PROJECTS_PATH);
+
+      // 检查是否已存在
+      if (projects.some((p) => p.name.toLowerCase() === name.toLowerCase())) {
+        return sendJson(res, 400, { error: "项目已存在" });
+      }
+
+      const newProject = {
+        id: randomUUID(),
+        name,
+        createdAt: isoStamp(),
+      };
+
+      projects.push(newProject);
+      await writeJsonArray(GEO_DETECTION_PROJECTS_PATH, projects);
+
+      return sendJson(res, 200, { projects });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "添加失败" });
+    }
+  }
+
+  // 删除项目
+  const projectDeleteMatch = url.pathname.match(/^\/api\/plugins\/geo-detection\/projects\/([^/]+)$/);
+  if (projectDeleteMatch && req.method === "DELETE") {
+    try {
+      const projectId = projectDeleteMatch[1];
+      const projects = await readJsonArray(GEO_DETECTION_PROJECTS_PATH);
+      const filtered = projects.filter((p) => p.id !== projectId);
+
+      if (filtered.length === projects.length) {
+        return sendJson(res, 404, { error: "项目不存在" });
+      }
+
+      await writeJsonArray(GEO_DETECTION_PROJECTS_PATH, filtered);
+      return sendJson(res, 200, { projects: filtered });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "删除失败" });
+    }
+  }
+
+  // 添加品牌词
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/brands` && req.method === "POST") {
+    try {
+      const body = await readBody(req);
+      const name = String(body?.name || "").trim();
+      const projectId = String(body?.projectId || "").trim();
+      const projectName = String(body?.projectName || "").trim();
+
+      if (!name) {
+        return sendJson(res, 400, { error: "品牌词不能为空" });
+      }
+
+      const brands = await readJsonArray(GEO_DETECTION_BRANDS_PATH);
+
+      // 检查是否已存在（同一项目下）
+      if (brands.some((b) => b.name.toLowerCase() === name.toLowerCase() && b.projectId === projectId)) {
+        return sendJson(res, 400, { error: "品牌词已存在" });
+      }
+
+      const newBrand = {
+        id: randomUUID(),
+        name,
+        projectId,
+        projectName,
+        createdAt: isoStamp(),
+      };
+
+      brands.push(newBrand);
+      await writeJsonArray(GEO_DETECTION_BRANDS_PATH, brands);
+
+      return sendJson(res, 200, { brands });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "添加失败" });
+    }
+  }
+
+  // 删除品牌词
+  const brandDeleteMatch = url.pathname.match(/^\/api\/plugins\/geo-detection\/brands\/([^/]+)$/);
+  if (brandDeleteMatch && req.method === "DELETE") {
+    try {
+      const brandId = brandDeleteMatch[1];
+      const brands = await readJsonArray(GEO_DETECTION_BRANDS_PATH);
+      const filtered = brands.filter((b) => b.id !== brandId);
+
+      if (filtered.length === brands.length) {
+        return sendJson(res, 404, { error: "品牌词不存在" });
+      }
+
+      await writeJsonArray(GEO_DETECTION_BRANDS_PATH, filtered);
+      return sendJson(res, 200, { brands: filtered });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "删除失败" });
+    }
+  }
+
+  // 执行检测任务（流式响应）
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/detect` && req.method === "POST") {
+    try {
+      const body = await readBody(req);
+
+      // 支持单个 keyword 或多个 keywords
+      let keywords = [];
+      if (Array.isArray(body?.keywords)) {
+        keywords = body.keywords.map((k) => String(k).trim()).filter((k) => k);
+      } else if (body?.keyword) {
+        const singleKeyword = String(body.keyword).trim();
+        if (singleKeyword) keywords = [singleKeyword];
+      }
+
+      const platforms = Array.isArray(body?.platforms) ? body.platforms : [];
+      const browserMode = body?.browserMode !== false; // 默认为 true
+      const repeatCount = Math.max(1, Math.min(10, parseInt(body?.repeatCount, 10) || 1)); // 1-10 次
+
+      if (keywords.length === 0) {
+        return sendJson(res, 400, { error: "长尾词不能为空" });
+      }
+
+      if (platforms.length === 0) {
+        return sendJson(res, 400, { error: "请至少选择一个平台" });
+      }
+
+      // 使用前端传递的品牌词（已按项目过滤）
+      const brands = Array.isArray(body?.brands) ? body.brands : [];
+      if (brands.length === 0) {
+        return sendJson(res, 400, { error: "请先添加品牌词或选择项目" });
+      }
+
+      // 设置流式响应
+      res.writeHead(200, {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-store",
+        "Transfer-Encoding": "chunked",
+      });
+
+      const sendEvent = (event) => {
+        res.write(JSON.stringify(event) + "\n");
+      };
+
+      // 清除模块缓存，确保加载最新代码
+      const indexPath = require.resolve("./lib/geo-detection/index.js");
+      delete require.cache[indexPath];
+      const { runDetection } = require("./lib/geo-detection/index.js");
+
+      try {
+        await runDetection({
+          keywords,
+          platforms,
+          brands, // 传递完整的品牌词对象（含项目信息）
+          browserMode,
+          repeatCount,
+          onLog: (message, level = "") => {
+            sendEvent({ type: "log", message, level });
+          },
+          onProgress: (data) => {
+            sendEvent({ type: "progress", ...data });
+          },
+          onReport: (report) => {
+            sendEvent({ type: "report", report });
+            // 保存报告
+            saveGeoReport(report);
+          },
+        });
+
+        sendEvent({ type: "complete", total: platforms.length * keywords.length * repeatCount });
+      } catch (error) {
+        sendEvent({ type: "error", message: error.message || "检测失败" });
+      } finally {
+        res.end();
+      }
+
+      return true;
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "检测失败" });
+    }
+  }
+
+  // 获取报告列表
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/reports` && req.method === "GET") {
+    try {
+      const reports = await readJsonArray(GEO_DETECTION_REPORTS_PATH);
+      return sendJson(res, 200, { reports });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "报告加载失败" });
+    }
+  }
+
+  // 删除所有报告
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/reports` && req.method === "DELETE") {
+    try {
+      await writeJsonArray(GEO_DETECTION_REPORTS_PATH, []);
+      return sendJson(res, 200, { reports: [] });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "删除失败" });
+    }
+  }
+
+  // 删除单个报告
+  const reportDeleteMatch = url.pathname.match(/^\/api\/plugins\/geo-detection\/reports\/([^/]+)$/);
+  if (reportDeleteMatch && req.method === "DELETE") {
+    try {
+      const reportId = reportDeleteMatch[1];
+      const reports = await readJsonArray(GEO_DETECTION_REPORTS_PATH);
+      const filteredReports = reports.filter((r) => r.id !== reportId);
+      await writeJsonArray(GEO_DETECTION_REPORTS_PATH, filteredReports);
+      return sendJson(res, 200, { reports: filteredReports });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "删除失败" });
+    }
+  }
+
+  return false;
+}
+
+// 保存 GEO 检测报告
+async function saveGeoReport(report) {
+  try {
+    const reports = await readJsonArray(GEO_DETECTION_REPORTS_PATH);
+
+    // 查找是否已存在相同日期、长尾词、平台的报告
+    const existingIndex = reports.findIndex(
+      (r) => r.date === report.date && r.keyword === report.keyword && r.platform === report.platform
+    );
+
+    if (existingIndex >= 0) {
+      // 更新现有报告
+      reports[existingIndex] = { ...reports[existingIndex], ...report };
+    } else {
+      // 添加新报告
+      reports.unshift(report);
+    }
+
+    await writeJsonArray(GEO_DETECTION_REPORTS_PATH, reports);
+  } catch (error) {
+    console.error("保存报告失败:", error.message);
+  }
 }
 
 async function handleOpenLinkApi(req, res, url) {

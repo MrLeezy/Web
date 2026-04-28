@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>小程序二维码生成器</title>
+    <link rel="stylesheet" href="./wechat-xcx-qacode.css" />
+  </head>
+  <body>
+    <main class="plugin-shell">
+      <section class="plugin-hero">
+        <a class="hero-back" href="/">← 返回首页</a>
+        <div class="hero-badge-row">
+          <span class="hero-badge" id="pluginTypeBadge">内置插件</span>
+          <span class="hero-badge" id="pluginCategoryBadge">Automation</span>
+        </div>
+        <h1 id="pluginTitle">小程序二维码生成器</h1>
+        <p class="hero-copy" id="pluginSummary">
+          批量生成小程序二维码。上传包含小程序标题和路径的文件，自动打开微信公众平台，等待扫码登录后逐条生成二维码并保存。
+        </p>
+      </section>
+
+      <section class="plugin-layout">
+        <section class="panel panel-primary">
+          <div class="panel-header">
+            <p class="panel-eyebrow">上传</p>
+            <h2>源文件</h2>
+            <p class="panel-copy">
+              支持 CSV、TXT、XLSX 格式。文件需包含 title（小程序标题）和 path（小程序路径）两列。
+            </p>
+          </div>
+
+          <input id="fileInput" type="file" accept=".csv,.txt,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden />
+
+          <button id="dropzone" class="dropzone" type="button">
+            <span class="dropzone-icon">码</span>
+            <span class="dropzone-title" id="dropzoneTitle">选择或拖拽文件到此处</span>
+            <span class="dropzone-hint" id="dropzoneHint">支持 CSV、TXT、XLSX 格式</span>
+          </button>
+
+          <div class="action-row">
+            <button id="browseButton" class="action-button" type="button">选择文件</button>
+            <button id="templateButton" class="action-button" type="button">下载模板</button>
+            <span class="action-meta" id="actionMeta">请先上传包含小程序信息的文件</span>
+          </div>
+
+          <div class="status-card is-hidden" id="statusCard"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <p class="panel-eyebrow">说明</p>
+            <h2>使用流程</h2>
+          </div>
+          <ul class="rule-list">
+            <li>上传包含 title 和 path 字段的文件</li>
+            <li>点击"开始生成"后，浏览器将自动打开微信公众平台</li>
+            <li>请使用微信扫码登录</li>
+            <li>登录成功后，系统将自动为每条记录生成二维码</li>
+            <li>二维码图片将保存到插件输出目录</li>
+          </ul>
+        </section>
+      </section>
+
+      <section class="preview-section is-hidden" id="previewSection">
+        <section class="panel">
+          <div class="panel-header">
+            <p class="panel-eyebrow">预览</p>
+            <h2>文件内容</h2>
+            <p class="panel-copy" id="previewMeta">共识别 0 条记录</p>
+          </div>
+          <div class="preview-table-wrapper">
+            <table class="preview-table" id="previewTable">
+              <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>小程序标题 (title)</th>
+                  <th>小程序路径 (path)</th>
+                </tr>
+              </thead>
+              <tbody id="previewTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+        <div class="preview-action-bar">
+          <button id="startButton" class="action-button is-primary" type="button">开始生成</button>
+          <span class="action-meta">确认无误后点击开始生成</span>
+        </div>
+      </section>
+
+      <section class="progress-section is-hidden" id="progressSection">
+        <section class="panel">
+          <div class="panel-header">
+            <p class="panel-eyebrow">进度</p>
+            <h2>生成状态</h2>
+          </div>
+          <div class="progress-info">
+            <div class="progress-stats">
+              <span class="progress-stat">总计: <strong id="progressTotal">0</strong></span>
+              <span class="progress-stat">已完成: <strong id="progressDone">0</strong></span>
+              <span class="progress-stat">成功: <strong id="progressSuccess">0</strong></span>
+              <span class="progress-stat">失败: <strong id="progressFailed">0</strong></span>
+            </div>
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p class="progress-current" id="progressCurrent">准备中...</p>
+          </div>
+          <div class="progress-log-wrapper">
+            <div class="progress-log" id="progressLog"></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="results-section is-hidden" id="resultsSection">
+        <section class="panel">
+          <div class="panel-header">
+            <p class="panel-eyebrow">完成</p>
+            <h2>生成结果</h2>
+          </div>
+          <div class="result-summary" id="resultSummary"></div>
+          <div class="result-output-dir" id="resultOutputDir"></div>
+          <div class="result-failures is-hidden" id="resultFailures">
+            <h3>失败明细</h3>
+            <ul id="failureList"></ul>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./wechat-xcx-qacode.js"></script>
+  </body>
+</html>

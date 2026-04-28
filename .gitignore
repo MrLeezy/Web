@@ -1,4 +1,5 @@
 .DS_Store
+**/.DS_Store
 node_modules/
 
 # Logs
@@ -17,8 +18,17 @@ data/haft-uploader/downloads/
 data/haft-uploader/executions.db
 data/plugin-uploads/
 data/plugin-outputs/
+data/comsumer-data/outputs/
+data/comsumer-data/workspaces/
+data/wechat-xcx-qacode/outputs/
+tmp-*.png
+
+# Local raw business data
+data/comsumer/*.xlsx
+data/comsumer-data/*.xlsx
 
 # Local private configuration
 private/haft-uploader/accounts.local.json
 private/haft-uploader/tasks.json
+private/comsumer-data/db-config.json
 *.local.json

@@ -1,0 +1,142 @@
+[
+  {
+    "id": "c200d980-2117-4c76-8476-fe24edd4298c",
+    "name": "蒲公英",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T06:59:33.740Z"
+  },
+  {
+    "id": "d02bfeea-a9a4-46b3-8c35-5861f922c5c4",
+    "name": "SInobase",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T06:59:42.038Z"
+  },
+  {
+    "id": "2c282269-889f-4f07-a803-a8f852501630",
+    "name": "赛诺",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T06:59:44.686Z"
+  },
+  {
+    "id": "db3f108b-d14d-4ee5-a841-be4598c9652c",
+    "name": "MIP",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:00:07.004Z"
+  },
+  {
+    "id": "85d0eb7a-c295-45f4-a860-2e4029480dd8",
+    "name": "MIP智能客服",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:00:14.471Z"
+  },
+  {
+    "id": "675164d3-2aad-4c33-ad13-40498df84ee9",
+    "name": "赛诺贝斯智域蒲公英AI+",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:45:29.894Z"
+  },
+  {
+    "id": "3f024442-cf2f-4b4d-8526-f83ffcbaeccf",
+    "name": "智域蒲公英AI+ V2.0",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:45:36.839Z"
+  },
+  {
+    "id": "f9d06601-0582-43d3-8f95-cdb53aee3690",
+    "name": "赛诺贝斯智域蒲公英",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:45:45.742Z"
+  },
+  {
+    "id": "b1b4c5b0-3b30-43c3-8c37-b4212cbc3016",
+    "name": "赛诺贝斯MIP AI客服云",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:46:13.073Z"
+  },
+  {
+    "id": "3d9cc80d-c4f2-46e8-8559-56abade0a160",
+    "name": "赛诺贝斯客服云",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:46:20.595Z"
+  },
+  {
+    "id": "1e8770b0-7d08-4aea-ab81-1cec21a4faa1",
+    "name": "赛诺贝斯AI客服云",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:46:27.626Z"
+  },
+  {
+    "id": "7b2f797c-cacd-473d-94e3-3f7fe818523b",
+    "name": "赛诺贝斯MIP",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:46:33.860Z"
+  },
+  {
+    "id": "0076422c-c658-422c-8de4-fa2a169d2f52",
+    "name": "赛诺贝斯营销云",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:46:40.905Z"
+  },
+  {
+    "id": "8fecd347-0710-412f-bfe9-107e2e923c15",
+    "name": "赛诺贝斯MIP营销云",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:46:48.157Z"
+  },
+  {
+    "id": "12d14450-e9b1-479c-9642-e30da6dcc733",
+    "name": "MIP营销云",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:47:07.268Z"
+  },
+  {
+    "id": "1d343d61-541a-4eba-bf27-f2d8734a20c4",
+    "name": "MIP AI客服云",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:47:18.256Z"
+  },
+  {
+    "id": "688b6238-4638-494c-8aa8-c6b654195cbd",
+    "name": "赛诺贝斯",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:47:24.676Z"
+  },
+  {
+    "id": "d52e436f-6182-4ab7-af97-fec02b413514",
+    "name": "智域蒲公英AI+",
+    "projectId": "1540ab51-50c1-4ebf-9511-c9778ecc470e",
+    "projectName": "赛诺贝斯",
+    "createdAt": "2026-04-21T07:47:31.860Z"
+  },
+  {
+    "id": "d030826b-08c3-4a27-b60f-d280f03ae9ca",
+    "name": "Dell",
+    "projectId": "d04ab518-99e6-431e-b7c8-9d84bafb35c1",
+    "projectName": "戴尔",
+    "createdAt": "2026-04-21T10:37:23.661Z"
+  },
+  {
+    "id": "6e3bf09f-8abd-4df5-a646-8b24e4f0b570",
+    "name": "戴尔",
+    "projectId": "d04ab518-99e6-431e-b7c8-9d84bafb35c1",
+    "projectName": "戴尔",
+    "createdAt": "2026-04-21T10:37:30.980Z"
+  }
+]

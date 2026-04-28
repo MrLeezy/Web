@@ -1,0 +1,9 @@
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "database": "your_database",
+  "user": "your_username",
+  "password": "your_password",
+  "_comment": "数据库连接配置，支持 mysql, postgres, mongodb"
+}

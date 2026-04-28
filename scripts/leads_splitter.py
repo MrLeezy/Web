@@ -7,7 +7,7 @@ import sys
 from collections import Counter
 from datetime import datetime
 
-REMOVE_SOURCES = ["wechat-dsp-xcx", "wechat-dsp", "douyin", "kuaishou", "toutiao"]
+REMOVE_SOURCES = ["wechat-dsp-xcx", "wechat-dsp", "douyin", "kuaishou", "toutiao", "xiaohongshu", "xiaohongshu_xcx"]
 KEEP_SOURCE = "wechat-dsp"
 
 
@@ -72,7 +72,7 @@ def main():
             {
                 "key": "table1",
                 "label": "Table 1",
-                "description": "Removes wechat-dsp-xcx, wechat-dsp, douyin, kuaishou, and toutiao.",
+                "description": "Removes wechat-dsp-xcx, wechat-dsp, douyin, kuaishou, toutiao, xiaohongshu, and xiaohongshu_xcx.",
                 "filename": table1_filename,
                 "count": len(table1_rows),
             },

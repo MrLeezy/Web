@@ -146,7 +146,7 @@ let lastRefreshAt = null;
 const AUTO_REFRESH_MS = 5 * 60 * 1000;
 
 let currentTaskView = "focus";
-let currentDeskTab = "workdesk";
+let currentDeskTab = "links";
 let activeQuickLinkInfoKey = "";
 let workReferenceGroups = defaultWorkReferenceGroups.map((group) => ({
   ...group,

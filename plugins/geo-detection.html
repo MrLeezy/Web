@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GEO长尾词监控</title>
+    <link rel="stylesheet" href="./geo-detection.css" />
+  </head>
+  <body>
+    <main class="plugin-shell">
+      <section class="plugin-hero">
+        <a class="hero-back" href="/">← 返回首页</a>
+        <h1 id="pluginTitle">GEO长尾词监控</h1>
+        <p class="hero-copy">检测品牌词在各大AI平台的曝光情况</p>
+      </section>
+
+      <section class="plugin-layout">
+        <!-- 左侧：品牌词管理 -->
+        <section class="panel panel-primary">
+          <div class="panel-header">
+            <h2>品牌词</h2>
+          </div>
+
+          <!-- 项目标签 -->
+          <div class="form-group">
+            <label class="form-label">项目分组</label>
+            <div class="project-tags" id="projectTags">
+              <label class="checkbox-label">
+                <input type="checkbox" name="project" value="all" checked />
+                <span>全部</span>
+              </label>
+              <!-- 项目标签动态渲染 -->
+            </div>
+            <div class="project-input-row">
+              <input type="text" id="projectInput" class="text-input text-input-sm" placeholder="新项目名" />
+              <button id="addProjectBtn" class="action-button is-secondary" type="button">添加项目</button>
+            </div>
+          </div>
+
+          <div class="brand-input-row">
+            <input type="text" id="brandInput" class="text-input" placeholder="输入品牌词..." />
+            <select id="brandProject" class="select-input">
+              <option value="">选择项目</option>
+            </select>
+            <button id="addBrandBtn" class="action-button is-primary" type="button">添加</button>
+          </div>
+
+          <div class="brand-list" id="brandList">
+            <!-- 品牌词列表动态渲染 -->
+          </div>
+        </section>
+
+        <!-- 右侧：检测任务 -->
+        <section class="panel">
+          <div class="panel-header">
+            <h2>检测设置</h2>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">长尾词 <span class="form-hint">（每行一个）</span></label>
+            <textarea id="keywordInput" class="textarea-input" placeholder="输入长尾词，每行一个..." rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">检测平台</label>
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="platform" value="doubao" checked />
+                <span>豆包</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="platform" value="deepseek" checked />
+                <span>Deepseek</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="platform" value="qianwen" checked />
+                <span>千问</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="platform" value="yuanbao" checked />
+                <span>元宝</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="browserMode" checked />
+              <span>显示浏览器窗口</span>
+            </label>
+            <p class="form-hint-block">勾选：可以看到浏览器操作，适合需要登录的情况<br>不勾选：后台静默执行，失败时请勾选此项重试</p>
+          </div>
+
+          <div class="action-row">
+            <button id="startDetectBtn" class="action-button is-primary" type="button">开始检测</button>
+            <button id="batchDetectBtn" class="action-button is-secondary" type="button">批量检测</button>
+          </div>
+
+          <div class="batch-options is-hidden" id="batchOptions">
+            <div class="batch-options-row">
+              <label class="form-label">重复次数</label>
+              <input type="number" id="repeatCount" class="text-input text-input-sm" value="5" min="1" max="10" />
+              <button id="confirmBatchBtn" class="action-button is-primary" type="button">开始批量检测</button>
+            </div>
+            <p class="form-hint-block">每个长尾词重复检测多次，计算推荐指数（满分10分）</p>
+          </div>
+
+          <div class="status-card is-hidden" id="statusCard"></div>
+        </section>
+      </section>
+
+      <!-- 进度区域 -->
+      <section class="progress-section is-hidden" id="progressSection">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>检测进度</h2>
+          </div>
+          <div class="progress-info">
+            <div class="progress-stats">
+              <span class="progress-stat">当前: <strong id="progressPlatform">-</strong></span>
+              <span class="progress-stat">状态: <strong id="progressStatus">准备中...</strong></span>
+            </div>
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+          </div>
+          <div class="progress-log-wrapper">
+            <div class="progress-log" id="progressLog"></div>
+          </div>
+        </section>
+      </section>
+
+      <!-- 报告区域 -->
+      <section class="report-section">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>检测报告</h2>
+          </div>
+
+          <div class="report-filters">
+            <input type="text" id="reportFilterKeyword" class="text-input text-input-sm" placeholder="筛选长尾词..." />
+            <select id="reportFilterProject" class="select-input">
+              <option value="">全部项目</option>
+            </select>
+            <select id="reportFilterPlatform" class="select-input">
+              <option value="">全部平台</option>
+              <option value="doubao">豆包</option>
+              <option value="deepseek">Deepseek</option>
+              <option value="qianwen">千问</option>
+              <option value="yuanbao">元宝</option>
+            </select>
+          </div>
+
+          <div class="report-table-wrapper">
+            <table class="report-table" id="reportTable">
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>项目</th>
+                  <th>长尾词</th>
+                  <th>平台</th>
+                  <th>内容匹配</th>
+                  <th>匹配品牌词</th>
+                  <th>打开资料</th>
+                  <th>检测类型</th>
+                  <th>推荐指数</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="reportTableBody">
+                <!-- 报告数据动态渲染 -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="report-actions">
+            <button id="exportReportsBtn" class="action-button is-secondary" type="button">导出报告</button>
+            <button id="deleteAllReportsBtn" class="action-button is-danger" type="button">全部删除</button>
+          </div>
+
+          <div class="report-empty is-hidden" id="reportEmpty">
+            <p>暂无检测报告</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./geo-detection.js"></script>
+  </body>
+</html>

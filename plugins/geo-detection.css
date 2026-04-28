@@ -1,0 +1,689 @@
+:root {
+  color-scheme: light;
+  --bg: #5a6c8a;
+  --bg-deep: #4a5a74;
+  --paper: #f4efe3;
+  --paper-strong: #efe8d7;
+  --ink: #283127;
+  --ink-soft: #4b5647;
+  --line: rgba(40, 49, 39, 0.16);
+  --line-strong: rgba(40, 49, 39, 0.24);
+  --text-light: #f8f5ed;
+  --today: #2f675d;
+  --warning: #c38840;
+  --danger: #bd5d5a;
+  --done: #5f946a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  font-family:
+    "SF Pro Text",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  color: var(--text-light);
+  background:
+    linear-gradient(180deg, rgba(90, 108, 138, 0.12) 0%, rgba(74, 90, 116, 0.06) 100%),
+    var(--bg);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, rgba(244, 239, 227, 0.08) 0%, rgba(244, 239, 227, 0) 34%),
+    linear-gradient(180deg, rgba(74, 90, 116, 0.18) 0%, rgba(90, 108, 138, 0.04) 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.plugin-shell {
+  width: min(1180px, calc(100vw - 40px));
+  margin: 0 auto;
+  padding: 28px 0 36px;
+}
+
+.plugin-hero,
+.panel,
+.stat-card,
+.output-card {
+  border-radius: 14px;
+  border: 1px solid rgba(248, 245, 237, 0.14);
+  background: rgba(248, 245, 237, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.plugin-hero {
+  padding: 20px 22px;
+  background:
+    linear-gradient(135deg, rgba(244, 239, 227, 0.14) 0%, rgba(90, 108, 138, 0.1) 100%),
+    rgba(248, 245, 237, 0.05);
+}
+
+.hero-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(244, 239, 227, 0.08);
+  border: 1px solid rgba(244, 239, 227, 0.14);
+  color: rgba(248, 245, 237, 0.9);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.hero-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(244, 239, 227, 0.12);
+  border: 1px solid rgba(244, 239, 227, 0.16);
+  font-size: 11px;
+  color: rgba(248, 245, 237, 0.86);
+}
+
+h1 {
+  margin: 14px 0 10px;
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 0.95;
+  font-weight: 300;
+}
+
+.hero-copy {
+  margin: 0;
+  max-width: 760px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(248, 245, 237, 0.76);
+}
+
+.plugin-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.panel {
+  padding: 18px;
+}
+
+.panel-primary {
+  min-height: 100%;
+}
+
+.panel-header h2 {
+  margin: 4px 0 8px;
+  font-size: 24px;
+  line-height: 1.05;
+}
+
+.panel-eyebrow {
+  margin: 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(248, 245, 237, 0.58);
+}
+
+.panel-copy {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(248, 245, 237, 0.7);
+}
+
+/* 表单样式 */
+.form-group {
+  margin-top: 16px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(248, 245, 237, 0.86);
+}
+
+.form-hint {
+  font-weight: 400;
+  color: rgba(248, 245, 237, 0.5);
+  font-size: 11px;
+}
+
+.form-hint-block {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(248, 245, 237, 0.5);
+}
+
+.text-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(248, 245, 237, 0.18);
+  background: rgba(248, 245, 237, 0.08);
+  color: rgba(248, 245, 237, 0.94);
+  font: inherit;
+  font-size: 13px;
+}
+
+.text-input::placeholder {
+  color: rgba(248, 245, 237, 0.5);
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: rgba(248, 245, 237, 0.36);
+  background: rgba(248, 245, 237, 0.12);
+}
+
+.text-input-sm {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.textarea-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(248, 245, 237, 0.18);
+  background: rgba(248, 245, 237, 0.08);
+  color: rgba(248, 245, 237, 0.94);
+  font: inherit;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.textarea-input::placeholder {
+  color: rgba(248, 245, 237, 0.5);
+}
+
+.textarea-input:focus {
+  outline: none;
+  border-color: rgba(248, 245, 237, 0.36);
+  background: rgba(248, 245, 237, 0.12);
+}
+
+.select-input {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(248, 245, 237, 0.18);
+  background: rgba(248, 245, 237, 0.08);
+  color: rgba(248, 245, 237, 0.94);
+  font: inherit;
+  font-size: 12px;
+}
+
+.select-input:focus {
+  outline: none;
+  border-color: rgba(248, 245, 237, 0.36);
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: rgba(248, 245, 237, 0.9);
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* 品牌词输入 */
+.brand-input-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.brand-input-row .text-input {
+  flex: 1;
+}
+
+/* 品牌词列表 */
+.brand-list {
+  margin-top: 14px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.brand-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  background: rgba(248, 245, 237, 0.08);
+  border: 1px solid rgba(248, 245, 237, 0.1);
+}
+
+.brand-item-text {
+  font-size: 13px;
+  color: rgba(248, 245, 237, 0.94);
+}
+
+.brand-item-project {
+  font-size: 11px;
+  color: rgba(248, 245, 237, 0.5);
+  margin-left: 6px;
+}
+
+.brand-item-delete {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: none;
+  background: rgba(189, 93, 90, 0.2);
+  color: rgba(255, 200, 200, 0.9);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.brand-item-delete:hover {
+  background: rgba(189, 93, 90, 0.3);
+}
+
+.brand-empty {
+  text-align: center;
+  padding: 20px;
+  color: rgba(248, 245, 237, 0.6);
+  font-size: 13px;
+}
+
+/* 按钮样式 */
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.action-button {
+  min-height: 34px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 239, 227, 0.18);
+  background: rgba(244, 239, 227, 0.14);
+  color: rgba(248, 245, 237, 0.94);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.action-button:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.action-button.is-primary {
+  background: rgba(95, 148, 106, 0.24);
+  border-color: rgba(95, 148, 106, 0.32);
+}
+
+.action-button.is-primary:hover:not(:disabled) {
+  background: rgba(95, 148, 106, 0.32);
+}
+
+.action-meta {
+  font-size: 11px;
+  color: rgba(248, 245, 237, 0.6);
+}
+
+/* 批量选项区域 */
+.batch-options {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(248, 245, 237, 0.06);
+  border: 1px solid rgba(248, 245, 237, 0.1);
+}
+
+.batch-options.is-hidden {
+  display: none;
+}
+
+.batch-options-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.batch-options-row .form-label {
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.batch-options-row .text-input-sm {
+  width: 60px;
+  text-align: center;
+}
+
+.batch-options-row .form-hint {
+  margin: 0;
+}
+
+/* 项目标签 */
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.project-input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.project-input-row .text-input-sm {
+  flex: 1;
+}
+
+/* 品牌词输入行 */
+.brand-input-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.brand-input-row .text-input {
+  flex: 1;
+}
+
+.brand-input-row .select-input {
+  width: auto;
+  min-width: 100px;
+}
+
+/* 状态卡片 */
+.status-card {
+  margin-top: 14px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.status-card.is-hidden,
+.progress-section.is-hidden,
+.report-section.is-hidden {
+  display: none;
+}
+
+.status-card.is-error {
+  background: rgba(189, 93, 90, 0.12);
+  border: 1px solid rgba(189, 93, 90, 0.26);
+  color: rgba(255, 232, 230, 0.94);
+}
+
+.status-card.is-processing {
+  background: rgba(195, 136, 64, 0.14);
+  border: 1px solid rgba(195, 136, 64, 0.26);
+  color: rgba(255, 241, 217, 0.94);
+}
+
+.status-card.is-success {
+  background: rgba(95, 148, 106, 0.14);
+  border: 1px solid rgba(95, 148, 106, 0.26);
+  color: rgba(233, 248, 236, 0.94);
+}
+
+/* 进度区域 */
+.progress-section {
+  margin-top: 14px;
+}
+
+.progress-info {
+  margin-top: 14px;
+}
+
+.progress-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+
+.progress-stat {
+  color: rgba(248, 245, 237, 0.8);
+}
+
+.progress-stat strong {
+  color: rgba(248, 245, 237, 0.98);
+  font-weight: 600;
+}
+
+.progress-bar-wrapper {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(248, 245, 237, 0.1);
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(95, 148, 106, 0.8) 0%, rgba(95, 148, 106, 0.6) 100%);
+  transition: width 200ms ease;
+}
+
+.progress-log-wrapper {
+  margin-top: 14px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.progress-log {
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  font-family: "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  color: rgba(248, 245, 237, 0.85);
+}
+
+.progress-log-entry {
+  margin-bottom: 4px;
+}
+
+.progress-log-entry.is-error {
+  color: rgba(255, 180, 180, 0.9);
+}
+
+.progress-log-entry.is-success {
+  color: rgba(180, 255, 200, 0.9);
+}
+
+/* 报告区域 */
+.report-section {
+  margin-top: 14px;
+}
+
+.report-filters {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+.report-filters .text-input {
+  width: 200px;
+}
+
+.report-table-wrapper {
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.report-table th,
+.report-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(248, 245, 237, 0.1);
+}
+
+.report-table th {
+  font-weight: 600;
+  color: rgba(248, 245, 237, 0.8);
+  background: rgba(248, 245, 237, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.report-table td {
+  color: rgba(248, 245, 237, 0.9);
+}
+
+/* 匹配品牌词列宽度限制 */
+.report-table td:nth-child(6) {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.report-table tr:hover td {
+  background: rgba(248, 245, 237, 0.04);
+}
+
+.report-table .match-yes {
+  color: rgba(180, 255, 200, 0.9);
+}
+
+.report-table .match-no {
+  color: rgba(255, 200, 200, 0.8);
+}
+
+.report-empty {
+  text-align: center;
+  padding: 30px;
+  color: rgba(248, 245, 237, 0.6);
+  font-size: 13px;
+}
+
+/* 报告操作区域 */
+.report-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* 报告删除按钮 */
+.report-delete-btn {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: none;
+  background: rgba(189, 93, 90, 0.2);
+  color: rgba(255, 200, 200, 0.9);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.report-delete-btn:hover {
+  background: rgba(189, 93, 90, 0.4);
+}
+
+/* 次要按钮样式 */
+.action-button.is-secondary {
+  background: rgba(244, 239, 227, 0.1);
+  border-color: rgba(244, 239, 227, 0.2);
+}
+
+.action-button.is-secondary:hover:not(:disabled) {
+  background: rgba(244, 239, 227, 0.18);
+}
+
+/* 危险按钮样式 */
+.action-button.is-danger {
+  background: rgba(189, 93, 90, 0.2);
+  border-color: rgba(189, 93, 90, 0.3);
+  color: rgba(255, 200, 200, 0.9);
+}
+
+.action-button.is-danger:hover:not(:disabled) {
+  background: rgba(189, 93, 90, 0.35);
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+@media (max-width: 1000px) {
+  .plugin-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .plugin-shell {
+    width: min(100vw - 28px, 100%);
+    padding-top: 20px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  .report-filters {
+    flex-direction: column;
+  }
+
+  .report-filters .text-input {
+    width: 100%;
+  }
+}

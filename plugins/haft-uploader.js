@@ -51,7 +51,7 @@ async function request(endpoint, options = {}) {
 
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(payload.error ?? "Request failed");
+    throw new Error(payload.error ?? "请求失败");
   }
 
   return payload;
@@ -85,8 +85,8 @@ async function loadPluginMeta() {
 
     elements.pluginTitle.textContent = plugin.title;
     elements.pluginSummary.textContent = plugin.summary;
-    elements.pluginCategoryBadge.textContent = plugin.category || "Automation";
-    elements.pluginTypeBadge.textContent = plugin.enabled ? "Internal Plugin" : "Plugin Disabled";
+    elements.pluginCategoryBadge.textContent = plugin.category || "自动化";
+    elements.pluginTypeBadge.textContent = plugin.enabled ? "内部插件" : "插件已停用";
     document.title = plugin.title;
   } catch {}
 }
@@ -96,22 +96,22 @@ function renderStatus() {
   const protectedCount = state.accounts.filter((account) => account.allowManualRun === false).length;
 
   setHeroStatus(
-    `Scheduler ${state.scheduler.running ? "is running" : "is stopped"}, ${enabledCount} enabled tasks, ${state.accounts.length} accounts, ${protectedCount} protected accounts.`,
+    `调度器${state.scheduler.running ? "运行中" : "已停止"}，已启用 ${enabledCount} 个任务，共 ${state.accounts.length} 个账号，其中 ${protectedCount} 个受保护账号。`,
   );
 
-  elements.schedulerToggleButton.textContent = state.scheduler.running ? "Stop Scheduler" : "Start Scheduler";
-  elements.schedulerStateValue.textContent = state.scheduler.running ? "Running" : "Stopped";
+  elements.schedulerToggleButton.textContent = state.scheduler.running ? "停止调度器" : "启动调度器";
+  elements.schedulerStateValue.textContent = state.scheduler.running ? "运行中" : "已停止";
   elements.enabledTaskValue.textContent = String(enabledCount);
   elements.accountCountValue.textContent = String(state.accounts.length);
   elements.protectedCountValue.textContent = String(protectedCount);
-  elements.taskSectionMeta.textContent = `${state.tasks.length} task(s) configured, ${enabledCount} enabled.`;
-  elements.logSectionMeta.textContent = `Showing the latest ${state.logs.length} execution log(s).`;
+  elements.taskSectionMeta.textContent = `已配置 ${state.tasks.length} 个任务，启用 ${enabledCount} 个。`;
+  elements.logSectionMeta.textContent = `正在显示最近 ${state.logs.length} 条执行日志。`;
 }
 
 function renderTasks() {
   if (state.tasks.length === 0) {
     elements.taskList.innerHTML =
-      '<div class="empty-state"><strong>No upload task yet</strong><p class="muted">Create the first Haft upload job to manage daily or scheduled runs from this plugin.</p></div>';
+      '<div class="empty-state"><strong>还没有上传任务</strong><p class="muted">新建第一个 Haft 上传任务后，就可以在这里管理日常或定时执行。</p></div>';
     return;
   }
 
@@ -126,7 +126,7 @@ function renderTasks() {
       const sourceSummary =
         task.fileSource.type === "directory"
           ? task.fileSource.directoryPath || "-"
-          : `${task.fileSource.downloadDir || "-"} · ${task.fileSource.urls?.length || 0} URL(s)`;
+          : `${task.fileSource.downloadDir || "-"} · ${task.fileSource.urls?.length || 0} 个下载链接`;
 
       return `
         <article class="task-item">
@@ -135,44 +135,44 @@ function renderTasks() {
               <strong class="task-title">${escapeHtml(task.name)}</strong>
               <div class="task-subtitle">${escapeHtml(formatSchedule(task.schedule))}</div>
             </div>
-            <span class="pill ${task.enabled ? "" : "off"}">${task.enabled ? "Enabled" : "Disabled"}</span>
+            <span class="pill ${task.enabled ? "" : "off"}">${task.enabled ? "已启用" : "已停用"}</span>
           </div>
 
           <div class="task-kv">
             <div class="kv-line">
-              <span>Account</span>
+              <span>账号</span>
               <strong>${escapeHtml(account ? `${account.label} / ${account.username}` : task.accountKey)}</strong>
             </div>
             <div class="kv-line">
-              <span>Upload Path</span>
+              <span>上传路径</span>
               <strong>${escapeHtml(targetPath)}</strong>
             </div>
             <div class="kv-line">
-              <span>File Source</span>
-              <strong>${task.fileSource.type === "directory" ? "Local Directory" : "URL Download"}</strong>
+              <span>文件来源</span>
+              <strong>${task.fileSource.type === "directory" ? "本地目录" : "链接下载"}</strong>
             </div>
             <div class="kv-line">
-              <span>Required Files</span>
+              <span>所需文件数</span>
               <strong>${escapeHtml(String(task.fileSource.requiredCount))}</strong>
             </div>
             <div class="kv-line kv-line-full">
-              <span>Source Detail</span>
+              <span>来源详情</span>
               <strong>${escapeHtml(sourceSummary)}</strong>
             </div>
           </div>
 
           <div class="task-tags">
-            <span class="mini-tag">${manualRunBlocked ? "Manual Run Locked" : running ? "Running" : "Manual Run Ready"}</span>
-            <span class="mini-tag">${task.browser?.headless ? "Headless Browser" : "Visible Browser"}</span>
-            <span class="mini-tag">${task.fileSource.type === "directory" ? "Direct Upload" : "Download Then Upload"}</span>
+            <span class="mini-tag">${manualRunBlocked ? "手动执行已锁定" : running ? "运行中" : "可手动执行"}</span>
+            <span class="mini-tag">${task.browser?.headless ? "无头浏览器" : "可见浏览器"}</span>
+            <span class="mini-tag">${task.fileSource.type === "directory" ? "直接上传" : "先下载再上传"}</span>
           </div>
 
           <div class="task-actions">
-            <button data-action="edit" data-task-id="${escapeHtml(task.id)}">Edit</button>
+            <button data-action="edit" data-task-id="${escapeHtml(task.id)}">编辑</button>
             <button data-action="run" data-task-id="${escapeHtml(task.id)}" ${manualRunBlocked || running ? "disabled" : ""}>
-              ${running ? "Running..." : "Run Now"}
+              ${running ? "运行中..." : "立即执行"}
             </button>
-            <button data-action="delete" data-task-id="${escapeHtml(task.id)}" class="ghost">Delete</button>
+            <button data-action="delete" data-task-id="${escapeHtml(task.id)}" class="ghost">删除</button>
           </div>
         </article>
       `;
@@ -183,7 +183,7 @@ function renderTasks() {
 function renderLogs() {
   if (state.logs.length === 0) {
     elements.logList.innerHTML =
-      '<div class="empty-state"><strong>No execution logs yet</strong><p class="muted">After a task runs, the upload result, file list, and debug trace path will appear here.</p></div>';
+      '<div class="empty-state"><strong>还没有执行日志</strong><p class="muted">任务运行后，上传结果、文件列表和调试追踪路径会显示在这里。</p></div>';
     return;
   }
 
@@ -201,37 +201,37 @@ function renderLogs() {
 
           <div class="task-kv">
             <div class="kv-line">
-              <span>Started</span>
+              <span>开始时间</span>
               <strong>${escapeHtml(formatDate(log.startedAt))}</strong>
             </div>
             <div class="kv-line">
-              <span>Finished</span>
-              <strong>${escapeHtml(log.finishedAt ? formatDate(log.finishedAt) : "Not finished")}</strong>
+              <span>结束时间</span>
+              <strong>${escapeHtml(log.finishedAt ? formatDate(log.finishedAt) : "未结束")}</strong>
             </div>
             <div class="kv-line">
-              <span>Account</span>
+              <span>账号</span>
               <strong>${escapeHtml(log.accountKey)}</strong>
             </div>
             <div class="kv-line">
-              <span>Files</span>
+              <span>文件数</span>
               <strong>${escapeHtml(String(log.fileCount ?? log.fileNames.length))}</strong>
             </div>
             <div class="kv-line kv-line-full">
-              <span>File Names</span>
-              <strong>${escapeHtml((log.fileNames || []).join("、") || "None")}</strong>
+              <span>文件名</span>
+              <strong>${escapeHtml((log.fileNames || []).join("、") || "无")}</strong>
             </div>
             <div class="kv-line kv-line-full">
-              <span>Execution Note</span>
+              <span>执行说明</span>
               <strong>${escapeHtml(buildExecutionSummary(log))}</strong>
             </div>
             ${
               extractTracePath(log.message)
-                ? `<div class="kv-line kv-line-full"><span>Trace Path</span><strong>${escapeHtml(extractTracePath(log.message))}</strong></div>`
+                ? `<div class="kv-line kv-line-full"><span>调试追踪路径</span><strong>${escapeHtml(extractTracePath(log.message))}</strong></div>`
                 : ""
             }
             ${
               log.screenshotPath
-                ? `<div class="kv-line kv-line-full"><span>Screenshot</span><strong>${escapeHtml(log.screenshotPath)}</strong></div>`
+                ? `<div class="kv-line kv-line-full"><span>截图</span><strong>${escapeHtml(log.screenshotPath)}</strong></div>`
                 : ""
             }
           </div>
@@ -265,7 +265,7 @@ function toggleScheduleFields() {
 function resetForm() {
   elements.form.reset();
   elements.existingTaskId.value = "";
-  elements.formTitle.textContent = "Create Task";
+  elements.formTitle.textContent = "新建任务";
   document.querySelector("#enabled").checked = true;
   elements.scheduleMode.value = "daily";
   document.querySelector("#uploadTime").value = "09:00";
@@ -281,7 +281,7 @@ function resetForm() {
 
 function fillForm(task) {
   elements.existingTaskId.value = task.id;
-  elements.formTitle.textContent = `Edit Task · ${task.name}`;
+  elements.formTitle.textContent = `编辑任务 · ${task.name}`;
   document.querySelector("#name").value = task.name;
   document.querySelector("#accountKey").value = task.accountKey;
   document.querySelector("#enabled").checked = task.enabled;
@@ -356,7 +356,7 @@ elements.form.addEventListener("submit", async (event) => {
     renderTasks();
     closeModal();
     resetForm();
-    setMessage("Task saved.");
+    setMessage("任务已保存。");
   } catch (error) {
     setMessage(error.message, true);
   }
@@ -381,7 +381,7 @@ elements.taskList.addEventListener("click", async (event) => {
   }
 
   if (action === "delete") {
-    if (!window.confirm(`Delete task "${task.name}"?`)) {
+    if (!window.confirm(`确认删除任务“${task.name}”？`)) {
       return;
     }
 
@@ -392,7 +392,7 @@ elements.taskList.addEventListener("click", async (event) => {
       state.tasks = payload.tasks ?? [];
       renderStatus();
       renderTasks();
-      setMessage("Task deleted.");
+      setMessage("任务已删除。");
     } catch (error) {
       setMessage(error.message, true);
     }
@@ -406,14 +406,14 @@ elements.taskList.addEventListener("click", async (event) => {
 
     state.runningTaskIds.add(taskId);
     renderTasks();
-    setMessage(`Task "${task.name}" is running...`);
+    setMessage(`任务“${task.name}”正在运行...`);
 
     try {
       const payload = await request(`/tasks/${encodeURIComponent(taskId)}/run`, {
         method: "POST",
       });
       await refreshLogs();
-      setMessage(`Task "${task.name}" finished with status ${payload.result?.status ?? "success"}.`);
+      setMessage(`任务“${task.name}”已完成，状态：${formatStatusLabel(payload.result?.status ?? "success")}。`);
     } catch (error) {
       setMessage(error.message, true);
     } finally {
@@ -426,7 +426,7 @@ elements.taskList.addEventListener("click", async (event) => {
 elements.refreshButton.addEventListener("click", async () => {
   try {
     await loadBootstrap();
-    setMessage("Data refreshed.");
+    setMessage("数据已刷新。");
   } catch (error) {
     setMessage(error.message, true);
     setHeroStatus(error.message, true);
@@ -439,7 +439,7 @@ elements.createTaskButton.addEventListener("click", () => {
 });
 
 elements.clearLogsButton.addEventListener("click", async () => {
-  if (!window.confirm("Clear current execution logs?")) {
+  if (!window.confirm("确认清空当前执行日志？")) {
     return;
   }
 
@@ -448,7 +448,7 @@ elements.clearLogsButton.addEventListener("click", async () => {
     state.logs = [];
     renderStatus();
     renderLogs();
-    setMessage("Logs cleared.");
+    setMessage("日志已清空。");
   } catch (error) {
     setMessage(error.message, true);
   }
@@ -461,7 +461,7 @@ elements.schedulerToggleButton.addEventListener("click", async () => {
     const payload = await request(endpoint, { method: "POST" });
     state.scheduler = payload.scheduler ?? state.scheduler;
     renderStatus();
-    setMessage(state.scheduler.running ? "Scheduler started." : "Scheduler stopped.");
+    setMessage(state.scheduler.running ? "调度器已启动。" : "调度器已停止。");
   } catch (error) {
     setMessage(error.message, true);
   }
@@ -491,41 +491,41 @@ function formatDate(value) {
 }
 
 function formatStatusLabel(status) {
-  if (status === "success") return "Success";
-  if (status === "failed") return "Failed";
-  if (status === "skipped") return "Skipped";
+  if (status === "success") return "成功";
+  if (status === "failed") return "失败";
+  if (status === "skipped") return "已跳过";
   return status;
 }
 
 function buildExecutionSummary(log) {
   const startedText = formatDate(log.startedAt);
-  const finishedText = log.finishedAt ? formatDate(log.finishedAt) : "not finished";
+  const finishedText = log.finishedAt ? formatDate(log.finishedAt) : "未结束";
   const cleanedMessage = cleanLogMessage(log.message);
   const fileCount = log.fileCount ?? log.fileNames.length;
 
   if (log.status === "success") {
-    return `Started at ${startedText}, finished at ${finishedText}, processed ${fileCount} file(s).${cleanedMessage ? ` ${cleanedMessage}` : ""}`;
+    return `开始于 ${startedText}，结束于 ${finishedText}，处理 ${fileCount} 个文件。${cleanedMessage ? ` ${cleanedMessage}` : ""}`;
   }
 
   if (log.status === "failed") {
-    return `Started at ${startedText}, failed at ${finishedText}. ${cleanedMessage || "No detailed reason returned."}`;
+    return `开始于 ${startedText}，失败于 ${finishedText}。${cleanedMessage || "没有返回详细原因。"}`;
   }
 
   if (log.status === "skipped") {
-    return `Skipped at ${startedText}. ${cleanedMessage || "Execution conditions were not met."}`;
+    return `跳过于 ${startedText}。${cleanedMessage || "未满足执行条件。"}`;
   }
 
-  return cleanedMessage || "No additional details.";
+  return cleanedMessage || "没有更多详情。";
 }
 
 function cleanLogMessage(message) {
   return String(message ?? "")
-    .replace(/\s*\|\s*Trace:\s*.+$/i, "")
+    .replace(/\s*\|\s*(Trace|调试追踪)：?\s*.+$/i, "")
     .trim();
 }
 
 function extractTracePath(message) {
-  const matched = String(message ?? "").match(/Trace:\s*(.+)$/i);
+  const matched = String(message ?? "").match(/(?:Trace|调试追踪)：?\s*(.+)$/i);
   return matched ? matched[1].trim() : "";
 }
 
@@ -540,11 +540,11 @@ function buildScheduleFromForm() {
         : getSelectedWeekdays();
 
   if (!timeValue) {
-    throw new Error("Please choose an upload time.");
+    throw new Error("请选择上传时间。");
   }
 
   if (mode === "weekly" && selectedWeekdays.length === 0) {
-    throw new Error("Please choose at least one weekday.");
+    throw new Error("请至少选择一个上传星期。");
   }
 
   const [hour, minute] = timeValue.split(":").map((value) => Number.parseInt(value, 10));
@@ -611,24 +611,24 @@ function getSelectedWeekdays() {
 function formatSchedule(schedule) {
   const { time, weekdays, mode } = parseCronSchedule(schedule);
   const labels = {
-    "0": "Sun",
-    "1": "Mon",
-    "2": "Tue",
-    "3": "Wed",
-    "4": "Thu",
-    "5": "Fri",
-    "6": "Sat",
+    "0": "周日",
+    "1": "周一",
+    "2": "周二",
+    "3": "周三",
+    "4": "周四",
+    "5": "周五",
+    "6": "周六",
   };
 
   if (mode === "daily" || weekdays.length === 7) {
-    return `Every day at ${time}`;
+    return `每天 ${time}`;
   }
 
   if (mode === "workday") {
-    return `Workdays at ${time}`;
+    return `工作日 ${time}`;
   }
 
-  return `${weekdays.map((value) => labels[value] ?? value).join(", ")} at ${time}`;
+  return `${weekdays.map((value) => labels[value] ?? value).join("、")} ${time}`;
 }
 
 function openModal() {
@@ -647,7 +647,7 @@ async function bootstrap() {
     await loadBootstrap();
   } catch (error) {
     setHeroStatus(error.message, true);
-    elements.taskList.innerHTML = `<div class="empty-state"><strong>Plugin is not ready</strong><p class="muted">${escapeHtml(error.message)}</p></div>`;
+    elements.taskList.innerHTML = `<div class="empty-state"><strong>插件尚未就绪</strong><p class="muted">${escapeHtml(error.message)}</p></div>`;
     elements.logList.innerHTML = "";
     elements.createTaskButton.disabled = true;
     elements.schedulerToggleButton.disabled = true;

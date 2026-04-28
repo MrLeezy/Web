@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "fiscalYears": {
+    "FY27": {
+      "start": "2026-01-31",
+      "end": "2027-01-29",
+      "label": "FY27 (2026-01-31 ~ 2027-01-29)"
+    },
+    "FY28": {
+      "start": "2027-01-30",
+      "end": "2028-01-28",
+      "label": "FY28 (2027-01-30 ~ 2028-01-28)"
+    }
+  },
+  "quarters": {
+    "Q1": { "weeks": [1, 13], "label": "Q1 (第1-13周)" },
+    "Q2": { "weeks": [1, 13], "label": "Q2 (第1-13周)" },
+    "Q3": { "weeks": [1, 13], "label": "Q3 (第1-13周)" },
+    "Q4": { "weeks": [1, 13], "label": "Q4 (第1-13周)" }
+  },
+  "sheets": {
+    "offline": [
+      { "name": "GIO", "description": "线下数据表" },
+      { "name": "Q-Chat", "description": "线下表提供" },
+      { "name": "Funnel", "description": "线下表" },
+      { "name": "Sunny Offline", "description": "线下表" },
+      { "name": "机器人", "description": "线下表" },
+      { "name": "B2B", "description": "线下表" }
+    ],
+    "database": [
+      { "name": "Unionid", "description": "数据库读取" },
+      { "name": "User", "description": "数据库读取" },
+      { "name": "Order", "description": "数据库读取" },
+      { "name": "领取积分", "description": "数据库读取" },
+      { "name": "领取优惠券", "description": "数据库读取" },
+      { "name": "订阅模版消息", "description": "数据库读取" },
+      { "name": "0元试用申请", "description": "数据库读取" },
+      { "name": "参与抽奖", "description": "数据库读取" },
+      { "name": "参与周年庆活动", "description": "数据库读取" },
+      { "name": "频道数据情况", "description": "数据库读取" }
+    ],
+    "generated": [
+      { "name": "UserRawdata", "description": "主要用户原始数据", "source": "merged" },
+      { "name": "DemandRawdata", "description": "需求数据", "source": "UserRawdata" },
+      { "name": "ProductRawdata", "description": "产品数据", "source": "database/merged" }
+    ],
+    "mapping": [
+      { "name": "Dictionary", "description": "字典表，维护映射关系" },
+      { "name": "UTM", "description": "渠道来源统一映射表" },
+      { "name": "唯一渠道数据分布", "description": "标准渠道映射表" }
+    ]
+  },
+  "fieldMappings": {
+    "userRawdata": {
+      "description": "用户原始数据字段映射",
+      "fields": []
+    },
+    "demandRawdata": {
+      "description": "需求数据字段映射",
+      "fields": []
+    }
+  },
+  "dataCleaning": {
+    "rules": []
+  }
+}

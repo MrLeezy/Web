@@ -78,7 +78,7 @@
     "dueAt": "2026-04-15T18:00",
     "reminderMinutes": 15,
     "source": "manual",
-    "updatedAt": "2026-04-10T14:07:05.608Z",
+    "updatedAt": "2026-04-20T02:07:01.778Z",
     "completedAt": ""
   },
   {
@@ -138,13 +138,13 @@
     "createdAt": "2026-04-10T10:08:36.589Z",
     "title": "外星人5G短信",
     "recurring": false,
-    "completed": false,
+    "completed": true,
     "note": "最晚这个时间需要收到外星人数据，并且提交5G短信审核，以及反馈具体的发送人群与时间",
     "dueAt": "2026-04-15T18:00",
     "reminderMinutes": 15,
     "source": "manual",
-    "updatedAt": "2026-04-10T14:06:46.728Z",
-    "completedAt": ""
+    "updatedAt": "2026-04-17T10:49:07.946Z",
+    "completedAt": "2026-04-17T10:49:07.946Z"
   },
   {
     "id": "26033838-b171-42e7-b1c3-01036f40a7e2",
@@ -164,13 +164,13 @@
     "createdAt": "2026-04-10T10:30:42.485Z",
     "title": "FY27Q1 POE 整理",
     "recurring": false,
-    "completed": false,
+    "completed": true,
     "note": "所有项目的POE需要在这个时间之前完成提交",
     "dueAt": "2026-04-21T18:30",
     "reminderMinutes": 15,
     "source": "manual",
-    "updatedAt": "2026-04-10T14:07:17.101Z",
-    "completedAt": ""
+    "updatedAt": "2026-04-27T03:09:20.053Z",
+    "completedAt": "2026-04-27T03:09:20.053Z"
   },
   {
     "id": "aead8dde-9500-4d4b-8c39-463f0deea965",
@@ -192,12 +192,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "https://teams.microsoft.com/dl/launcher/launcher.html?url=%2F_%23%2Fl%2Fmeetup-join%2F19%3Ameeting_MjBjM2IxMmEtZDE3ZC00ZjY0LWEzNDEtYWFlNWYyNjFmNTQw%40thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%2522945c199a-83a2-4e80-9f8c-5a91be5752dd%2522%252c%2522Oid%2522%253a%2522eddca6bc-7f17-482e-b53a-77ebefbcab1f%2522%257d%26anon%3Dtrue&type=meetup-join&deeplinkId=1a519bc8-a8d0-4b2c-9d21-f54b305fa225&directDl=true&msLaunch=true&enableMobilePage=true&suppressPrompt=true",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "4792eec4-2d27-4f73-88c2-24fcd6ef012e",
     "generatedDate": "2026-04-21",
     "createdAt": "2026-04-10T13:53:21.078Z",
-    "updatedAt": "2026-04-10T13:53:21.078Z"
+    "updatedAt": "2026-04-21T07:26:37.563Z",
+    "completedAt": "2026-04-21T07:26:37.563Z"
   },
   {
     "id": "8189459e-5e6a-4d4b-b80e-2af306132e5c",
@@ -206,12 +207,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "https://teams.microsoft.com/dl/launcher/launcher.html?url=%2F_%23%2Fl%2Fmeetup-join%2F19%3Ameeting_MjBjM2IxMmEtZDE3ZC00ZjY0LWEzNDEtYWFlNWYyNjFmNTQw%40thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%2522945c199a-83a2-4e80-9f8c-5a91be5752dd%2522%252c%2522Oid%2522%253a%2522eddca6bc-7f17-482e-b53a-77ebefbcab1f%2522%257d%26anon%3Dtrue&type=meetup-join&deeplinkId=1a519bc8-a8d0-4b2c-9d21-f54b305fa225&directDl=true&msLaunch=true&enableMobilePage=true&suppressPrompt=true",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "4792eec4-2d27-4f73-88c2-24fcd6ef012e",
     "generatedDate": "2026-04-28",
     "createdAt": "2026-04-10T13:53:21.078Z",
-    "updatedAt": "2026-04-10T13:53:21.078Z"
+    "updatedAt": "2026-04-28T07:33:24.603Z",
+    "completedAt": "2026-04-28T07:33:24.603Z"
   },
   {
     "id": "830828d1-fdb2-495e-a2f5-a5a3d0418820",
@@ -220,12 +222,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "https://teams.microsoft.com/meet/29290975877606?p=O6SAtnl8yrUVnelHTx",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "14221924-126e-43e3-b626-1d40dd2a009f",
     "generatedDate": "2026-04-23",
     "createdAt": "2026-04-10T13:53:21.078Z",
-    "updatedAt": "2026-04-10T13:53:21.078Z"
+    "updatedAt": "2026-04-24T02:32:50.480Z",
+    "completedAt": "2026-04-24T02:32:50.480Z"
   },
   {
     "id": "ed41ecbc-68d3-405d-811d-27a2dd31f0c1",
@@ -338,12 +341,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "大企业leads数据上传到Haft平台",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
     "generatedDate": "2026-04-20",
     "createdAt": "2026-04-10T13:56:01.784Z",
-    "updatedAt": "2026-04-10T13:56:01.784Z"
+    "updatedAt": "2026-04-20T06:24:09.176Z",
+    "completedAt": "2026-04-20T06:24:09.176Z"
   },
   {
     "id": "9d20986f-03f2-47b2-93b2-6a5b5d9ce170",
@@ -352,12 +356,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "大企业leads数据上传到Haft平台",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
     "generatedDate": "2026-04-21",
     "createdAt": "2026-04-10T13:56:01.784Z",
-    "updatedAt": "2026-04-10T13:56:01.784Z"
+    "updatedAt": "2026-04-21T05:57:06.504Z",
+    "completedAt": "2026-04-21T05:57:06.504Z"
   },
   {
     "id": "f1eac338-afd6-4383-9de1-4fe7a12619f5",
@@ -366,12 +371,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "大企业leads数据上传到Haft平台",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
     "generatedDate": "2026-04-22",
     "createdAt": "2026-04-10T13:56:01.784Z",
-    "updatedAt": "2026-04-10T13:56:01.784Z"
+    "updatedAt": "2026-04-22T10:01:00.369Z",
+    "completedAt": "2026-04-22T10:01:00.369Z"
   },
   {
     "id": "a0bc6129-741e-45d6-932c-2de9ae171b45",
@@ -380,12 +386,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "大企业leads数据上传到Haft平台",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
     "generatedDate": "2026-04-23",
     "createdAt": "2026-04-10T13:56:01.784Z",
-    "updatedAt": "2026-04-10T13:56:01.784Z"
+    "updatedAt": "2026-04-23T06:09:26.917Z",
+    "completedAt": "2026-04-23T06:09:26.917Z"
   },
   {
     "id": "fa070c59-df67-47f5-b2a3-7acb0d9831f6",
@@ -394,12 +401,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "大企业leads数据上传到Haft平台",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
     "generatedDate": "2026-04-24",
     "createdAt": "2026-04-10T13:56:01.784Z",
-    "updatedAt": "2026-04-10T13:56:01.784Z"
+    "updatedAt": "2026-04-27T03:07:53.520Z",
+    "completedAt": "2026-04-27T03:07:53.520Z"
   },
   {
     "id": "977121c2-e976-441e-8c1c-c669ba2254e4",
@@ -408,12 +416,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "大企业leads数据上传到Haft平台",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
     "generatedDate": "2026-04-27",
     "createdAt": "2026-04-10T13:56:01.784Z",
-    "updatedAt": "2026-04-10T13:56:01.784Z"
+    "updatedAt": "2026-04-27T03:09:14.424Z",
+    "completedAt": "2026-04-27T03:09:14.424Z"
   },
   {
     "id": "5b719704-e52d-45b9-a302-69d1ce71d87e",
@@ -540,13 +549,13 @@
     "createdAt": "2026-04-13T10:28:45.947Z",
     "title": "外星人小程序媒体投放对接",
     "recurring": false,
-    "completed": false,
+    "completed": true,
     "note": "1、原始ID：gh_64eec6a0ff7e、小程序昵称：戴尔会员、小程序主体名称：戴尔(中国)有限公司\n2、pages/alien/vip?utm_source=wechats_dsp&utm_medium=ot_md_so&utm_campaign=consumer_campaign-alienware_alienware&utm_content=yin-li&utm_term=campaign-alienware-alienware\n3、加入外星人会员进行上报么？ 转化归因根据什么进行上报？",
     "dueAt": "2026-04-16T18:00",
     "reminderMinutes": 15,
     "source": "manual",
-    "updatedAt": "2026-04-13T10:28:45.949Z",
-    "completedAt": ""
+    "updatedAt": "2026-04-17T07:01:01.376Z",
+    "completedAt": "2026-04-17T07:01:01.377Z"
   },
   {
     "id": "c9e72e7f-3bb1-4538-b68b-1ff036f51162",
@@ -570,12 +579,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "整理大企周报与分析",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "cad2d679-0b9a-41b2-84cb-f0e660df6958",
     "generatedDate": "2026-04-21",
     "createdAt": "2026-04-13T11:26:10.520Z",
-    "updatedAt": "2026-04-13T11:26:10.520Z"
+    "updatedAt": "2026-04-21T07:26:41.596Z",
+    "completedAt": "2026-04-21T07:26:41.596Z"
   },
   {
     "id": "39621ed4-930b-4921-aed2-5ec87d007ea0",
@@ -584,12 +594,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "整理大企周报与分析",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "cad2d679-0b9a-41b2-84cb-f0e660df6958",
     "generatedDate": "2026-04-28",
     "createdAt": "2026-04-13T11:26:10.520Z",
-    "updatedAt": "2026-04-13T11:26:10.520Z"
+    "updatedAt": "2026-04-28T07:11:33.379Z",
+    "completedAt": "2026-04-28T07:11:33.379Z"
   },
   {
     "id": "8ef0e2fc-1a9f-48cd-99d0-1163fcc84088",
@@ -622,13 +633,13 @@
     "createdAt": "2026-04-14T09:38:37.241Z",
     "title": "417大会-417/418需要发送2条中奖短信",
     "recurring": false,
-    "completed": false,
+    "completed": true,
     "note": "【戴尔中国】恭喜您成为本次“ALIENWARE 外星人「玩心大开」游戏互动嘉年华”终极幸运得主！大奖【ALIENWARE 外星人星舰游戏本】已为你锁定！请于{当日日期}18点前凭“中奖短信”前往舞台区领取，错过即失效！",
-    "dueAt": "2026-04-17T17:00",
+    "dueAt": "2026-04-18T17:00",
     "reminderMinutes": 15,
     "source": "manual",
-    "updatedAt": "2026-04-15T09:15:08.893Z",
-    "completedAt": ""
+    "updatedAt": "2026-04-20T02:06:33.177Z",
+    "completedAt": "2026-04-20T02:06:33.177Z"
   },
   {
     "id": "60a28186-2dff-4f42-84c8-f4b26d67b9a3",
@@ -796,12 +807,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "1f2e04ad-b62e-4914-b2e6-37e1df566d89",
     "generatedDate": "2026-04-17",
     "createdAt": "2026-04-16T07:26:12.430Z",
-    "updatedAt": "2026-04-16T07:26:12.430Z"
+    "updatedAt": "2026-04-20T02:06:20.712Z",
+    "completedAt": "2026-04-20T02:06:20.712Z"
   },
   {
     "id": "f2f1f94d-0103-4f88-bdcd-e157cd2426e3",
@@ -810,12 +822,13 @@
     "reminderMinutes": 15,
     "recurring": true,
     "note": "",
-    "completed": false,
+    "completed": true,
     "source": "template",
     "templateId": "1f2e04ad-b62e-4914-b2e6-37e1df566d89",
     "generatedDate": "2026-04-24",
     "createdAt": "2026-04-16T07:26:12.430Z",
-    "updatedAt": "2026-04-16T07:26:12.430Z"
+    "updatedAt": "2026-04-27T05:58:22.674Z",
+    "completedAt": "2026-04-27T05:58:22.674Z"
   },
   {
     "id": "b84638f6-2bf7-4b12-8068-e5de3a0e2b40",
@@ -858,5 +871,239 @@
     "generatedDate": "2026-05-07",
     "createdAt": "2026-04-17T01:58:12.773Z",
     "updatedAt": "2026-04-17T01:58:12.773Z"
+  },
+  {
+    "id": "a1516321-44a1-4565-a237-7274423383fa",
+    "createdAt": "2026-04-17T06:38:22.116Z",
+    "title": "CSG活动与mona和周博",
+    "recurring": false,
+    "completed": true,
+    "note": "https://dell.zoom.us/j/5563201160?omn=97977900650",
+    "dueAt": "2026-04-20T15:30",
+    "reminderMinutes": 15,
+    "source": "manual",
+    "updatedAt": "2026-04-20T07:52:08.020Z",
+    "completedAt": "2026-04-20T07:52:08.020Z"
+  },
+  {
+    "id": "12ba5391-9927-4d10-8cc4-00ec1debe2ac",
+    "title": "大企数据上传",
+    "dueAt": "2026-05-08T12:00:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "大企业leads数据上传到Haft平台",
+    "completed": false,
+    "source": "template",
+    "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
+    "generatedDate": "2026-05-08",
+    "createdAt": "2026-04-17T16:00:52.580Z",
+    "updatedAt": "2026-04-17T16:00:52.580Z"
+  },
+  {
+    "id": "a736bc7b-ea27-4c4f-ab88-32d922d7177a",
+    "title": "部门周报",
+    "dueAt": "2026-05-08T18:00:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "",
+    "completed": false,
+    "source": "template",
+    "templateId": "1f2e04ad-b62e-4914-b2e6-37e1df566d89",
+    "generatedDate": "2026-05-08",
+    "createdAt": "2026-04-17T16:00:52.580Z",
+    "updatedAt": "2026-04-17T16:00:52.580Z"
+  },
+  {
+    "id": "14d5a2af-f466-47ba-8ff2-998f6fc6894e",
+    "title": "大企数据上传",
+    "dueAt": "2026-05-09T12:00:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "大企业leads数据上传到Haft平台",
+    "completed": false,
+    "source": "template",
+    "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
+    "generatedDate": "2026-05-09",
+    "createdAt": "2026-04-18T16:41:33.410Z",
+    "updatedAt": "2026-04-18T16:41:33.410Z"
+  },
+  {
+    "id": "037219ff-2182-4724-9f9c-a7ea8d1ff9e5",
+    "createdAt": "2026-04-20T07:30:25.356Z",
+    "title": "与企点客服那面开会说续费的事情",
+    "recurring": false,
+    "completed": true,
+    "note": "",
+    "dueAt": "2026-04-20T17:00",
+    "reminderMinutes": 15,
+    "source": "manual",
+    "updatedAt": "2026-04-20T10:08:56.932Z",
+    "completedAt": "2026-04-20T10:08:56.932Z"
+  },
+  {
+    "id": "06efec9e-825a-4da1-b827-7ce10995b3e8",
+    "createdAt": "2026-04-20T10:08:52.595Z",
+    "title": "Alienware Member data support",
+    "recurring": false,
+    "completed": true,
+    "note": "https://teams.microsoft.com/meet/273160339297178?p=x5fYG7CRnW8heiHqfK",
+    "dueAt": "2026-04-21T12:00",
+    "reminderMinutes": 15,
+    "source": "manual",
+    "updatedAt": "2026-04-21T06:10:59.029Z",
+    "completedAt": "2026-04-21T06:10:59.029Z"
+  },
+  {
+    "id": "f0e971e4-f9db-4e97-abd7-862bb58d0d4d",
+    "title": "大企数据上传",
+    "dueAt": "2026-05-11T12:00:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "大企业leads数据上传到Haft平台",
+    "completed": false,
+    "source": "template",
+    "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
+    "generatedDate": "2026-05-11",
+    "createdAt": "2026-04-20T16:00:14.021Z",
+    "updatedAt": "2026-04-20T16:00:14.021Z"
+  },
+  {
+    "id": "dffdb344-ac39-4f5b-8b6d-56dd7141b3ed",
+    "createdAt": "2026-04-21T07:27:10.097Z",
+    "title": "本季度数据环比和同比进行一下对比，看看费用情况",
+    "recurring": false,
+    "completed": false,
+    "note": "",
+    "dueAt": "2026-04-23T16:00",
+    "reminderMinutes": 15,
+    "source": "manual",
+    "updatedAt": "2026-04-21T07:27:10.097Z",
+    "completedAt": ""
+  },
+  {
+    "id": "f5b8f916-56a2-4724-9d54-9aea57cd06d4",
+    "title": "大企数据上传",
+    "dueAt": "2026-05-12T12:00:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "大企业leads数据上传到Haft平台",
+    "completed": false,
+    "source": "template",
+    "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
+    "generatedDate": "2026-05-12",
+    "createdAt": "2026-04-21T16:26:56.318Z",
+    "updatedAt": "2026-04-21T16:26:56.318Z"
+  },
+  {
+    "id": "01357e24-0cf7-4da4-83b8-9a6587d996c5",
+    "title": "Solution周会",
+    "dueAt": "2026-05-12T15:00:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "https://teams.microsoft.com/dl/launcher/launcher.html?url=%2F_%23%2Fl%2Fmeetup-join%2F19%3Ameeting_MjBjM2IxMmEtZDE3ZC00ZjY0LWEzNDEtYWFlNWYyNjFmNTQw%40thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%2522945c199a-83a2-4e80-9f8c-5a91be5752dd%2522%252c%2522Oid%2522%253a%2522eddca6bc-7f17-482e-b53a-77ebefbcab1f%2522%257d%26anon%3Dtrue&type=meetup-join&deeplinkId=1a519bc8-a8d0-4b2c-9d21-f54b305fa225&directDl=true&msLaunch=true&enableMobilePage=true&suppressPrompt=true",
+    "completed": false,
+    "source": "template",
+    "templateId": "4792eec4-2d27-4f73-88c2-24fcd6ef012e",
+    "generatedDate": "2026-05-12",
+    "createdAt": "2026-04-21T16:26:56.318Z",
+    "updatedAt": "2026-04-21T16:26:56.318Z"
+  },
+  {
+    "id": "80a87b05-2a7c-430a-991c-48f776930711",
+    "title": "大企业周报",
+    "dueAt": "2026-05-12T14:30:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "整理大企周报与分析",
+    "completed": false,
+    "source": "template",
+    "templateId": "cad2d679-0b9a-41b2-84cb-f0e660df6958",
+    "generatedDate": "2026-05-12",
+    "createdAt": "2026-04-21T16:26:56.318Z",
+    "updatedAt": "2026-04-21T16:26:56.318Z"
+  },
+  {
+    "id": "1a4e0c14-8026-4857-b0fc-1278908d250f",
+    "title": "大企数据上传",
+    "dueAt": "2026-05-13T12:00:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "大企业leads数据上传到Haft平台",
+    "completed": false,
+    "source": "template",
+    "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
+    "generatedDate": "2026-05-13",
+    "createdAt": "2026-04-22T16:00:13.857Z",
+    "updatedAt": "2026-04-22T16:00:13.857Z"
+  },
+  {
+    "id": "ad75d91c-b916-41b2-8acd-859d895370dd",
+    "title": "大企数据上传",
+    "dueAt": "2026-05-14T12:00:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "大企业leads数据上传到Haft平台",
+    "completed": false,
+    "source": "template",
+    "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
+    "generatedDate": "2026-05-14",
+    "createdAt": "2026-04-24T02:32:10.283Z",
+    "updatedAt": "2026-04-24T02:32:10.283Z"
+  },
+  {
+    "id": "94e5a992-73be-4762-8a56-f578cfba83a5",
+    "title": "外星人周会",
+    "dueAt": "2026-05-14T15:30:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "https://teams.microsoft.com/meet/29290975877606?p=O6SAtnl8yrUVnelHTx",
+    "completed": false,
+    "source": "template",
+    "templateId": "14221924-126e-43e3-b626-1d40dd2a009f",
+    "generatedDate": "2026-05-14",
+    "createdAt": "2026-04-24T02:32:10.283Z",
+    "updatedAt": "2026-04-24T02:32:10.283Z"
+  },
+  {
+    "id": "cd801836-fe58-4eb7-9e7f-8d5a736f8f0f",
+    "title": "大企数据上传",
+    "dueAt": "2026-05-15T12:00:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "大企业leads数据上传到Haft平台",
+    "completed": false,
+    "source": "template",
+    "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
+    "generatedDate": "2026-05-15",
+    "createdAt": "2026-04-27T03:03:54.364Z",
+    "updatedAt": "2026-04-27T03:03:54.364Z"
+  },
+  {
+    "id": "2cdabdc9-a40a-4792-a151-705ee5ba8040",
+    "title": "部门周报",
+    "dueAt": "2026-05-15T18:00:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "",
+    "completed": false,
+    "source": "template",
+    "templateId": "1f2e04ad-b62e-4914-b2e6-37e1df566d89",
+    "generatedDate": "2026-05-15",
+    "createdAt": "2026-04-27T03:03:54.364Z",
+    "updatedAt": "2026-04-27T03:03:54.364Z"
+  },
+  {
+    "id": "a2998f13-5061-4d3a-9326-9b24faaa4e87",
+    "title": "大企数据上传",
+    "dueAt": "2026-05-18T12:00:00",
+    "reminderMinutes": 15,
+    "recurring": true,
+    "note": "大企业leads数据上传到Haft平台",
+    "completed": false,
+    "source": "template",
+    "templateId": "ef16496a-bd79-47ec-b0f1-ab93a8eae1af",
+    "generatedDate": "2026-05-18",
+    "createdAt": "2026-04-28T01:57:57.865Z",
+    "updatedAt": "2026-04-28T01:57:57.865Z"
   }
 ]

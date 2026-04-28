@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consumer 数据生成器</title>
+    <link rel="stylesheet" href="./comsumer-data.css?v=20260421-1" />
+  </head>
+  <body>
+    <main class="plugin-shell">
+      <section class="plugin-hero">
+        <a class="hero-back" href="/">← 返回首页</a>
+        <div class="hero-badge-row">
+          <span class="hero-badge" id="pluginTypeBadge">内置插件</span>
+          <span class="hero-badge" id="pluginCategoryBadge">Data Ops</span>
+        </div>
+        <h1 id="pluginTitle">Consumer 数据生成器</h1>
+        <p class="hero-copy" id="pluginSummary">
+          面向现有 Consumer 工作簿链路，完成周期工作簿创建、源 Sheet 导入、UserRawdata / DemandRawdata / ProductRawdata
+          重建，以及主底表同步。
+        </p>
+      </section>
+
+      <section class="metrics-grid" id="metricsGrid">
+        <article class="metric-card">
+          <span class="metric-label">唯一渠道</span>
+          <strong class="metric-value" id="metricChannels">--</strong>
+          <span class="metric-note">来自配置表</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">UTM 映射</span>
+          <strong class="metric-value" id="metricUtms">--</strong>
+          <span class="metric-note">标准渠道入口</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">历史周期文件</span>
+          <strong class="metric-value" id="metricPeriods">--</strong>
+          <span class="metric-note">可作为模板复用</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">主底表</span>
+          <strong class="metric-value" id="metricMasters">--</strong>
+          <span class="metric-note">合并与覆盖目标</span>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">线上配置</p>
+            <h2>配置中心</h2>
+            <p class="panel-copy">直接在线维护配置表里的唯一渠道和 UTM 映射，不再依赖线下改 Excel。</p>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button id="refreshConfigEditorBtn" class="action-button is-ghost" type="button">刷新配置中心</button>
+          <span class="action-meta" id="configEditorHint">会同步读取配置表和最近一次未匹配的 UTM 组合。</span>
+        </div>
+
+        <div class="status-card is-hidden" id="configStatusCard"></div>
+
+        <div class="config-editor-grid">
+          <section class="config-editor-card">
+            <div class="section-header">
+              <h3>唯一渠道维护</h3>
+              <p class="empty-hint">新增渠道或修正已有唯一标识符的归属信息。</p>
+            </div>
+
+            <form id="uniqueChannelForm" class="editor-form">
+              <div class="editor-form-grid">
+                <label class="field">
+                  <span>Channel</span>
+                  <input id="uniqueChannelInput" type="text" autocomplete="off" />
+                </label>
+                <label class="field">
+                  <span>Source</span>
+                  <input id="uniqueSourceInput" type="text" autocomplete="off" />
+                </label>
+                <label class="field">
+                  <span>Term</span>
+                  <input id="uniqueTermInput" type="text" autocomplete="off" placeholder="/" />
+                </label>
+                <label class="field">
+                  <span>唯一标识符</span>
+                  <input id="uniqueIdInput" type="text" autocomplete="off" />
+                </label>
+              </div>
+              <div class="action-row">
+                <button id="saveUniqueChannelBtn" class="action-button" type="submit">保存唯一渠道</button>
+              </div>
+            </form>
+
+            <label class="field search-field">
+              <span>搜索唯一渠道</span>
+              <input id="uniqueSearchInput" type="search" autocomplete="off" placeholder="按 uniqueId / Channel / Source 搜索" />
+            </label>
+
+            <div class="table-shell" id="uniqueChannelTable"></div>
+          </section>
+
+          <section class="config-editor-card">
+            <div class="section-header">
+              <h3>UTM 映射维护</h3>
+              <p class="empty-hint">补充或修正 utm_source / utm_campaign / utm_term 到唯一标识符的映射。</p>
+            </div>
+
+            <form id="utmForm" class="editor-form">
+              <div class="editor-form-grid">
+                <label class="field">
+                  <span>utm_source</span>
+                  <input id="utmSourceInput" type="text" autocomplete="off" />
+                </label>
+                <label class="field">
+                  <span>utm_campaign</span>
+                  <input id="utmCampaignInput" type="text" autocomplete="off" />
+                </label>
+                <label class="field">
+                  <span>utm_term</span>
+                  <input id="utmTermInput" type="text" autocomplete="off" />
+                </label>
+                <label class="field">
+                  <span>唯一标识符</span>
+                  <select id="utmUniqueIdSelect"></select>
+                </label>
+              </div>
+              <div class="action-row">
+                <button id="saveUtmBtn" class="action-button" type="submit">保存 UTM 映射</button>
+              </div>
+            </form>
+
+            <label class="field search-field">
+              <span>搜索 UTM 映射</span>
+              <input id="utmSearchInput" type="search" autocomplete="off" placeholder="按 utm_source / utm_campaign / uniqueId 搜索" />
+            </label>
+
+            <div class="table-shell" id="utmTable"></div>
+          </section>
+        </div>
+
+        <section class="config-editor-card config-editor-card-full">
+          <div class="section-header">
+            <h3>最近未匹配的 UTM</h3>
+            <p class="empty-hint" id="latestUnmatchedMeta">重建后会把未匹配的 UTM 组合显示在这里，支持多选后批量映射到同一个唯一渠道。</p>
+          </div>
+          <div class="unmatched-utm-toolbar">
+            <button id="selectAllUnmatchedBtn" class="action-button is-ghost" type="button">全选当前列表</button>
+            <button id="clearUnmatchedSelectionBtn" class="action-button is-ghost" type="button">清空选择</button>
+            <label class="field unmatched-bulk-field">
+              <span>批量映射到</span>
+              <select id="bulkUtmUniqueIdSelect"></select>
+            </label>
+            <button id="bulkMapUnmatchedBtn" class="action-button" type="button">批量保存映射</button>
+            <span class="action-meta" id="bulkSelectionNote">暂未选择未匹配 UTM。</span>
+          </div>
+          <div class="unmatched-utm-list" id="latestUnmatchedList"></div>
+        </section>
+      </section>
+
+      <section class="plugin-layout">
+        <section class="panel panel-primary">
+          <div class="panel-header">
+            <div>
+              <p class="panel-eyebrow">步骤 1</p>
+              <h2>选择更新周期</h2>
+              <p class="panel-copy">只标记本次要更新的财年、季度和周度，不会自动在 data/comsumer 下新建周工作簿。</p>
+            </div>
+          </div>
+
+          <div class="period-grid">
+            <label class="field">
+              <span>财年</span>
+              <select id="fiscalYearSelect"></select>
+            </label>
+
+            <label class="field">
+              <span>季度</span>
+              <select id="quarterSelect">
+                <option value="Q1">Q1</option>
+                <option value="Q2">Q2</option>
+                <option value="Q3">Q3</option>
+                <option value="Q4">Q4</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>周度</span>
+              <select id="weekSelect"></select>
+            </label>
+          </div>
+
+          <div class="action-row">
+            <button id="openPeriodBtn" class="action-button" type="button">加载当前周期</button>
+            <button id="rebuildBtn" class="action-button is-secondary" type="button" disabled>重建并同步主底表</button>
+            <span class="action-meta" id="periodHint">先选择一个周期，再加载本次要更新的数据范围。</span>
+          </div>
+
+          <div class="status-card is-hidden" id="periodStatusCard"></div>
+
+          <div class="current-period-card" id="currentPeriodCard">
+            <div class="current-period-top">
+              <div>
+                <p class="current-period-label">当前周期</p>
+                <strong class="current-period-value" id="currentPeriodValue">未选择</strong>
+              </div>
+              <button id="downloadPeriodBtn" class="text-button" type="button" disabled>下载插件工作区</button>
+            </div>
+            <p class="current-period-note" id="currentPeriodNote">加载后会显示是否存在插件工作区或历史周期工作簿。</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="panel-eyebrow">配置</p>
+              <h2>系统概览</h2>
+              <p class="panel-copy">读取当前 Consumer 配置表和主底表，确保整个工作簿链路使用同一套口径。</p>
+            </div>
+          </div>
+
+          <div class="summary-list" id="configSummaryList"></div>
+
+          <div class="download-group">
+            <button id="downloadConfigBtn" class="action-button is-ghost" type="button">下载配置表</button>
+          </div>
+
+          <div class="supported-section">
+            <p class="supported-title">当前支持导入的源 Sheet</p>
+            <div class="supported-tags" id="supportedTags"></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="plugin-layout">
+        <section class="panel panel-primary">
+          <div class="panel-header">
+            <div>
+              <p class="panel-eyebrow">步骤 2</p>
+              <h2>导入线下或标准化工作簿</h2>
+              <p class="panel-copy">
+                选择当前周期后上传 Excel 或 CSV。系统会按 sheet 名或表头自动识别，并写入插件工作区，再用于更新主底表。
+              </p>
+            </div>
+          </div>
+
+          <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" multiple hidden />
+
+          <button id="uploadBtn" class="dropzone" type="button">
+            <span class="dropzone-icon">数</span>
+            <span class="dropzone-title">选择或拖拽 Excel / CSV 到这里</span>
+            <span class="dropzone-hint">支持一次选择多个文件，识别后自动导入到当前周期工作簿。</span>
+          </button>
+
+          <div class="status-card is-hidden" id="uploadStatusCard"></div>
+
+          <div class="import-history">
+            <div class="section-header">
+              <h3>本次导入记录</h3>
+            </div>
+            <div class="history-list" id="importHistoryList">
+              <p class="empty-hint">还没有导入任何文件。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="panel-eyebrow">主底表</p>
+              <h2>同步目标</h2>
+              <p class="panel-copy">重建完成后，会按当前周期更新主底表；其中 UserRawdata_merged 为核心底层数据表。</p>
+            </div>
+          </div>
+
+          <div class="master-file-list" id="masterFileList"></div>
+        </section>
+      </section>
+
+      <section class="panel is-hidden" id="workbookSection">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">周期详情</p>
+            <h2>当前工作区状态</h2>
+            <p class="panel-copy" id="workbookMeta">加载周期后，这里会展示插件工作区或历史周期工作簿的状态。</p>
+          </div>
+        </div>
+
+        <div class="sheet-columns">
+          <section>
+            <h3>源 Sheet</h3>
+            <div class="sheet-list" id="sourceSheetList"></div>
+          </section>
+          <section>
+            <h3>汇总 Sheet</h3>
+            <div class="sheet-list" id="generatedSheetList"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel is-hidden" id="resultSection">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">步骤 3</p>
+            <h2>重建结果</h2>
+            <p class="panel-copy">展示本次生成的行数、未匹配项，以及可下载的输出文件。</p>
+          </div>
+        </div>
+
+        <div class="result-grid" id="resultGrid"></div>
+        <div class="unmatched-grid" id="unmatchedGrid"></div>
+        <div class="download-grid" id="downloadGrid"></div>
+      </section>
+    </main>
+
+    <script src="./comsumer-data.js?v=20260421-1"></script>
+  </body>
+</html>
