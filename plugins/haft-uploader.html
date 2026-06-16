@@ -152,6 +152,24 @@
               <textarea id="urlsText" rows="5" placeholder="每行一个下载链接"></textarea>
             </label>
 
+            <label id="downloadDateModeField" class="hidden">
+              <span>下载日期</span>
+              <select id="downloadDateMode">
+                <option value="yesterday">昨天</option>
+                <option value="custom">指定日期</option>
+              </select>
+            </label>
+
+            <label id="customStartDateField" class="hidden">
+              <span>指定日期</span>
+              <div class="date-select-grid">
+                <select id="customStartYear" aria-label="指定年份"></select>
+                <select id="customStartMonth" aria-label="指定月份"></select>
+                <select id="customStartDay" aria-label="指定日期"></select>
+              </div>
+              <small class="field-hint">仅会替换下载链接中为空的 `start=` 参数。</small>
+            </label>
+
             <label>
               <span>所需文件数量</span>
               <input id="requiredCount" type="number" min="1" value="1" />

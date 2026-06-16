@@ -1,0 +1,199 @@
+{
+  "lastSuccessfulStartAt": "2026-06-15T03:00:00.000Z",
+  "lastSuccessfulEndAt": "2026-06-16T03:00:00.000Z",
+  "lastDownloadedFileName": "leads_form%282026%E5%B9%B406%E6%9C%8815%E6%97%A5+11%E6%97%B600%E5%88%86-2026%E5%B9%B406%E6%9C%8816%E6%97%A5+11%E6%97%B600%E5%88%86%29_by_20260616.csv",
+  "lastDownloadedAt": "2026-06-16T07:06:31.426Z",
+  "history": [
+    {
+      "runAt": "2026-06-16T07:06:31.426Z",
+      "period": {
+        "startAt": "2026-06-15T03:00:00.000Z",
+        "endAt": "2026-06-16T03:00:00.000Z"
+      },
+      "download": {
+        "fileName": "leads_form%282026%E5%B9%B406%E6%9C%8815%E6%97%A5+11%E6%97%B600%E5%88%86-2026%E5%B9%B406%E6%9C%8816%E6%97%A5+11%E6%97%B600%E5%88%86%29_by_20260616.csv",
+        "filePath": "/Users/lizhongyu/程序/团队协作系统/data/leads-splitter/downloads/leads_form%282026%E5%B9%B406%E6%9C%8815%E6%97%A5+11%E6%97%B600%E5%88%86-2026%E5%B9%B406%E6%9C%8816%E6%97%A5+11%E6%97%B600%E5%88%86%29_by_20260616.csv",
+        "fileSize": 185092,
+        "url": "https://www.dellemc-solution.com/admin/intent_form/getIntentData?export=true&source=s&d=2026-06-15+11%3A00%3A00+%E5%88%B0+2026-06-16+11%3A00%3A00&utmSource=&withOutT=false"
+      },
+      "result": {
+        "total": 409,
+        "table1_count": 0,
+        "table2_count": 291,
+        "outputs": [
+          {
+            "key": "table1",
+            "label": "Table 1",
+            "description": "Removes wechat-dsp-xcx, wechat-dsp, douyin, kuaishou, toutiao, xiaohongshu, and xiaohongshu_xcx.",
+            "filename": "leads_form_by_20260616#0.csv",
+            "count": 0
+          },
+          {
+            "key": "table2",
+            "label": "Table 2",
+            "description": "Keeps only wechat-dsp for the downstream handoff.",
+            "filename": "leads_form_by_20260616#291-to ouyang.csv",
+            "count": 291
+          }
+        ]
+      }
+    },
+    {
+      "runAt": "2026-06-15T05:31:58.673Z",
+      "period": {
+        "startAt": "2026-06-12T03:00:00.000Z",
+        "endAt": "2026-06-15T03:00:00.000Z"
+      },
+      "download": {
+        "fileName": "leads_form%282026%E5%B9%B406%E6%9C%8812%E6%97%A5+11%E6%97%B600%E5%88%86-2026%E5%B9%B406%E6%9C%8815%E6%97%A5+11%E6%97%B600%E5%88%86%29_by_20260615.csv",
+        "filePath": "/Users/lizhongyu/程序/团队协作系统/data/leads-splitter/downloads/leads_form%282026%E5%B9%B406%E6%9C%8812%E6%97%A5+11%E6%97%B600%E5%88%86-2026%E5%B9%B406%E6%9C%8815%E6%97%A5+11%E6%97%B600%E5%88%86%29_by_20260615.csv",
+        "fileSize": 1454572,
+        "url": "https://www.dellemc-solution.com/admin/intent_form/getIntentData?export=true&source=s&d=2026-06-12+11%3A00%3A00+%E5%88%B0+2026-06-15+11%3A00%3A00&utmSource=&withOutT=false"
+      },
+      "result": {
+        "total": 3540,
+        "table1_count": 1406,
+        "table2_count": 487,
+        "outputs": [
+          {
+            "key": "table1",
+            "label": "Table 1",
+            "description": "Removes wechat-dsp-xcx, wechat-dsp, douyin, kuaishou, toutiao, xiaohongshu, and xiaohongshu_xcx.",
+            "filename": "leads_form_by_20260615#1406.csv",
+            "count": 1406
+          },
+          {
+            "key": "table2",
+            "label": "Table 2",
+            "description": "Keeps only wechat-dsp for the downstream handoff.",
+            "filename": "leads_form_by_20260615#487-to ouyang.csv",
+            "count": 487
+          }
+        ]
+      }
+    },
+    {
+      "runAt": "2026-06-12T06:37:33.009Z",
+      "period": {
+        "startAt": "2026-06-10T03:00:00.000Z",
+        "endAt": "2026-06-12T03:00:00.000Z"
+      },
+      "download": {
+        "fileName": "leads_form%282026%E5%B9%B406%E6%9C%8810%E6%97%A5+11%E6%97%B600%E5%88%86-2026%E5%B9%B406%E6%9C%8812%E6%97%A5+11%E6%97%B600%E5%88%86%29_by_20260612.csv",
+        "filePath": "/Users/lizhongyu/程序/团队协作系统/data/leads-splitter/downloads/leads_form%282026%E5%B9%B406%E6%9C%8810%E6%97%A5+11%E6%97%B600%E5%88%86-2026%E5%B9%B406%E6%9C%8812%E6%97%A5+11%E6%97%B600%E5%88%86%29_by_20260612.csv",
+        "fileSize": 4413151,
+        "url": "https://www.dellemc-solution.com/admin/intent_form/getIntentData?export=true&source=s&d=2026-06-10+11%3A00%3A00+%E5%88%B0+2026-06-12+11%3A00%3A00&utmSource=&withOutT=false"
+      },
+      "result": {
+        "total": 11339,
+        "table1_count": 9946,
+        "table2_count": 688,
+        "outputs": [
+          {
+            "key": "table1",
+            "label": "Table 1",
+            "description": "Removes wechat-dsp-xcx, wechat-dsp, douyin, kuaishou, toutiao, xiaohongshu, and xiaohongshu_xcx.",
+            "filename": "leads_form_by_20260612#9946.csv",
+            "count": 9946
+          },
+          {
+            "key": "table2",
+            "label": "Table 2",
+            "description": "Keeps only wechat-dsp for the downstream handoff.",
+            "filename": "leads_form_by_20260612#688-to ouyang.csv",
+            "count": 688
+          }
+        ]
+      }
+    },
+    {
+      "runAt": "2026-06-10T03:35:23.201Z",
+      "period": {
+        "startAt": "2026-06-09T03:00:00.000Z",
+        "endAt": "2026-06-10T03:00:00.000Z"
+      },
+      "download": {
+        "fileName": "leads_form%282026%E5%B9%B406%E6%9C%8809%E6%97%A5+11%E6%97%B600%E5%88%86-2026%E5%B9%B406%E6%9C%8810%E6%97%A5+11%E6%97%B600%E5%88%86%29_by_20260610.csv",
+        "filePath": "/Users/lizhongyu/程序/团队协作系统/data/leads-splitter/downloads/leads_form%282026%E5%B9%B406%E6%9C%8809%E6%97%A5+11%E6%97%B600%E5%88%86-2026%E5%B9%B406%E6%9C%8810%E6%97%A5+11%E6%97%B600%E5%88%86%29_by_20260610.csv",
+        "fileSize": 731063,
+        "url": "https://www.dellemc-solution.com/admin/intent_form/getIntentData?export=true&source=s&d=2026-06-09+11%3A00%3A00+%E5%88%B0+2026-06-10+11%3A00%3A00&utmSource=&withOutT=false"
+      },
+      "result": {
+        "total": 1782,
+        "table1_count": 548,
+        "table2_count": 502,
+        "outputs": [
+          {
+            "key": "table1",
+            "label": "Table 1",
+            "description": "Removes wechat-dsp-xcx, wechat-dsp, douyin, kuaishou, toutiao, xiaohongshu, and xiaohongshu_xcx.",
+            "filename": "leads_form_by_20260610#548.csv",
+            "count": 548
+          },
+          {
+            "key": "table2",
+            "label": "Table 2",
+            "description": "Keeps only wechat-dsp for the downstream handoff.",
+            "filename": "leads_form_by_20260610#502-to ouyang.csv",
+            "count": 502
+          }
+        ]
+      }
+    },
+    {
+      "runAt": "2026-06-09T05:39:52.590Z",
+      "period": {
+        "startAt": "2026-06-08T03:00:00.000Z",
+        "endAt": "2026-06-09T03:00:00.000Z"
+      },
+      "download": {
+        "fileName": "leads_form%282026%E5%B9%B406%E6%9C%8808%E6%97%A5+11%E6%97%B600%E5%88%86-2026%E5%B9%B406%E6%9C%8809%E6%97%A5+11%E6%97%B600%E5%88%86%29_by_20260609.csv",
+        "filePath": "/Users/lizhongyu/程序/团队协作系统/data/leads-splitter/downloads/leads_form%282026%E5%B9%B406%E6%9C%8808%E6%97%A5+11%E6%97%B600%E5%88%86-2026%E5%B9%B406%E6%9C%8809%E6%97%A5+11%E6%97%B600%E5%88%86%29_by_20260609.csv",
+        "fileSize": 426062,
+        "url": "https://www.dellemc-solution.com/admin/intent_form/getIntentData?export=true&source=s&d=2026-06-08+11%3A00%3A00+%E5%88%B0+2026-06-09+11%3A00%3A00&utmSource=&withOutT=false"
+      },
+      "result": {
+        "total": 989,
+        "table1_count": 167,
+        "table2_count": 480,
+        "outputs": [
+          {
+            "key": "table1",
+            "label": "Table 1",
+            "description": "Removes wechat-dsp-xcx, wechat-dsp, douyin, kuaishou, toutiao, xiaohongshu, and xiaohongshu_xcx.",
+            "filename": "leads_form_by_20260609#167.csv",
+            "count": 167
+          },
+          {
+            "key": "table2",
+            "label": "Table 2",
+            "description": "Keeps only wechat-dsp for the downstream handoff.",
+            "filename": "leads_form_by_20260609#480-to ouyang.csv",
+            "count": 480
+          }
+        ]
+      }
+    }
+  ],
+  "lastResult": {
+    "total": 409,
+    "table1_count": 0,
+    "table2_count": 291,
+    "outputs": [
+      {
+        "key": "table1",
+        "label": "Table 1",
+        "description": "Removes wechat-dsp-xcx, wechat-dsp, douyin, kuaishou, toutiao, xiaohongshu, and xiaohongshu_xcx.",
+        "filename": "leads_form_by_20260616#0.csv",
+        "count": 0
+      },
+      {
+        "key": "table2",
+        "label": "Table 2",
+        "description": "Keeps only wechat-dsp for the downstream handoff.",
+        "filename": "leads_form_by_20260616#291-to ouyang.csv",
+        "count": 291
+      }
+    ]
+  }
+}

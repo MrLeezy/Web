@@ -20,6 +20,7 @@ const PLUGIN_CARDS_PATH = path.join(DATA_DIR, "plugin-cards.json");
 const PLUGIN_UPLOAD_DIR = path.join(DATA_DIR, "plugin-uploads");
 const PLUGIN_OUTPUT_DIR = path.join(DATA_DIR, "plugin-outputs");
 const LEADS_SPLITTER_OUTPUT_DIR = path.join(PLUGIN_OUTPUT_DIR, "leads-splitter");
+const SFDC_SIGNAL_CLEANER_OUTPUT_DIR = path.join(PLUGIN_OUTPUT_DIR, "sfdc-signal-cleaner");
 const HAFT_UPLOADER_PRIVATE_DIR = path.join(PRIVATE_DIR, "haft-uploader");
 const HAFT_UPLOADER_DATA_DIR = path.join(DATA_DIR, "haft-uploader");
 const HAFT_UPLOADER_DOWNLOAD_DIR = path.join(HAFT_UPLOADER_DATA_DIR, "downloads");
@@ -38,10 +39,23 @@ const GEO_DETECTION_DATA_DIR = path.join(DATA_DIR, "geo-detection");
 const GEO_DETECTION_PROJECTS_PATH = path.join(GEO_DETECTION_DATA_DIR, "projects.json");
 const GEO_DETECTION_BRANDS_PATH = path.join(GEO_DETECTION_DATA_DIR, "brands.json");
 const GEO_DETECTION_REPORTS_PATH = path.join(GEO_DETECTION_DATA_DIR, "reports.json");
+const LEADS_SPLITTER_DATA_DIR = path.join(DATA_DIR, "leads-splitter");
+const LEADS_SPLITTER_DOWNLOAD_DIR = path.join(LEADS_SPLITTER_DATA_DIR, "downloads");
+const LEADS_SPLITTER_AUTOMATION_STATE_PATH = path.join(LEADS_SPLITTER_DATA_DIR, "automation-state.json");
 const LEGACY_HAFT_ROOT = path.resolve(ROOT, "..", "Haft 通用工具");
 const LEGACY_HAFT_CONFIG_DIR = path.join(LEGACY_HAFT_ROOT, "config");
 const LEGACY_HAFT_DATA_DIR = path.join(LEGACY_HAFT_ROOT, "data");
 const LEGACY_HAFT_DOWNLOAD_DIR = path.join(LEGACY_HAFT_ROOT, "download");
+const HOME_TASK_HAFT_LINKS = [
+  {
+    homeTitle: "大企数据上传",
+    haftTaskName: "大企数据工作日上传",
+  },
+  {
+    homeTitle: "会议数据上传",
+    haftTaskName: "网络会议数据上传",
+  },
+];
 
 const DEFAULT_WORK_DESK = [
   {
@@ -203,12 +217,30 @@ const DEFAULT_PLUGIN_CARDS = [
     enabled: true,
   },
   {
+    id: "opportunity-master",
+    icon: "商",
+    title: "商机数据整合",
+    category: "Data Ops",
+    summary: "自动识别 website、Chat、400、order 多来源 Excel，并生成统一的商机终极表。",
+    pageUrl: "/plugins/opportunity-master.html",
+    enabled: true,
+  },
+  {
     id: "geo-detection",
     icon: "GEO",
     title: "GEO长尾词监控",
     category: "Automation",
     summary: "监控品牌词在各智能Chat平台（豆包、Deepseek、千问、元宝）的曝光情况，自动检测AI回复内容和参考资料中的品牌词命中。",
     pageUrl: "/plugins/geo-detection.html",
+    enabled: true,
+  },
+  {
+    id: "sfdc-signal-cleaner",
+    icon: "SF",
+    title: "SFDC Signal 数据清洗",
+    category: "Data Ops",
+    summary: "上传最新 SFDC Signal Excel，全量重映射字段并输出标准结果表。",
+    pageUrl: "/plugins/sfdc-signal-cleaner.html",
     enabled: true,
   },
 ];
@@ -317,6 +349,17 @@ function normalizeHaftTaskForCurrentProject(task) {
 
   current.fileSource = source;
   return current;
+}
+
+function mergeHaftTaskPresets(currentTask, incomingTask) {
+  if (!currentTask) {
+    return incomingTask;
+  }
+
+  return {
+    ...incomingTask,
+    preprocess: incomingTask.preprocess ?? currentTask.preprocess,
+  };
 }
 
 async function migrateLegacyHaftUploaderFiles() {
@@ -869,6 +912,7 @@ async function runJsonScript(scriptPath, args) {
 
 let haftUploaderRuntimePromise = null;
 let haftUploaderConfigModulePromise = null;
+let leadsSplitterAutomationModulePromise = null;
 
 async function loadHaftUploaderConfigModule() {
   if (!haftUploaderConfigModulePromise) {
@@ -894,6 +938,42 @@ async function getHaftUploaderRuntime() {
   }
 
   return haftUploaderRuntimePromise;
+}
+
+async function getLeadsSplitterAutomationModule() {
+  if (!leadsSplitterAutomationModulePromise) {
+    leadsSplitterAutomationModulePromise = import(
+      pathToFileURL(path.join(ROOT, "lib/leads-splitter/automation.mjs")).href
+    ).catch((error) => {
+      leadsSplitterAutomationModulePromise = null;
+      throw error;
+    });
+  }
+
+  return leadsSplitterAutomationModulePromise;
+}
+
+async function processLeadsSplitterFile(inputPath) {
+  return runJsonScript(path.join(SCRIPTS_DIR, "leads_splitter.py"), [
+    "--input",
+    inputPath,
+    "--output-dir",
+    LEADS_SPLITTER_OUTPUT_DIR,
+  ]);
+}
+
+async function processSfdcSignalCleanerFile(inputPath, originalFilename = "") {
+  const parsed = path.parse(String(originalFilename || path.basename(inputPath)));
+  const safeStem = sanitizeFilename(parsed.name || "sfdc_signal").replace(/\.[^.]+$/g, "") || "sfdc_signal";
+  const outputFilename = `${safeStem}-mapped-${Date.now()}.xlsx`;
+  const outputPath = path.join(SFDC_SIGNAL_CLEANER_OUTPUT_DIR, outputFilename);
+
+  return runJsonScript(path.join(SCRIPTS_DIR, "sfdc_signal_cleaner.py"), [
+    "--input",
+    inputPath,
+    "--output",
+    outputPath,
+  ]);
 }
 
 async function ensureGeneratedTasks() {
@@ -992,6 +1072,58 @@ async function ensureGeneratedTasks() {
   }
 
   return tasks;
+}
+
+function findHomeTaskHaftLinkByHaftTaskName(haftTaskName) {
+  return HOME_TASK_HAFT_LINKS.find((link) => link.haftTaskName === haftTaskName) ?? null;
+}
+
+function normalizeDateInput(value) {
+  const normalized = String(value ?? "").trim();
+  return /^\d{4}-\d{2}-\d{2}$/.test(normalized) ? normalized : "";
+}
+
+async function completeLinkedHomeTask(link, dateKey = "") {
+  const tasks = await ensureGeneratedTasks();
+  const targetDateKey = normalizeDateInput(dateKey) || toLocalDateKey(new Date());
+  const target = tasks.find(
+    (task) =>
+      task.title === link.homeTitle &&
+      task.generatedDate === targetDateKey &&
+      task.source === "template",
+  );
+
+  if (!target) {
+    return { updated: false, reason: "linked_home_task_not_found", homeTitle: link.homeTitle, date: targetDateKey };
+  }
+
+  if (target.completed) {
+    return { updated: false, taskId: target.id, reason: "already_completed", homeTitle: link.homeTitle, date: targetDateKey };
+  }
+
+  const now = isoStamp();
+  target.completed = true;
+  target.updatedAt = now;
+  target.completedAt = now;
+  await writeTasks(tasks);
+
+  return { updated: true, taskId: target.id, homeTitle: link.homeTitle, date: targetDateKey };
+}
+
+async function completeLinkedHomeTaskAfterHaftRun(taskId, result, homeTaskDate = "") {
+  const completedStatuses = new Set(["success", "skipped"]);
+  if (!completedStatuses.has(result?.status)) {
+    return null;
+  }
+
+  const runtime = await getHaftUploaderRuntime();
+  const haftTask = (await runtime.listTasks()).find((task) => task.id === taskId);
+  const link = findHomeTaskHaftLinkByHaftTaskName(haftTask?.name);
+  if (!link) {
+    return null;
+  }
+
+  return completeLinkedHomeTask(link, homeTaskDate);
 }
 
 async function handleTasksApi(req, res, url) {
@@ -1210,7 +1342,7 @@ async function handleHaftUploaderApi(req, res, url) {
 
       const nextTasks =
         index >= 0
-          ? tasks.map((task, taskIndex) => (taskIndex === index ? incoming : task))
+          ? tasks.map((task, taskIndex) => (taskIndex === index ? mergeHaftTaskPresets(task, incoming) : task))
           : [...tasks, incoming];
 
       return sendJson(res, 200, { tasks: await runtime.replaceTasks(nextTasks) });
@@ -1238,8 +1370,13 @@ async function handleHaftUploaderApi(req, res, url) {
   if (runMatch && req.method === "POST") {
     try {
       const runtime = await getHaftUploaderRuntime();
-      const result = await runtime.runTaskByIdManually(decodeURIComponent(runMatch[1]));
-      return sendJson(res, 200, { result });
+      const taskId = decodeURIComponent(runMatch[1]);
+      const body = await readBody(req);
+      const downloadDate = normalizeDateInput(body?.downloadDate);
+      const homeTaskDate = normalizeDateInput(body?.homeTaskDate) || downloadDate;
+      const result = await runtime.runTaskByIdManually(taskId, { downloadDate });
+      const linkedHomeTask = await completeLinkedHomeTaskAfterHaftRun(taskId, result, homeTaskDate);
+      return sendJson(res, 200, { result, linkedHomeTask });
     } catch (error) {
       return sendJson(res, 400, { error: error.message || "任务运行失败" });
     }
@@ -1580,6 +1717,97 @@ async function handleComsumerDataApi(req, res, url) {
   return false;
 }
 
+async function handleOpportunityMasterApi(req, res, url) {
+  const PLUGIN_ID = "opportunity-master";
+  const service = require("./lib/opportunity-master/service.js");
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/health` && req.method === "GET") {
+    return sendJson(res, 200, {
+      ok: true,
+      plugin: PLUGIN_ID,
+      version: "2026-06-08",
+    });
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/bootstrap` && req.method === "GET") {
+    try {
+      return sendJson(res, 200, await service.getBootstrapData());
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "插件初始化失败" });
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/import` && req.method === "POST") {
+    const rawBody = await readRawBody(req);
+    const form = parseMultipartForm(req, rawBody);
+    const file = form.files.file;
+
+    if (!file || !file.buffer?.length) {
+      return sendJson(res, 400, { error: "请先选择要上传的 Excel 文件" });
+    }
+
+    const filename = sanitizeFilename(file.filename || `opportunity_master_${Date.now()}.xlsx`);
+    if (!/\.(xlsx|xlsm|xltx|xltm)$/i.test(filename)) {
+      return sendJson(res, 400, { error: "当前插件仅支持 Excel 工作簿格式（XLSX / XLSM / XLTX / XLTM）" });
+    }
+
+    const tempPath = path.join(PLUGIN_UPLOAD_DIR, `${Date.now()}-${randomUUID()}-${filename}`);
+    await fsp.writeFile(tempPath, file.buffer);
+
+    try {
+      const payload = await service.importUploadedFile(tempPath, filename);
+      return sendJson(res, 200, { ok: true, ...payload });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "文件导入失败" });
+    } finally {
+      await fsp.unlink(tempPath).catch(() => {});
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/remove` && req.method === "POST") {
+    try {
+      const body = await readBody(req);
+      const payload = await service.removeWorkspaceFile(body?.fileId);
+      return sendJson(res, 200, { ok: true, ...payload });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "文件移除失败" });
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/build` && req.method === "POST") {
+    try {
+      const body = await readBody(req);
+      const payload = await service.buildWorkspace(String(body?.runLabel || "").trim());
+      return sendJson(res, 200, { ok: true, ...payload });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "终极表生成失败" });
+    }
+  }
+
+  if (url.pathname === `/api/plugins/${PLUGIN_ID}/download` && req.method === "GET") {
+    try {
+      const filePath = service.resolveDownloadTarget(url.searchParams.get("file"));
+      const stat = await fsp.stat(filePath);
+      if (!stat.isFile()) {
+        throw new Error("invalid file");
+      }
+
+      const filename = path.basename(filePath);
+      res.writeHead(200, {
+        "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`,
+        "Cache-Control": "no-store",
+      });
+      fs.createReadStream(filePath).pipe(res);
+      return true;
+    } catch (error) {
+      return sendJson(res, 404, { error: error.message || "文件不存在" });
+    }
+  }
+
+  return false;
+}
+
 async function handlePluginsApi(req, res, url) {
   if (url.pathname.startsWith("/api/plugins/haft-uploader/")) {
     return handleHaftUploaderApi(req, res, url);
@@ -1593,6 +1821,10 @@ async function handlePluginsApi(req, res, url) {
     return handleComsumerDataApi(req, res, url);
   }
 
+  if (url.pathname.startsWith("/api/plugins/opportunity-master/")) {
+    return handleOpportunityMasterApi(req, res, url);
+  }
+
   if (url.pathname.startsWith("/api/plugins/geo-detection/")) {
     return handleGeoDetectionApi(req, res, url);
   }
@@ -1601,7 +1833,7 @@ async function handlePluginsApi(req, res, url) {
     return sendJson(res, 200, {
       ok: true,
       plugin: "leads-splitter",
-      version: "2026-04-16",
+      version: "2026-05-06",
     });
   }
 
@@ -1611,27 +1843,75 @@ async function handlePluginsApi(req, res, url) {
     const file = form.files.file;
 
     if (!file || !file.buffer?.length) {
-      return sendJson(res, 400, { error: "请先选择要上传的 CSV 文件" });
+      return sendJson(res, 400, { error: "请先选择要上传的 CSV 或 XLSX 文件" });
     }
 
-    const filename = sanitizeFilename(file.filename || `leads_form_${Date.now()}.csv`);
-    if (!/\.csv$/i.test(filename)) {
-      return sendJson(res, 400, { error: "当前插件仅支持 CSV 文件" });
+    const filename = sanitizeFilename(file.filename || `leads_form_${Date.now()}.xlsx`);
+    if (!/\.(csv|xlsx)$/i.test(filename)) {
+      return sendJson(res, 400, { error: "当前插件仅支持 CSV 或 XLSX 文件" });
     }
 
     const tempPath = path.join(PLUGIN_UPLOAD_DIR, `${Date.now()}-${randomUUID()}-${filename}`);
     await fsp.writeFile(tempPath, file.buffer);
 
     try {
-      const result = await runJsonScript(path.join(SCRIPTS_DIR, "leads_splitter.py"), [
-        "--input",
-        tempPath,
-        "--output-dir",
-        LEADS_SPLITTER_OUTPUT_DIR,
-      ]);
+      const result = await processLeadsSplitterFile(tempPath);
       return sendJson(res, 200, { result });
     } finally {
       await fsp.unlink(tempPath).catch(() => {});
+    }
+  }
+
+  if (url.pathname === "/api/plugins/leads-splitter/automation/status" && req.method === "GET") {
+    try {
+      const automation = await getLeadsSplitterAutomationModule();
+      const status = await automation.getLeadsSplitterAutomationStatus({
+        statePath: LEADS_SPLITTER_AUTOMATION_STATE_PATH,
+      });
+      return sendJson(res, 200, { ok: true, status });
+    } catch (error) {
+      return sendJson(res, 500, { error: error.message || "自动拆表状态获取失败" });
+    }
+  }
+
+  if (url.pathname === "/api/plugins/leads-splitter/automation/run" && req.method === "POST") {
+    try {
+      const body = await readBody(req).catch(() => ({}));
+      const automation = await getLeadsSplitterAutomationModule();
+      const haftConfig = await loadHaftUploaderConfigModule();
+      const appConfig = await haftConfig.loadAppConfig();
+      const cycle = await automation.runLeadsSplitterDownloadCycle({
+        statePath: LEADS_SPLITTER_AUTOMATION_STATE_PATH,
+        destinationDir: LEADS_SPLITTER_DOWNLOAD_DIR,
+        auth: appConfig.downloadPortalAuth,
+        startAt: body.startAt,
+        endAt: body.endAt,
+        browserOptions: {
+          headless: body.headless !== false,
+          slowMoMs: Number.isFinite(Number(body.slowMoMs)) ? Number(body.slowMoMs) : 120,
+        },
+      });
+
+      const result = await processLeadsSplitterFile(cycle.download.filePath);
+      const savedState = await cycle.markSuccess({
+        lastResult: {
+          total: result.total,
+          table1_count: result.table1_count,
+          table2_count: result.table2_count,
+          outputs: result.outputs,
+        },
+      });
+
+      return sendJson(res, 200, {
+        ok: true,
+        message: "自动下载并拆表成功",
+        period: cycle.period,
+        download: cycle.download,
+        result,
+        state: savedState,
+      });
+    } catch (error) {
+      return sendJson(res, 500, { error: error.message || "自动下载并拆表失败" });
     }
   }
 
@@ -1648,6 +1928,64 @@ async function handlePluginsApi(req, res, url) {
 
       res.writeHead(200, {
         "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`,
+        "Cache-Control": "no-store",
+      });
+      fs.createReadStream(filePath).pipe(res);
+      return true;
+    } catch {
+      return sendJson(res, 404, { error: "文件不存在或已被移除" });
+    }
+  }
+
+  if (url.pathname === "/api/plugins/sfdc-signal-cleaner/health" && req.method === "GET") {
+    return sendJson(res, 200, {
+      ok: true,
+      plugin: "sfdc-signal-cleaner",
+      version: "2026-06-09",
+    });
+  }
+
+  if (url.pathname === "/api/plugins/sfdc-signal-cleaner/process" && req.method === "POST") {
+    const rawBody = await readRawBody(req);
+    const form = parseMultipartForm(req, rawBody);
+    const file = form.files.file;
+
+    if (!file || !file.buffer?.length) {
+      return sendJson(res, 400, { error: "请先选择要上传的 Excel 文件" });
+    }
+
+    const filename = sanitizeFilename(file.filename || `sfdc_signal_${Date.now()}.xlsx`);
+    if (!/\.(xlsx|xlsm|xltx|xltm)$/i.test(filename)) {
+      return sendJson(res, 400, { error: "当前插件仅支持 Excel 工作簿格式（XLSX / XLSM / XLTX / XLTM）" });
+    }
+
+    const tempPath = path.join(PLUGIN_UPLOAD_DIR, `${Date.now()}-${randomUUID()}-${filename}`);
+    await fsp.writeFile(tempPath, file.buffer);
+
+    try {
+      const result = await processSfdcSignalCleanerFile(tempPath, filename);
+      return sendJson(res, 200, { ok: true, result });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || "映射失败" });
+    } finally {
+      await fsp.unlink(tempPath).catch(() => {});
+    }
+  }
+
+  const sfdcSignalDownloadMatch = url.pathname.match(/^\/api\/plugins\/sfdc-signal-cleaner\/download\/([^/]+)$/);
+  if (sfdcSignalDownloadMatch && req.method === "GET") {
+    const filename = path.basename(decodeURIComponent(sfdcSignalDownloadMatch[1]));
+    const filePath = path.join(SFDC_SIGNAL_CLEANER_OUTPUT_DIR, filename);
+
+    try {
+      const stat = await fsp.stat(filePath);
+      if (!stat.isFile()) {
+        throw new Error("invalid file");
+      }
+
+      res.writeHead(200, {
+        "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`,
         "Cache-Control": "no-store",
       });

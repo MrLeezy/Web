@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>商机数据整合</title>
+    <link rel="stylesheet" href="./opportunity-master.css" />
+  </head>
+  <body>
+    <main class="plugin-shell">
+      <section class="plugin-hero">
+        <a class="hero-back" href="/">← 返回首页</a>
+        <div class="hero-badge-row">
+          <span class="hero-badge" id="pluginTypeBadge">内置插件</span>
+          <span class="hero-badge" id="pluginCategoryBadge">Data Ops</span>
+        </div>
+        <h1 id="pluginTitle">商机数据整合</h1>
+        <p class="hero-copy" id="pluginSummary">
+          上传不同来源的商机 Excel，系统会自动识别 website / Chat / 400 / order，并在同一工作区里累加整合，最终生成一个标准终极表。
+        </p>
+      </section>
+
+      <section class="metrics-grid" id="metricsGrid">
+        <article class="metric-card">
+          <span class="metric-label">工作区文件</span>
+          <strong class="metric-value" id="metricFiles">0</strong>
+          <span class="metric-note">当前批次已上传文件</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">可构建文件</span>
+          <strong class="metric-value" id="metricReady">0</strong>
+          <span class="metric-note">已识别来源且可参与生成</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">未识别文件</span>
+          <strong class="metric-value" id="metricUnknown">0</strong>
+          <span class="metric-note">需要你先确认是否上传了正确文件</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">最近输出</span>
+          <strong class="metric-value metric-value-small" id="metricOutput">暂无</strong>
+          <span class="metric-note">最近一次生成的终极表</span>
+        </article>
+      </section>
+
+      <section class="plugin-layout">
+        <section class="panel panel-primary">
+          <div class="panel-header">
+            <div>
+              <p class="panel-eyebrow">步骤 1</p>
+              <h2>上传并识别来源文件</h2>
+              <p class="panel-copy">支持多选上传。系统会自动按文件名、sheet 和表头识别来源类型，并把所有文件累加保留在当前工作区中。</p>
+            </div>
+          </div>
+
+          <input id="fileInput" type="file" accept=".xlsx,.xlsm,.xltx,.xltm" multiple hidden />
+
+          <button id="uploadBtn" class="dropzone" type="button">
+            <span class="dropzone-icon">商</span>
+            <span class="dropzone-title">选择或拖拽 Excel 文件到这里</span>
+            <span class="dropzone-hint">推荐直接上传原始来源文件。当前阶段仅支持 Excel 工作簿。</span>
+          </button>
+
+          <div class="action-row">
+            <button id="refreshBtn" class="action-button is-ghost" type="button">刷新工作区</button>
+            <button id="buildBtn" class="action-button" type="button">生成终极表</button>
+            <span class="action-meta" id="actionMeta">先上传文件，再点击生成终极表。</span>
+          </div>
+
+          <div class="status-card is-hidden" id="statusCard"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="panel-eyebrow">系统状态</p>
+              <h2>规则资产检查</h2>
+              <p class="panel-copy">终极表字段顺序由映射表控制，channel 口径由渠道映射表控制。</p>
+            </div>
+          </div>
+          <div class="summary-list" id="assetSummary"></div>
+          <div class="supported-section">
+            <p class="supported-title">当前支持自动识别的来源</p>
+            <div class="supported-tags" id="supportedTags"></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">步骤 2</p>
+            <h2>当前工作区</h2>
+            <p class="panel-copy">这里会展示每个上传文件的识别结果。`unknown` 文件不会参与构建，你可以删除后重新上传正确文件。</p>
+          </div>
+        </div>
+        <div class="workspace-list" id="workspaceList"></div>
+      </section>
+
+      <section class="panel result-panel is-hidden" id="resultSection">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">步骤 3</p>
+            <h2>构建结果</h2>
+            <p class="panel-copy">生成成功后会在这里展示结果摘要和下载入口。</p>
+          </div>
+        </div>
+        <div class="result-grid" id="resultGrid"></div>
+        <div class="download-row" id="downloadRow"></div>
+      </section>
+    </main>
+
+    <script src="./opportunity-master.js"></script>
+  </body>
+</html>
+

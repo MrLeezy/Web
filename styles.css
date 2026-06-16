@@ -1070,6 +1070,11 @@ h1 {
   transform: rotate(40deg);
 }
 
+.task-check:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
 .task-item.is-done .task-title {
   color: rgba(248, 245, 237, 0.62);
   text-decoration: line-through;
@@ -1102,6 +1107,29 @@ h1 {
   background: rgba(95, 148, 106, 0.14);
   border-color: rgba(95, 148, 106, 0.26);
   color: rgba(232, 247, 236, 0.84);
+}
+
+.task-run-button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(95, 148, 106, 0.82);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 10px;
+  line-height: 1;
+  padding: 5px 8px;
+  white-space: nowrap;
+}
+
+.task-run-button:hover:not(:disabled) {
+  background: rgba(95, 148, 106, 0.96);
+}
+
+.task-run-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
 }
 
 .task-board-section {

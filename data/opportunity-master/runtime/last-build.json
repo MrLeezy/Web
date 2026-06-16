@@ -1,0 +1,66 @@
+{
+  "outputFile": "/Users/lizhongyu/程序/团队协作系统/data/opportunity-master/outputs/20260616_102526/商机数据整合结果_workspace_20260616_102526.xlsx",
+  "outputFilename": "商机数据整合结果_workspace_20260616_102526.xlsx",
+  "totalRows": 125983,
+  "sourceCounts": {
+    "website_q2": 123979,
+    "chat_phone_combined": 2145
+  },
+  "inputCounts": {
+    "website_q2": 123979,
+    "chat_phone_combined": 2145
+  },
+  "invalidCounts": {
+    "invalid_email": 208,
+    "account_id_cleared": 985,
+    "invalid_phone": 12
+  },
+  "filteredCounts": {
+    "sfdc_signal_lookup_rows": 8986,
+    "sfdc_call_type_leads_ignored": 5794,
+    "sfdc_call_type_overrides": 2769,
+    "sfdc_call_type_phone_matches": 2428,
+    "sfdc_call_type_email_matches": 2510,
+    "sfdc_call_type_signals": 2769,
+    "leads_id_deduped_rows": 141
+  },
+  "channelCounts": {
+    "rule_3": 15211,
+    "unmatched": 42952,
+    "rule_25": 15099,
+    "rule_8": 2794,
+    "rule_4": 949,
+    "rule_5": 6018,
+    "rule_24": 27015,
+    "rule_2": 2056,
+    "rule_30": 34,
+    "rule_9": 40,
+    "rule_7": 44,
+    "rule_23": 927,
+    "rule_15": 15,
+    "rule_6": 25,
+    "rule_33": 7,
+    "rule_22": 778,
+    "rule_13": 3,
+    "rule_26": 3,
+    "rule_12": 22,
+    "rule_28": 1,
+    "rule_10": 5,
+    "rule_19": 3956,
+    "rule_20": 8169,
+    "rule_36": 1
+  },
+  "sourceFiles": [
+    {
+      "sourceName": "website_q2",
+      "path": "/Users/lizhongyu/程序/团队协作系统/data/opportunity-master/uploads/file-1781574639054-41a2b8a5-f647-41bf-b4b9-000955c8fa59-FY27Q2_follow_up_2026.6.12_1_.xlsx",
+      "filename": "file-1781574639054-41a2b8a5-f647-41bf-b4b9-000955c8fa59-FY27Q2_follow_up_2026.6.12_1_.xlsx"
+    },
+    {
+      "sourceName": "chat_phone_combined",
+      "path": "/Users/lizhongyu/程序/团队协作系统/data/opportunity-master/uploads/file-1781574628547-c9085cf8-22cf-4b82-9543-b10a7ed7b5a8-FY72Q2-400_chat_-6.12.xlsx",
+      "filename": "file-1781574628547-c9085cf8-22cf-4b82-9543-b10a7ed7b5a8-FY72Q2-400_chat_-6.12.xlsx"
+    }
+  ],
+  "builtAt": "2026-06-16T02:25:50.606Z"
+}

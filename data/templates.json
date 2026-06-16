@@ -64,5 +64,31 @@
     "active": true,
     "allWorkday": false,
     "updatedAt": "2026-04-16T07:26:12.425Z"
+  },
+  {
+    "id": "38d3a221-ebf6-461d-9192-661b98de3484",
+    "createdAt": "2026-06-01T02:50:04.270Z",
+    "title": "企业微信周会",
+    "weekdays": [
+      1
+    ],
+    "time": "11:00",
+    "reminderMinutes": 15,
+    "note": "https://teams.microsoft.com/meet/224756326478254?p=aoCF5cnq36kHgYnT1X",
+    "active": true,
+    "allWorkday": false,
+    "updatedAt": "2026-06-01T02:50:04.270Z"
+  },
+  {
+    "id": "e40b347b-ceaf-4c3a-ae1b-3fc123fd1d00",
+    "createdAt": "2026-06-16T07:41:13.930Z",
+    "title": "会议数据上传",
+    "weekdays": "all_workday",
+    "time": "12:00",
+    "reminderMinutes": 15,
+    "note": "",
+    "active": true,
+    "allWorkday": true,
+    "updatedAt": "2026-06-16T07:41:13.931Z"
   }
 ]

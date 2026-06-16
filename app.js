@@ -135,6 +135,17 @@ const defaultQuickLinkGroups = [
 const taskStore = [];
 let activeTaskInfoId = "";
 let isQuickTaskSubmitting = false;
+const runningLinkedHaftTaskIds = new Set();
+const homeTaskHaftLinks = [
+  {
+    homeTitle: "大企数据上传",
+    haftTaskName: "大企数据工作日上传",
+  },
+  {
+    homeTitle: "会议数据上传",
+    haftTaskName: "网络会议数据上传",
+  },
+];
 let quickTaskModalState = {
   open: false,
   mode: "create",
@@ -578,7 +589,90 @@ function openQuickEditModal(taskId) {
 }
 
 function isTaskUiBusy() {
-  return isQuickTaskSubmitting || quickTaskModalState.open;
+  return isQuickTaskSubmitting || quickTaskModalState.open || runningLinkedHaftTaskIds.size > 0;
+}
+
+function getHomeTaskHaftLink(task) {
+  if (task.source !== "template") {
+    return null;
+  }
+
+  return homeTaskHaftLinks.find((link) => link.homeTitle === task.title) ?? null;
+}
+
+function getTaskBusinessDate(task) {
+  const dueDate = String(task.dueAt || "").split("T")[0];
+  return task.generatedDate || dueDate || "";
+}
+
+async function runLinkedHaftUploadFromHome(taskId) {
+  if (runningLinkedHaftTaskIds.has(taskId)) {
+    return;
+  }
+
+  const homeTask = taskStore.find((task) => task.id === taskId);
+  const link = homeTask ? getHomeTaskHaftLink(homeTask) : null;
+  if (!homeTask || !link) {
+    return;
+  }
+
+  const businessDate = getTaskBusinessDate(homeTask);
+  const note = document.getElementById("interactionNote");
+  runningLinkedHaftTaskIds.add(taskId);
+  if (note) {
+    note.dataset.locked = "true";
+    note.textContent = `正在执行 Haft ${link.haftTaskName}，任务日期 ${businessDate || "未指定"}，完成后会自动更新首页任务状态。`;
+  }
+  renderTaskBoard();
+
+  try {
+    const bootstrapResponse = await fetch("/api/plugins/haft-uploader/bootstrap", { cache: "no-store" });
+    if (!bootstrapResponse.ok) {
+      throw new Error("Haft 上传任务加载失败");
+    }
+
+    const bootstrap = await bootstrapResponse.json();
+    const haftTask = (bootstrap.tasks || []).find((task) => task.name === link.haftTaskName);
+    if (!haftTask?.id) {
+      throw new Error(`未找到 Haft 任务：${link.haftTaskName}`);
+    }
+
+    const runResponse = await fetch(`/api/plugins/haft-uploader/tasks/${encodeURIComponent(haftTask.id)}/run`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        downloadDate: businessDate,
+        homeTaskDate: businessDate,
+      }),
+    });
+    const payload = await runResponse.json().catch(() => ({}));
+    if (!runResponse.ok) {
+      throw new Error(payload.error || "Haft 任务执行失败");
+    }
+
+    await refreshTaskBoardData();
+    if (note) {
+      note.dataset.locked = "true";
+      note.textContent = payload.linkedHomeTask?.updated
+        ? `Haft ${link.haftTaskName} 已完成，首页任务已同步完成。`
+        : `Haft ${link.haftTaskName} 已完成，首页任务状态已刷新。`;
+    }
+  } catch (error) {
+    if (note) {
+      note.dataset.locked = "true";
+      note.textContent = error.message || "Haft 任务执行失败，请到 Haft 自动上传页面查看日志。";
+    }
+  } finally {
+    runningLinkedHaftTaskIds.delete(taskId);
+    renderTaskBoard();
+    if (note) {
+      window.clearTimeout(runLinkedHaftUploadFromHome.resetTimer);
+      runLinkedHaftUploadFromHome.resetTimer = window.setTimeout(() => {
+        delete note.dataset.locked;
+        renderHeader();
+      }, 3200);
+    }
+  }
 }
 
 async function refreshTaskBoardData() {
@@ -1329,9 +1423,14 @@ function renderTaskBoard() {
         checkbox.type = "checkbox";
         checkbox.checked = task.completed;
         checkbox.setAttribute("aria-label", `${task.title} 完成状态`);
-        checkbox.addEventListener("change", () => {
-          toggleTaskStatus(task.id);
-        });
+        if (getHomeTaskHaftLink(task) && !task.completed) {
+          checkbox.disabled = true;
+          checkbox.title = "请通过右侧执行按钮完成 Haft 上传后自动完成任务";
+        } else {
+          checkbox.addEventListener("change", () => {
+            toggleTaskStatus(task.id);
+          });
+        }
 
         const main = document.createElement("div");
         main.className = "task-main";
@@ -1392,7 +1491,24 @@ function renderTaskBoard() {
         } else if (alert?.type === "overdue") {
           action.classList.add("is-muted");
         }
-        action.textContent = task.completed ? "已完成" : "待完成";
+
+        const shouldRenderHaftRunButton = getHomeTaskHaftLink(task) && !task.completed && task.status !== "later";
+        if (shouldRenderHaftRunButton) {
+          const isRunning = runningLinkedHaftTaskIds.has(task.id);
+          const runButton = document.createElement("button");
+          runButton.className = "task-run-button";
+          runButton.type = "button";
+          runButton.disabled = isRunning;
+          runButton.textContent = isRunning ? "执行中..." : "执行上传";
+          runButton.setAttribute("aria-label", `${task.title} 执行 Haft 上传`);
+          runButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            runLinkedHaftUploadFromHome(task.id);
+          });
+          action.appendChild(runButton);
+        } else {
+          action.textContent = task.completed ? "已完成" : "待完成";
+        }
 
         main.append(titleRow, meta);
 

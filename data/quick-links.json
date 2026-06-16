@@ -84,7 +84,7 @@
         "label": "服务器充值",
         "url": "https://signin.aliyun.com/login.htm?callback=https%3A%2F%2Fwww.aliyun.com%2F#/main",
         "note": "阿里云平台",
-        "remark": "用户名：lizhongyu@1819930856647297.onaliyun.com 密码：Sino@123"
+        "remark": "用户名：lizhongyu@1819930856647297.onaliyun.com 密码：Leezy@123"
       },
       {
         "label": "阿里云点播",
@@ -133,6 +133,12 @@
         "url": "https://docs.qq.com/sheet/DTUpucWJmSmFQV29k",
         "note": "UTM数据检测表",
         "remark": ""
+      },
+      {
+        "label": "signalflow",
+        "url": "https://signalflow.dell.com/leadLoadForm",
+        "note": "数据上传",
+        "remark": "用户名：carl_li@sinobasedm.com 密码：Leezy@123"
       }
     ]
   },
@@ -192,6 +198,12 @@
         "url": "https://ai-search.smarket.com.cn/b/index.html#/admin/auth/rule",
         "note": "智能搜索平台",
         "remark": "用户名：admin 密码：@Sino2025"
+      },
+      {
+        "label": "AI-Skill",
+        "url": "https://ai-skill.smarket.com.cn/",
+        "note": "AISkill-Claw",
+        "remark": "用户名：mengnan.li@dell.com 密码：Dell@FY27"
       }
     ]
   },

@@ -248,6 +248,17 @@ h1 {
   color: rgba(248, 245, 237, 0.6);
 }
 
+.automation-meta {
+  margin: 12px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(248, 245, 237, 0.68);
+}
+
+.log-panel {
+  margin-top: 14px;
+}
+
 .status-card {
   margin-top: 14px;
   padding: 11px 12px;
@@ -295,6 +306,101 @@ h1 {
   flex-direction: column;
   gap: 14px;
   margin-top: 14px;
+}
+
+.log-summary-grid,
+.log-list {
+  display: grid;
+  gap: 12px;
+}
+
+.log-summary-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+.log-summary-card,
+.log-item-card {
+  border-radius: 14px;
+  border: 1px solid rgba(248, 245, 237, 0.14);
+  background: rgba(248, 245, 237, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.log-summary-card {
+  padding: 16px;
+}
+
+.log-summary-label {
+  font-size: 11px;
+  color: rgba(248, 245, 237, 0.58);
+}
+
+.log-summary-value {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(248, 245, 237, 0.96);
+  overflow-wrap: anywhere;
+}
+
+.log-list {
+  margin-top: 14px;
+}
+
+.log-item-card {
+  padding: 16px;
+}
+
+.log-item-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.log-item-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(248, 245, 237, 0.98);
+}
+
+.log-item-time {
+  font-size: 11px;
+  color: rgba(248, 245, 237, 0.6);
+  white-space: nowrap;
+}
+
+.log-item-meta {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.log-kv {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 12px;
+}
+
+.log-kv-label {
+  color: rgba(248, 245, 237, 0.6);
+  flex: 0 0 92px;
+}
+
+.log-kv-value {
+  color: rgba(248, 245, 237, 0.92);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.empty-log {
+  padding: 18px 0 6px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(248, 245, 237, 0.68);
 }
 
 .stats-grid,
@@ -397,6 +503,7 @@ h1 {
 
 @media (max-width: 1000px) {
   .plugin-layout,
+  .log-summary-grid,
   .output-grid,
   .distribution-grid {
     grid-template-columns: minmax(0, 1fr);

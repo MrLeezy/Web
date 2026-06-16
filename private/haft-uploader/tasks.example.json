@@ -29,6 +29,7 @@
       "fileSource": {
         "type": "download",
         "downloadDir": "/path/to/download/folder",
+        "downloadDateMode": "yesterday",
         "requiredCount": 3,
         "stableWindowMs": 4000,
         "urls": [

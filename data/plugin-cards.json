@@ -36,12 +36,30 @@
     "enabled": true
   },
   {
+    "id": "opportunity-master",
+    "icon": "商",
+    "title": "商机数据整合",
+    "category": "Data Ops",
+    "summary": "自动识别 website、Chat、400、order 多来源 Excel，并生成统一的商机终极表。",
+    "pageUrl": "/plugins/opportunity-master.html",
+    "enabled": true
+  },
+  {
     "id": "geo-detection",
     "icon": "GEO",
     "title": "GEO长尾词监控",
     "category": "Automation",
     "summary": "监控品牌词在各智能Chat平台（豆包、Deepseek、千问、元宝）的曝光情况，自动检测AI回复内容和参考资料中的品牌词命中。",
     "pageUrl": "/plugins/geo-detection.html",
+    "enabled": true
+  },
+  {
+    "id": "sfdc-signal-cleaner",
+    "icon": "SF",
+    "title": "SFDC Signal 数据清洗",
+    "category": "Data Ops",
+    "summary": "上传最新 SFDC Signal Excel，全量重映射字段并输出标准结果表。",
+    "pageUrl": "/plugins/sfdc-signal-cleaner.html",
     "enabled": true
   }
 ]

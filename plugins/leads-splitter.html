@@ -1,66 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Leads Splitter</title>
+    <title>大企数据每日上传</title>
     <link rel="stylesheet" href="./leads-splitter.css" />
   </head>
   <body>
     <main class="plugin-shell">
       <section class="plugin-hero">
-        <a class="hero-back" href="/">← Back To Board</a>
+        <a class="hero-back" href="/">← 返回看板</a>
         <div class="hero-badge-row">
-          <span class="hero-badge" id="pluginTypeBadge">Internal Plugin</span>
+          <span class="hero-badge" id="pluginTypeBadge">内部插件</span>
           <span class="hero-badge" id="pluginCategoryBadge">Data Ops</span>
         </div>
-        <h1 id="pluginTitle">Leads Splitter</h1>
+        <h1 id="pluginTitle">大企数据每日上传</h1>
         <p class="hero-copy" id="pluginSummary">
-          Upload the standard leads export, split it into two delivery-ready CSV files, and keep the workflow aligned
-          with the original internal tool.
+          支持手动上传源文件，也支持自动登录下载最新数据并拆分成两个交付文件，方便你先核对拆表结果，再去上传任务里继续处理。
         </p>
       </section>
 
       <section class="plugin-layout">
         <section class="panel panel-primary">
           <div class="panel-header">
-            <p class="panel-eyebrow">Upload</p>
-            <h2>Source File</h2>
+            <p class="panel-eyebrow">上传入口</p>
+            <h2>源文件处理</h2>
             <p class="panel-copy">
-              Supports the same CSV input as the reference page. This page does not include the old auto-run flow.
+              支持手动上传 CSV / XLSX 文件，也支持系统自动登录门户下载最近一个执行周期的数据并立即拆表。
             </p>
           </div>
 
-          <input id="fileInput" type="file" accept=".csv,text/csv" hidden />
+          <input
+            id="fileInput"
+            type="file"
+            accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            hidden
+          />
 
           <button id="dropzone" class="dropzone" type="button">
             <span class="dropzone-icon">LS</span>
-            <span class="dropzone-title" id="dropzoneTitle">Choose or drop a CSV file</span>
-            <span class="dropzone-hint" id="dropzoneHint">The file will be split into two CSV outputs.</span>
+            <span class="dropzone-title" id="dropzoneTitle">选择或拖入 CSV / XLSX 文件</span>
+            <span class="dropzone-hint" id="dropzoneHint">系统会把源文件拆分成两个 CSV 输出文件。</span>
           </button>
 
           <div class="action-row">
-            <button id="browseButton" class="action-button" type="button">Select CSV</button>
-            <span class="action-meta" id="actionMeta">Recommended input: the standard leads export file.</span>
+            <button id="browseButton" class="action-button" type="button">选择文件</button>
+            <button id="autoDownloadButton" class="action-button" type="button">自动下载并拆表</button>
+            <span class="action-meta" id="actionMeta">建议使用最新导出的 leads 源文件。</span>
           </div>
+
+          <p class="automation-meta" id="automationMeta">正在读取最近一次自动拆表记录...</p>
 
           <div class="status-card is-hidden" id="statusCard"></div>
         </section>
 
         <section class="panel">
           <div class="panel-header">
-            <p class="panel-eyebrow">Rules</p>
-            <h2>Split Logic</h2>
+            <p class="panel-eyebrow">规则说明</p>
+            <h2>拆分逻辑</h2>
           </div>
           <ul class="rule-list">
-            <li>
-              Table 1 removes `wechat-dsp-xcx`, `wechat-dsp`, `douyin`, `kuaishou`, `toutiao`,
-              `xiaohongshu`, and `xiaohongshu_xcx`.
-            </li>
-            <li>Table 2 keeps only `wechat-dsp` for the downstream handoff flow.</li>
-            <li>Output filenames follow the same naming pattern as the previous internal page.</li>
+            <li>CSV 和 XLSX 会优先根据表头自动识别 `数据来源` / `媒体来源` / `source` 列。</li>
+            <li>如果没有识别到来源列，系统会回退到旧文件兼容逻辑继续处理。</li>
+            <li>表一会排除 `wechat-dsp-xcx`、`wechat-dsp`、`douyin`、`kuaishou`、`toutiao`、`xiaohongshu`、`xiaohongshu_xcx`。</li>
+            <li>表二只保留 `wechat-dsp`，用于后续下游交接。</li>
+            <li>自动下载模式会优先使用“上次成功结束时间 -> 本次 11:00 截止时间”的周期进行抓取。</li>
           </ul>
         </section>
+      </section>
+
+      <section class="panel log-panel">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">执行日志</p>
+            <h2>最近抓取记录</h2>
+            <p class="panel-copy">这里会展示最近一次自动抓取的时间周期、下载文件和拆表结果，方便你核对后再去上传任务里继续执行。</p>
+          </div>
+        </div>
+        <div class="log-summary-grid" id="logSummaryGrid"></div>
+        <div class="log-list" id="automationLogList"></div>
       </section>
 
       <section class="results is-hidden" id="resultsSection">
@@ -68,8 +86,8 @@
         <div class="output-grid" id="outputGrid"></div>
         <section class="panel">
           <div class="panel-header">
-            <p class="panel-eyebrow">Breakdown</p>
-            <h2>Source Distribution</h2>
+            <p class="panel-eyebrow">来源分布</p>
+            <h2 id="distributionTitle">来源拆解</h2>
           </div>
           <div class="distribution-grid" id="distributionGrid"></div>
         </section>

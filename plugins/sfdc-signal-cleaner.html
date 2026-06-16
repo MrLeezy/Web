@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SFDC Signal 数据清洗</title>
+    <link rel="stylesheet" href="./sfdc-signal-cleaner.css" />
+  </head>
+  <body>
+    <main class="plugin-shell">
+      <section class="plugin-hero">
+        <a class="hero-back" href="/">← 返回首页</a>
+        <div class="hero-badge-row">
+          <span class="hero-badge">内置插件</span>
+          <span class="hero-badge">Data Ops</span>
+        </div>
+        <h1>SFDC Signal 数据清洗</h1>
+        <p class="hero-copy">
+          每次上传最新的 SFDC Signal 原始表，系统会按当前规则全量重新映射字段、清洗手机号、省市和 Allocaida ID，并输出标准结果表。
+        </p>
+      </section>
+
+      <section class="plugin-layout">
+        <section class="panel panel-primary">
+          <div class="panel-header">
+            <div>
+              <p class="panel-eyebrow">上传入口</p>
+              <h2>重新映射最新源表</h2>
+              <p class="panel-copy">当前仅支持 Excel 工作簿。每次上传后都会完整重跑映射，不会沿用上一次结果。</p>
+            </div>
+          </div>
+
+          <input
+            id="fileInput"
+            type="file"
+            accept=".xlsx,.xlsm,.xltx,.xltm,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            hidden
+          />
+
+          <button id="dropzone" class="dropzone" type="button">
+            <span class="dropzone-icon">SF</span>
+            <span class="dropzone-title">选择或拖入最新 SFDC Excel 文件</span>
+            <span class="dropzone-hint">默认读取 Sheet1 或 明细，全量输出标准 13 列结果表。</span>
+          </button>
+
+          <div class="action-row">
+            <button id="browseButton" class="action-button" type="button">选择文件并开始映射</button>
+            <span class="action-meta" id="actionMeta">建议直接上传最新导出的 SFDC Signal 原始文件。</span>
+          </div>
+
+          <div class="status-card is-hidden" id="statusCard"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="panel-eyebrow">当前规则</p>
+              <h2>清洗口径</h2>
+            </div>
+          </div>
+          <ul class="rule-list">
+            <li>按全量明细重新映射，不默认删行。</li>
+            <li>`Mobile` 去非数字，若前缀是 `86` 先去掉，再要求必须为 11 位且以 `1` 开头，否则置空。</li>
+            <li>`State/Province` 去掉末尾 `省` / `市`，`City` 去掉末尾 `市`。</li>
+            <li>`Allocaida ID` 从 `是否eleads` 提取数字；`eleads 但备注没ID` 记为 `1`，`邮箱与其他Campaign 重复` 记为 `2`，其他说明文本留空。</li>
+            <li>`call_type` 直接映射原始表 `Column1`；历史文件没有该列时留空。</li>
+          </ul>
+        </section>
+      </section>
+
+      <section class="results is-hidden" id="resultsSection">
+        <div class="stats-grid" id="statsGrid"></div>
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="panel-eyebrow">处理结果</p>
+              <h2>输出文件</h2>
+              <p class="panel-copy">映射完成后可直接下载最新结果文件。</p>
+            </div>
+          </div>
+          <div class="download-card" id="downloadCard"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./sfdc-signal-cleaner.js"></script>
+  </body>
+</html>

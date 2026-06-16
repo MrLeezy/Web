@@ -1,5 +1,6 @@
 const PLUGIN_ID = "haft-uploader";
 const API_BASE = `${window.location.origin}/api/plugins/${PLUGIN_ID}`;
+const LOG_GROUP_PREVIEW_COUNT = 5;
 
 const state = {
   accounts: [],
@@ -7,6 +8,8 @@ const state = {
   scheduler: { running: false, jobCount: 0 },
   logs: [],
   runningTaskIds: new Set(),
+  openLogGroups: new Set(["failed"]),
+  expandedLogGroups: new Set(),
 };
 
 const elements = {
@@ -41,6 +44,12 @@ const elements = {
   directoryPathField: document.querySelector("#directoryPathField"),
   downloadDirField: document.querySelector("#downloadDirField"),
   urlsField: document.querySelector("#urlsField"),
+  downloadDateModeField: document.querySelector("#downloadDateModeField"),
+  customStartDateField: document.querySelector("#customStartDateField"),
+  downloadDateMode: document.querySelector("#downloadDateMode"),
+  customStartYear: document.querySelector("#customStartYear"),
+  customStartMonth: document.querySelector("#customStartMonth"),
+  customStartDay: document.querySelector("#customStartDay"),
 };
 
 async function request(endpoint, options = {}) {
@@ -94,6 +103,7 @@ async function loadPluginMeta() {
 function renderStatus() {
   const enabledCount = state.tasks.filter((task) => task.enabled).length;
   const protectedCount = state.accounts.filter((account) => account.allowManualRun === false).length;
+  const logCounts = countLogsByStatus(state.logs);
 
   setHeroStatus(
     `调度器${state.scheduler.running ? "运行中" : "已停止"}，已启用 ${enabledCount} 个任务，共 ${state.accounts.length} 个账号，其中 ${protectedCount} 个受保护账号。`,
@@ -105,7 +115,7 @@ function renderStatus() {
   elements.accountCountValue.textContent = String(state.accounts.length);
   elements.protectedCountValue.textContent = String(protectedCount);
   elements.taskSectionMeta.textContent = `已配置 ${state.tasks.length} 个任务，启用 ${enabledCount} 个。`;
-  elements.logSectionMeta.textContent = `正在显示最近 ${state.logs.length} 条执行日志。`;
+  elements.logSectionMeta.textContent = `最近 ${state.logs.length} 条日志：失败 ${logCounts.failed} 条，成功 ${logCounts.success} 条，跳过 ${logCounts.skipped} 条。`;
 }
 
 function renderTasks() {
@@ -127,6 +137,15 @@ function renderTasks() {
         task.fileSource.type === "directory"
           ? task.fileSource.directoryPath || "-"
           : `${task.fileSource.downloadDir || "-"} · ${task.fileSource.urls?.length || 0} 个下载链接`;
+      const downloadDateMarkup =
+        task.fileSource.type === "download"
+          ? `
+            <div class="kv-line">
+              <span>下载日期</span>
+              <strong>${escapeHtml(formatDownloadDateMode(task.fileSource.downloadDateMode, task.fileSource.customStartDate))}</strong>
+            </div>
+          `
+          : "";
 
       return `
         <article class="task-item">
@@ -155,6 +174,7 @@ function renderTasks() {
               <span>所需文件数</span>
               <strong>${escapeHtml(String(task.fileSource.requiredCount))}</strong>
             </div>
+            ${downloadDateMarkup}
             <div class="kv-line kv-line-full">
               <span>来源详情</span>
               <strong>${escapeHtml(sourceSummary)}</strong>
@@ -165,6 +185,7 @@ function renderTasks() {
             <span class="mini-tag">${manualRunBlocked ? "手动执行已锁定" : running ? "运行中" : "可手动执行"}</span>
             <span class="mini-tag">${task.browser?.headless ? "无头浏览器" : "可见浏览器"}</span>
             <span class="mini-tag">${task.fileSource.type === "directory" ? "直接上传" : "先下载再上传"}</span>
+            ${task.preprocess?.kind === "leads_splitter_auto" ? '<span class="mini-tag">上传前先自动拆表</span>' : ""}
           </div>
 
           <div class="task-actions">
@@ -187,58 +208,144 @@ function renderLogs() {
     return;
   }
 
-  elements.logList.innerHTML = state.logs
-    .map(
-      (log) => `
-        <article class="log-item">
-          <div class="log-top">
-            <div class="task-title-block">
-              <strong class="task-title">${escapeHtml(log.taskName)}</strong>
-              <div class="task-subtitle">${escapeHtml(formatStatusLabel(log.status))}</div>
-            </div>
-            <span class="pill ${log.status === "failed" ? "fail" : log.status === "success" ? "" : "off"}">${escapeHtml(formatStatusLabel(log.status))}</span>
-          </div>
+  const groupedLogs = [
+    { status: "failed", open: true },
+    { status: "success", open: false },
+    { status: "skipped", open: false },
+  ];
 
-          <div class="task-kv">
-            <div class="kv-line">
-              <span>开始时间</span>
-              <strong>${escapeHtml(formatDate(log.startedAt))}</strong>
-            </div>
-            <div class="kv-line">
-              <span>结束时间</span>
-              <strong>${escapeHtml(log.finishedAt ? formatDate(log.finishedAt) : "未结束")}</strong>
-            </div>
-            <div class="kv-line">
-              <span>账号</span>
-              <strong>${escapeHtml(log.accountKey)}</strong>
-            </div>
-            <div class="kv-line">
-              <span>文件数</span>
-              <strong>${escapeHtml(String(log.fileCount ?? log.fileNames.length))}</strong>
-            </div>
-            <div class="kv-line kv-line-full">
-              <span>文件名</span>
-              <strong>${escapeHtml((log.fileNames || []).join("、") || "无")}</strong>
-            </div>
-            <div class="kv-line kv-line-full">
-              <span>执行说明</span>
-              <strong>${escapeHtml(buildExecutionSummary(log))}</strong>
-            </div>
-            ${
-              extractTracePath(log.message)
-                ? `<div class="kv-line kv-line-full"><span>调试追踪路径</span><strong>${escapeHtml(extractTracePath(log.message))}</strong></div>`
-                : ""
-            }
-            ${
-              log.screenshotPath
-                ? `<div class="kv-line kv-line-full"><span>截图</span><strong>${escapeHtml(log.screenshotPath)}</strong></div>`
-                : ""
-            }
-          </div>
-        </article>
-      `,
-    )
+  elements.logList.innerHTML = groupedLogs
+    .map(({ status, open }) => renderLogGroup(status, open))
     .join("");
+}
+
+function renderLogGroup(status, open) {
+  const logs = state.logs.filter((log) => log.status === status);
+  if (logs.length === 0) {
+    return "";
+  }
+
+  const isOpen = state.openLogGroups.has(status) || open;
+  const isExpanded = state.expandedLogGroups.has(status);
+  const visibleLogs = isExpanded ? logs : logs.slice(0, LOG_GROUP_PREVIEW_COUNT);
+
+  return `
+    <section class="log-group log-group-${escapeHtml(status)} ${isOpen ? "is-open" : ""}">
+      <button class="log-group-summary" type="button" data-action="toggle-group" data-status="${escapeHtml(status)}">
+        <div class="log-group-title-wrap">
+          <strong class="log-group-title">${escapeHtml(formatStatusLabel(status))}</strong>
+          <span class="log-group-count">${escapeHtml(String(logs.length))} 条</span>
+        </div>
+        <span class="log-group-hint">${isOpen ? "收起" : "展开"}${logs.length > LOG_GROUP_PREVIEW_COUNT && !isExpanded ? ` · 最近 ${LOG_GROUP_PREVIEW_COUNT} 条` : ""}</span>
+      </button>
+      <div class="log-group-body ${isOpen ? "" : "hidden"}">
+        <div class="log-group-list">
+          ${visibleLogs.map((log) => renderLogCard(log)).join("")}
+        </div>
+        ${
+          logs.length > LOG_GROUP_PREVIEW_COUNT
+            ? `<div class="log-group-actions">
+                <button class="log-group-toggle-button" type="button" data-action="toggle-group-size" data-status="${escapeHtml(status)}">
+                  ${isExpanded ? "只看最近5条" : `查看全部（${logs.length} 条）`}
+                </button>
+              </div>`
+            : ""
+        }
+      </div>
+    </section>
+  `;
+}
+
+function renderLogCard(log) {
+  const fileCount = log.fileCount ?? log.fileNames.length;
+  const detailsMarkup = renderLogDetails(log);
+
+  return `
+    <article class="log-item">
+      <div class="log-top">
+        <div class="task-title-block">
+          <strong class="task-title">${escapeHtml(log.taskName)}</strong>
+          <div class="task-subtitle">${escapeHtml(formatLogSubline(log))}</div>
+        </div>
+        <span class="pill ${log.status === "failed" ? "fail" : log.status === "success" ? "" : "off"}">${escapeHtml(formatStatusLabel(log.status))}</span>
+      </div>
+
+      <div class="log-meta-chips">
+        <span class="mini-tag">账号 ${escapeHtml(log.accountKey)}</span>
+        <span class="mini-tag">${escapeHtml(String(fileCount))} 个文件</span>
+        <span class="mini-tag">${escapeHtml(log.finishedAt ? formatDate(log.finishedAt) : formatDate(log.startedAt))}</span>
+      </div>
+
+      <div class="log-summary">
+        ${escapeHtml(buildExecutionSummary(log))}
+      </div>
+
+      ${detailsMarkup}
+    </article>
+  `;
+}
+
+function renderLogDetails(log) {
+  const detailItems = [];
+  const fileNames = Array.isArray(log.fileNames) ? log.fileNames : [];
+
+  if (fileNames.length > 0) {
+    detailItems.push(`
+      <div class="kv-line kv-line-full">
+        <span>文件名</span>
+        <strong>${escapeHtml(fileNames.join("、"))}</strong>
+      </div>
+    `);
+  }
+
+  if (extractTracePath(log.message)) {
+    detailItems.push(`
+      <div class="kv-line kv-line-full">
+        <span>调试追踪路径</span>
+        <strong>${escapeHtml(extractTracePath(log.message))}</strong>
+      </div>
+    `);
+  }
+
+  if (log.screenshotPath) {
+    detailItems.push(`
+      <div class="kv-line kv-line-full">
+        <span>截图</span>
+        <strong>${escapeHtml(log.screenshotPath)}</strong>
+      </div>
+    `);
+  }
+
+  if (detailItems.length === 0) {
+    return "";
+  }
+
+  return `
+    <details class="log-item-details">
+      <summary>查看详情</summary>
+      <div class="task-kv task-kv-compact">
+        ${detailItems.join("")}
+      </div>
+    </details>
+  `;
+}
+
+function formatLogSubline(log) {
+  const started = formatDate(log.startedAt);
+  const finished = log.finishedAt ? formatDate(log.finishedAt) : "未结束";
+  return `${started} -> ${finished}`;
+}
+
+function countLogsByStatus(logs) {
+  return logs.reduce(
+    (counts, log) => {
+      if (log.status === "failed" || log.status === "success" || log.status === "skipped") {
+        counts[log.status] += 1;
+      }
+      return counts;
+    },
+    { failed: 0, success: 0, skipped: 0 },
+  );
 }
 
 function renderAccounts() {
@@ -255,11 +362,96 @@ function toggleSourceFields() {
   elements.directoryPathField.classList.toggle("hidden", isDownload);
   elements.downloadDirField.classList.toggle("hidden", !isDownload);
   elements.urlsField.classList.toggle("hidden", !isDownload);
+  elements.downloadDateModeField.classList.toggle("hidden", !isDownload);
+  toggleDownloadDateFields();
 }
 
 function toggleScheduleFields() {
   const isWeekly = elements.scheduleMode.value === "weekly";
   elements.weekdayField.classList.toggle("hidden", !isWeekly);
+}
+
+function toggleDownloadDateFields() {
+  const showCustomDate =
+    elements.fileSourceType.value === "download" && elements.downloadDateMode.value === "custom";
+  elements.customStartDateField.classList.toggle("hidden", !showCustomDate);
+}
+
+function populateCustomDateOptions() {
+  const currentYear = new Date().getFullYear();
+  const years = [];
+
+  for (let year = currentYear - 10; year <= currentYear + 5; year += 1) {
+    years.push(year);
+  }
+
+  elements.customStartYear.innerHTML = years
+    .map((year) => `<option value="${year}">${year} 年</option>`)
+    .join("");
+
+  elements.customStartMonth.innerHTML = Array.from({ length: 12 }, (_, index) => index + 1)
+    .map((month) => `<option value="${String(month).padStart(2, "0")}">${month} 月</option>`)
+    .join("");
+}
+
+function syncCustomStartDayOptions(preferredDay = null) {
+  const year = Number.parseInt(elements.customStartYear.value, 10);
+  const month = Number.parseInt(elements.customStartMonth.value, 10);
+  const totalDays = Number.isInteger(year) && Number.isInteger(month) ? new Date(year, month, 0).getDate() : 31;
+  const nextDay = clampDayValue(preferredDay ?? elements.customStartDay.value, totalDays);
+
+  elements.customStartDay.innerHTML = Array.from({ length: totalDays }, (_, index) => index + 1)
+    .map((day) => {
+      const value = String(day).padStart(2, "0");
+      return `<option value="${value}">${day} 日</option>`;
+    })
+    .join("");
+
+  elements.customStartDay.value = nextDay;
+}
+
+function clampDayValue(dayValue, totalDays) {
+  const numericDay = Number.parseInt(dayValue, 10);
+  if (!Number.isInteger(numericDay) || numericDay <= 0) {
+    return "01";
+  }
+
+  return String(Math.min(numericDay, totalDays)).padStart(2, "0");
+}
+
+function getYesterdayDateInput() {
+  const target = new Date();
+  target.setDate(target.getDate() - 1);
+  return formatDateInput(target);
+}
+
+function formatDateInput(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function setCustomStartDateParts(dateValue = getYesterdayDateInput()) {
+  const matched = String(dateValue).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const fallback = getYesterdayDateInput().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const [, year, month, day] = matched || fallback;
+
+  elements.customStartYear.value = year;
+  elements.customStartMonth.value = month;
+  syncCustomStartDayOptions(day);
+}
+
+function buildCustomStartDate() {
+  const year = elements.customStartYear.value;
+  const month = elements.customStartMonth.value;
+  const day = elements.customStartDay.value;
+
+  if (!year || !month || !day) {
+    return "";
+  }
+
+  return `${year}-${month}-${day}`;
 }
 
 function resetForm() {
@@ -273,6 +465,8 @@ function resetForm() {
   document.querySelector("#stableWindowMs").value = 4000;
   document.querySelector("#slowMoMs").value = 200;
   document.querySelector("#postUploadDelayMs").value = 3000;
+  elements.downloadDateMode.value = "yesterday";
+  setCustomStartDateParts();
   setWeekdays(["1", "2", "3", "4", "5"]);
   toggleScheduleFields();
   toggleSourceFields();
@@ -290,6 +484,8 @@ function fillForm(task) {
   document.querySelector("#directoryPath").value = task.fileSource.directoryPath ?? "";
   document.querySelector("#downloadDir").value = task.fileSource.downloadDir ?? "";
   document.querySelector("#urlsText").value = Array.isArray(task.fileSource.urls) ? task.fileSource.urls.join("\n") : "";
+  elements.downloadDateMode.value = task.fileSource.downloadDateMode === "custom" ? "custom" : "yesterday";
+  setCustomStartDateParts(task.fileSource.customStartDate ?? getYesterdayDateInput());
   document.querySelector("#requiredCount").value = task.fileSource.requiredCount;
   document.querySelector("#stableWindowMs").value = task.fileSource.stableWindowMs ?? 4000;
   document.querySelector("#headless").checked = task.browser?.headless ?? false;
@@ -324,6 +520,10 @@ elements.form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   try {
+    if (elements.fileSourceType.value === "download" && elements.downloadDateMode.value === "custom" && !buildCustomStartDate()) {
+      throw new Error("请选择指定下载日期。");
+    }
+
     const body = {
       existingTaskId: elements.existingTaskId.value || undefined,
       name: document.querySelector("#name").value,
@@ -335,6 +535,8 @@ elements.form.addEventListener("submit", async (event) => {
         directoryPath: document.querySelector("#directoryPath").value,
         downloadDir: document.querySelector("#downloadDir").value,
         urlsText: document.querySelector("#urlsText").value,
+        downloadDateMode: elements.downloadDateMode.value,
+        customStartDate: buildCustomStartDate(),
         requiredCount: document.querySelector("#requiredCount").value,
         stableWindowMs: document.querySelector("#stableWindowMs").value,
       },
@@ -413,13 +615,49 @@ elements.taskList.addEventListener("click", async (event) => {
         method: "POST",
       });
       await refreshLogs();
-      setMessage(`任务“${task.name}”已完成，状态：${formatStatusLabel(payload.result?.status ?? "success")}。`);
+      setMessage(
+        `任务“${task.name}”已完成，状态：${formatStatusLabel(payload.result?.status ?? "success")}。${
+          payload.linkedHomeTask?.updated ? " 首页今日任务已同步完成。" : ""
+        }`,
+      );
     } catch (error) {
       setMessage(error.message, true);
     } finally {
       state.runningTaskIds.delete(taskId);
       renderTasks();
     }
+  }
+});
+
+elements.logList.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-action][data-status]");
+  if (!button) {
+    return;
+  }
+
+  const { action, status } = button.dataset;
+  if (!status) {
+    return;
+  }
+
+  if (action === "toggle-group") {
+    if (state.openLogGroups.has(status)) {
+      state.openLogGroups.delete(status);
+    } else {
+      state.openLogGroups.add(status);
+    }
+    renderLogs();
+    return;
+  }
+
+  if (action === "toggle-group-size") {
+    if (state.expandedLogGroups.has(status)) {
+      state.expandedLogGroups.delete(status);
+    } else {
+      state.expandedLogGroups.add(status);
+      state.openLogGroups.add(status);
+    }
+    renderLogs();
   }
 });
 
@@ -476,6 +714,9 @@ elements.taskModal.addEventListener("click", (event) => {
 });
 elements.scheduleMode.addEventListener("change", toggleScheduleFields);
 elements.fileSourceType.addEventListener("change", toggleSourceFields);
+elements.downloadDateMode.addEventListener("change", toggleDownloadDateFields);
+elements.customStartYear.addEventListener("change", () => syncCustomStartDayOptions());
+elements.customStartMonth.addEventListener("change", () => syncCustomStartDayOptions());
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -631,6 +872,14 @@ function formatSchedule(schedule) {
   return `${weekdays.map((value) => labels[value] ?? value).join("、")} ${time}`;
 }
 
+function formatDownloadDateMode(mode, customStartDate) {
+  if (mode === "custom" && customStartDate) {
+    return `指定日期 ${customStartDate}`;
+  }
+
+  return "昨天";
+}
+
 function openModal() {
   elements.taskModal.classList.remove("hidden");
 }
@@ -640,6 +889,7 @@ function closeModal() {
 }
 
 async function bootstrap() {
+  populateCustomDateOptions();
   resetForm();
   await loadPluginMeta();
 

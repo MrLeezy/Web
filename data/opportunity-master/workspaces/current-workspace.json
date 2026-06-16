@@ -1,0 +1,48 @@
+{
+  "pluginId": "opportunity-master",
+  "files": [
+    {
+      "id": "file-1781574628547-c9085cf8-22cf-4b82-9543-b10a7ed7b5a8",
+      "filename": "FY72Q2-400_chat_-6.12.xlsx",
+      "storedFilename": "file-1781574628547-c9085cf8-22cf-4b82-9543-b10a7ed7b5a8-FY72Q2-400_chat_-6.12.xlsx",
+      "storedPath": "/Users/lizhongyu/程序/团队协作系统/data/opportunity-master/uploads/file-1781574628547-c9085cf8-22cf-4b82-9543-b10a7ed7b5a8-FY72Q2-400_chat_-6.12.xlsx",
+      "size": 877949,
+      "uploadedAt": "2026-06-16T01:50:28.549Z",
+      "detectedSource": "chat_phone_combined",
+      "detectedBy": "sheet1 combined headers",
+      "status": "ready",
+      "sheetNames": [
+        "Sheet1"
+      ]
+    },
+    {
+      "id": "file-1781574639054-41a2b8a5-f647-41bf-b4b9-000955c8fa59",
+      "filename": "FY27Q2_follow_up_2026.6.12_1_.xlsx",
+      "storedFilename": "file-1781574639054-41a2b8a5-f647-41bf-b4b9-000955c8fa59-FY27Q2_follow_up_2026.6.12_1_.xlsx",
+      "storedPath": "/Users/lizhongyu/程序/团队协作系统/data/opportunity-master/uploads/file-1781574639054-41a2b8a5-f647-41bf-b4b9-000955c8fa59-FY27Q2_follow_up_2026.6.12_1_.xlsx",
+      "size": 28509688,
+      "uploadedAt": "2026-06-16T01:50:39.083Z",
+      "detectedSource": "website_q2",
+      "detectedBy": "sheet: FY27Q2数据明细-唯一",
+      "status": "ready",
+      "sheetNames": [
+        "FY27Q2数据明细-唯一"
+      ]
+    },
+    {
+      "id": "file-1781575909578-5f06d914-650b-48b5-87d7-2d3ac61ba013",
+      "filename": "SFDC_Signal_FY27Q2W6-mapped-1781575425405.xlsx",
+      "storedFilename": "file-1781575909578-5f06d914-650b-48b5-87d7-2d3ac61ba013-SFDC_Signal_FY27Q2W6-mapped-1781575425405.xlsx",
+      "storedPath": "/Users/lizhongyu/程序/团队协作系统/data/opportunity-master/uploads/file-1781575909578-5f06d914-650b-48b5-87d7-2d3ac61ba013-SFDC_Signal_FY27Q2W6-mapped-1781575425405.xlsx",
+      "size": 2144142,
+      "uploadedAt": "2026-06-16T02:11:49.581Z",
+      "detectedSource": "sfdc_signal_mapping",
+      "detectedBy": "sheet1 sfdc signal headers",
+      "status": "ready",
+      "sheetNames": [
+        "Sheet1"
+      ]
+    }
+  ],
+  "updatedAt": "2026-06-16T02:11:50.658Z"
+}
